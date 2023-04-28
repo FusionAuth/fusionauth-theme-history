@@ -13,7 +13,7 @@
 
 [@helpers.html]
   [@helpers.head title=theme.message('device-title')]
-  <script src="/js/oauth2/Device.js?version=${version}"></script>
+  <script src="${request.contextPath}/js/oauth2/Device.js?version=${version}"></script>
   <script>
     Prime.Document.onReady(function() {
       var form = Prime.Document.queryById('device-form');
@@ -97,7 +97,7 @@
 
       [#-- Not showing the form if the user must logout first. --]
       [#if !logoutToContinue]
-      <form action="/oauth2/device" method="POST" id="device-form">
+      <form action="${request.contextPath}/oauth2/device" method="POST" id="device-form">
         [@helpers.oauthHiddenFields/]
         <p>${theme.message('userCode')}</p>
         <fieldset>

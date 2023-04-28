@@ -18,11 +18,20 @@
 
 [@helpers.html]
   [@helpers.head]
-    <script src="/js/identityProvider/InProgress.js?version=${version}"></script>
+    <script src="${request.contextPath}/js/identityProvider/InProgress.js?version=${version}"></script>
     [@helpers.alternativeLoginsScript clientId=client_id identityProviders=identityProviders/]
     [#if step == totalSteps]
       [@helpers.captchaScripts showCaptcha=showCaptcha captchaMethod=tenant.captchaConfiguration.captchaMethod siteKey=tenant.captchaConfiguration.siteKey/]
     [/#if]
+    <script type="text/javascript">
+      document.addEventListener('DOMContentLoaded', () => {
+        if (PublicKeyCredential && PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable) {
+          PublicKeyCredential
+            .isUserVerifyingPlatformAuthenticatorAvailable()
+            .then(result => document.querySelector('input[name="userVerifyingPlatformAuthenticatorAvailable"]').value = result);
+        }
+      });
+    </script>
     [#-- Custom <head> code goes here --]
   [/@helpers.head]
   [@helpers.body]
@@ -47,11 +56,12 @@
         [/#if]
         </p>
       [/#if]
-      <form action="register" method="POST" class="full">
+      <form action="${request.contextPath}/oauth2/register" method="POST" class="full">
         [@helpers.oauthHiddenFields/]
         [@helpers.hidden name="step"/]
         [@helpers.hidden name="registrationState"/]
         [@helpers.hidden name="parentEmailRequired"/]
+        [@helpers.hidden name="userVerifyingPlatformAuthenticatorAvailable"/]
 
         [#-- Show the Password Validation Rules if there is a field error for 'user.password' --]
         [#if (fieldMessages?keys?seq_contains("user.password")!false) && passwordValidationRules??]
@@ -160,7 +170,7 @@
 
         [#-- Identity Provider Buttons (if you want to include these, remove the if-statement) --]
         [#if true]
-          [@helpers.alternativeLogins clientId=client_id identityProviders=identityProviders![] passwordlessEnabled=false/]
+          [@helpers.alternativeLogins clientId=client_id identityProviders=identityProviders![] passwordlessEnabled=false bootStrapWebauthnEnabled=false/]
         [/#if]
         [#-- End Identity Provider Buttons --]
 

@@ -29,12 +29,13 @@
 
     [@helpers.main title=theme.message('two-factor-challenge')]
       [#setting url_escaping_charset='UTF-8']
-      <form id="2fa-form" action="two-factor" method="POST" class="full">
+      <form id="2fa-form" action="${request.contextPath}/oauth2/two-factor" method="POST" class="full">
         [@helpers.input type="text" name="code" id="code" autocapitalize="none" autocomplete="one-time-code" autocorrect="off" autofocus=true leftAddon="lock" placeholder=theme.message('code')/]
 
         [@helpers.oauthHiddenFields/]
         [@helpers.hidden name="methodId"/]
         [@helpers.hidden name="twoFactorId"/]
+        [@helpers.hidden name="userVerifyingPlatformAuthenticatorAvailable"/]
         <fieldset>
           <div class="form-row">
             <label>

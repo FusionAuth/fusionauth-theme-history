@@ -18,7 +18,7 @@
       <p class="mt-0 mb-3">${theme.message("authenticator-disable-step-1")}</p>
     [#elseif method == "email" || method == "sms"]
       <p class="mt-0 mb-3">${theme.message("${method}-disable-step-1", (method == "email")?then(email, mobilePhone))}</p>
-      <form id="send-two-factor-form" action="disable" method="POST" class="full">
+      <form id="send-two-factor-form" action="${request.contextPath}/account/two-factor/disable" method="POST" class="full">
         [@helpers.hidden name="action" value="send" /]
         [@helpers.hidden name="client_id" /]
         [@helpers.hidden name="methodId" /]
@@ -53,7 +53,7 @@
             </p>
           </fieldset>
 
-          <form id="two-factor-form" action="disable" method="POST" class="full">
+          <form id="two-factor-form" action="${request.contextPath}/account/two-factor/disable" method="POST" class="full">
             [@helpers.hidden name="client_id" /]
             [@helpers.hidden name="methodId" /]
 

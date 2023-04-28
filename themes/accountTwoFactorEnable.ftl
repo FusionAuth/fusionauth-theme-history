@@ -28,7 +28,7 @@
       [#-- Email or SMS Instructions --]
       <p class="mt-0 mb-3">${theme.message("${method}-enable-step-1", helpers.display(user, (method == "email")?then("email", "mobilePhone")))}</p>
 
-      <form id="two-factor-send-form" action="enable" method="POST" class="full">
+      <form id="two-factor-send-form" action="${request.contextPath}/account/two-factor/enable" method="POST" class="full">
         [@helpers.hidden name="action" value="send" /]
         [@helpers.hidden name="client_id" /]
         [@helpers.hidden name="method" /]
@@ -59,8 +59,8 @@
 [@helpers.html]
   [@helpers.head title=theme.message("authenticator-configuration")]
     [#-- JavaScript is used for rendering authenticator QR code --]
-    <script src="/js/qrcode-min-1.0.js"></script>
-    <script src="/js/account/EnableTwoFactor.js?version=${version}"></script>
+    <script src="${request.contextPath}/js/qrcode-min-1.0.js"></script>
+    <script src="${request.contextPath}/js/account/EnableTwoFactor.js?version=${version}"></script>
     <script>
       Prime.Document.onReady(function() {
         [#-- These variables will get set by the FreeMarker template. --]
@@ -127,7 +127,7 @@
           [/#list]
 
           [#-- Enable Two Factor Form --]
-          <form id="two-factor-form" action="enable" method="POST" class="full">
+          <form id="two-factor-form" action="${request.contextPath}/account/two-factor/enable" method="POST" class="full">
              [@helpers.hidden name="client_id" /]
              [@helpers.hidden name="email" /]
              [@helpers.hidden name="method" /]

@@ -6,21 +6,27 @@
 [#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]
 [#-- @ftlvariable name="tenantId" type="java.util.UUID" --]
 [#-- @ftlvariable name="user" type="io.fusionauth.domain.User" --]
+[#-- @ftlvariable name="webauthnAvailable" type="boolean" --]
 
 [#import "../_helpers.ftl" as helpers/]
 
 [@helpers.html]
   [@helpers.head title=theme.message("account")]
     [#-- Custom header code goes here --]
-    <script src="/js/ui/Main.js?version=${version}"></script>
+    <script src="${request.contextPath}/js/ui/Main.js?version=${version}"></script>
   [/@helpers.head]
   [@helpers.body]
     [@helpers.header]
       [#-- Custom header code goes here --]
     [/@helpers.header]
 
-    [#assign actionURL = multiFactorAvailable?then("/account/two-factor/", "")/]
-    [@helpers.accountMain rowClass="row center" colClass="col-xs-12 col-sm-12 col-md-10 col-lg-8" actionURL=actionURL actionText=theme.message('manage-two-factor') actionDirection="forward"]
+    [#assign actionURLs = multiFactorAvailable?then(["/account/two-factor/"], [])/]
+    [#assign actionURLs = actionURLs + webauthnAvailable?then(["/account/webauthn/"], [])/]
+
+    [#assign actionTexts = multiFactorAvailable?then([theme.message("manage-two-factor")], [])/]
+    [#assign actionTexts = actionTexts + webauthnAvailable?then([theme.message("manage-webauthn-passkeys")], [])/]
+
+    [@helpers.accountMain rowClass="row center" colClass="col-xs-12 col-sm-12 col-md-10 col-lg-8" actionURL=actionURLs actionText=actionTexts actionDirection="forward"]
       [@helpers.accountPanel title="" tenant=tenant user=user action="view" showEdit=formConfigured]
          <div class="row" style="border-bottom: 0;">
             <div class="col-xs-12 col-md-12">

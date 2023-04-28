@@ -13,10 +13,16 @@
   [@helpers.head]
     [#-- Custom <head> code goes here --]
     <script>
-    Prime.Document.onReady(function() {
-      var firstInput = Prime.Document.queryFirst('form[action=/oauth2/complete-registration]').queryFirst('input:not([type=hidden])');
+    document.addEventListener('DOMContentLoaded', () => {
+      var firstInput = document.querySelector('form[action="/oauth2/complete-registration"]').querySelector('input:not([type=hidden])');
       if (firstInput !== null) {
           firstInput.focus();
+      }
+
+      if (PublicKeyCredential && PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable) {
+        PublicKeyCredential
+          .isUserVerifyingPlatformAuthenticatorAvailable()
+          .then(result => document.querySelector('input[name="userVerifyingPlatformAuthenticatorAvailable"]').value = result);
       }
     });
     </script>
@@ -31,6 +37,7 @@
         [@helpers.oauthHiddenFields/]
         [@helpers.hidden name="step"/]
         [@helpers.hidden name="registrationState"/]
+        [@helpers.hidden name="userVerifyingPlatformAuthenticatorAvailable"/]
 
         [#-- Begin Self Service Custom Registration Form Steps --]
         [#if fields?has_content]

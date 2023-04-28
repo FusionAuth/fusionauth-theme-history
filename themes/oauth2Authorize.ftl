@@ -1,6 +1,7 @@
 [#ftl/]
 [#setting url_escaping_charset="UTF-8"]
 [#-- @ftlvariable name="application" type="io.fusionauth.domain.Application" --]
+[#-- @ftlvariable name="bootStrapWebauthnEnabled" type="boolean" --]
 [#-- @ftlvariable name="client_id" type="java.lang.String" --]
 [#-- @ftlvariable name="code_challenge" type="java.lang.String" --]
 [#-- @ftlvariable name="code_challenge_method" type="java.lang.String" --]
@@ -18,6 +19,7 @@
 [#-- @ftlvariable name="scope" type="java.lang.String" --]
 [#-- @ftlvariable name="showCaptcha" type="boolean" --]
 [#-- @ftlvariable name="showPasswordField" type="boolean" --]
+[#-- @ftlvariable name="showWebAuthnReauthLink" type="boolean" --]
 [#-- @ftlvariable name="state" type="java.lang.String" --]
 [#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]
 [#-- @ftlvariable name="tenantId" type="java.util.UUID" --]
@@ -28,14 +30,14 @@
 
 [@helpers.html]
   [@helpers.head]
-    <script src="/js/jstz-min-1.0.6.js"></script>
+    <script src="${request.contextPath}/js/jstz-min-1.0.6.js"></script>
     [@helpers.captchaScripts showCaptcha=showCaptcha captchaMethod=tenant.captchaConfiguration.captchaMethod siteKey=tenant.captchaConfiguration.siteKey/]
-    <script src="/js/oauth2/Authorize.js?version=${version}"></script>
-    <script src="/js/identityProvider/InProgress.js?version=${version}"></script>
+    <script src="${request.contextPath}/js/oauth2/Authorize.js?version=${version}"></script>
+    <script src="${request.contextPath}/js/identityProvider/InProgress.js?version=${version}"></script>
     [@helpers.alternativeLoginsScript clientId=client_id identityProviders=identityProviders/]
     <script>
       Prime.Document.onReady(function() {
-        [#-- This object handles guessing the timezone and filling in the device id of the user --]
+        [#-- This object handles guessing the timezone, filling in the device id of the user, and check for WebAuthn re-authentication support --]
         new FusionAuth.OAuth2.Authorize();
       });
     </script>
@@ -66,6 +68,7 @@
       <form action="${request.contextPath}/oauth2/authorize" method="POST" class="full">
         [@helpers.oauthHiddenFields/]
         [@helpers.hidden name="showPasswordField"/]
+        [@helpers.hidden name="userVerifyingPlatformAuthenticatorAvailable"/]
         [#if showPasswordField && hasDomainBasedIdentityProviders]
           [@helpers.hidden name="loginId"/]
         [/#if]
@@ -102,7 +105,11 @@
           [@helpers.link url="${request.contextPath}/oauth2/register"]${theme.message('create-an-account')}[/@helpers.link]
         </div>
       [/#if]
-      [@helpers.alternativeLogins clientId=client_id identityProviders=identityProviders passwordlessEnabled=passwordlessEnabled/]
+
+     [#if showWebAuthnReauthLink]
+       [@helpers.link url="${request.contextPath}/oauth2/webauthn-reauth"] ${theme.message('return-to-webauthn-reauth')} [/@helpers.link]
+     [/#if]
+      [@helpers.alternativeLogins clientId=client_id identityProviders=identityProviders passwordlessEnabled=passwordlessEnabled bootStrapWebauthnEnabled=bootStrapWebauthnEnabled/]
     [/@helpers.main]
 
     [@helpers.footer]

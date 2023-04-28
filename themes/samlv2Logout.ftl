@@ -30,7 +30,7 @@
     [#list allLogoutURLs![] as logoutURL]
       <iframe src="${logoutURL}" style="width:0; height:0; border:0; border:none;"></iframe>
     [/#list]
-    <form action="/samlv2/logout/complete" method="POST">
+    <form action="${request.contextPath}/samlv2/logout/complete" method="POST">
       [@helpers.hidden name="binding"/]
       [@helpers.hidden name="RelayState"/]
       [@helpers.hidden name="SAMLRequest"/]

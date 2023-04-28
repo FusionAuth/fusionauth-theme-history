@@ -94,7 +94,8 @@
   [/#if]
 
   <script src="${request.contextPath}/js/prime-min-1.6.4.js?version=${version}"></script>
-  <script src="/js/oauth2/LocaleSelect.js?version=${version}"></script>
+  <script src="${request.contextPath}/js/Util.js?version=${version}"></script>
+  <script src="${request.contextPath}/js/oauth2/LocaleSelect.js?version=${version}"></script>
   <script>
     "use strict";
     Prime.Document.onReady(function() {
@@ -156,25 +157,25 @@
 [#macro alternativeLoginsScript clientId identityProviders]
   [#if identityProviders["Apple"]?has_content]
     <script src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></script>
-    <script src="/js/identityProvider/Apple.js?version=${version}"></script>
+    <script src="${request.contextPath}/js/identityProvider/Apple.js?version=${version}"></script>
   [/#if]
   [#if identityProviders["Facebook"]?has_content]
     <script src="https://connect.facebook.net/en_US/sdk.js"></script>
-    <script src="/js/identityProvider/Facebook.js?version=${version}" data-app-id="${identityProviders["Facebook"][0].lookupAppId(clientId)}"></script>
+    <script src="${request.contextPath}/js/identityProvider/Facebook.js?version=${version}" data-app-id="${identityProviders["Facebook"][0].lookupAppId(clientId)}"></script>
   [/#if]
   [#if identityProviders["Google"]?has_content]
     <script src="https://apis.google.com/js/api:client.js"></script>
-    <script src="/js/identityProvider/Google.js?version=${version}" data-client-id="${identityProviders["Google"][0].lookupClientId(clientId)}"></script>
+    <script src="${request.contextPath}/js/identityProvider/Google.js?version=${version}" data-client-id="${identityProviders["Google"][0].lookupClientId(clientId)}"></script>
   [/#if]
   [#if identityProviders["Twitter"]?has_content]
     [#-- This is the FusionAuth clientId --]
-    <script src="/js/identityProvider/Twitter.js?version=${version}" data-client-id="${clientId}"></script>
+    <script src="${request.contextPath}/js/identityProvider/Twitter.js?version=${version}" data-client-id="${clientId}"></script>
   [/#if]
   [#if identityProviders["EpicGames"]?has_content || identityProviders["Facebook"]?has_content || identityProviders["Google"]?has_content ||
        identityProviders["LinkedIn"]?has_content || identityProviders["Nintendo"]?has_content || identityProviders["OpenIDConnect"]?has_content ||
        identityProviders["SAMLv2"]?has_content || identityProviders["SonyPSN"]?has_content || identityProviders["Steam"]?has_content ||
        identityProviders["Twitch"]?has_content || identityProviders["Xbox"]?has_content]
-    <script src="/js/identityProvider/Redirect.js?version=${version}"></script>
+    <script src="${request.contextPath}/js/identityProvider/Redirect.js?version=${version}"></script>
   [/#if]
 [/#macro]
 
@@ -232,20 +233,39 @@
     [@localSelector/]
   </div>
   <div class="${colClass}" style="text-align: right;">
-  [#if actionURL?has_content]
-    [#if !actionURL?contains("client_id")]
-      [#if actionURL?contains("?")]
-       [#local actionURL = actionURL + "&client_id=${client_id}"/]
-      [#else]
-       [#local actionURL = actionURL + "?client_id=${client_id}"/]
-      [/#if]
-    [/#if]
-    [#if actionDirection == "back"]
-      <a href="${actionURL}"> <i class="fa fa-arrow-left"></i> ${actionText}</a>
-    [#else]
-      <a href="${actionURL}">${actionText} <i class="fa fa-arrow-right"></i></a>
-    [/#if]
+
+  [#-- actionURL and actionText may be an array. For backwards compatibility, allow a string
+       or an array. If not an array yet, convert to one now. --]
+  [#if !actionURL?is_sequence]
+    [#local actionURLs = [actionURL]/]
+  [#else]
+    [#local actionURLs = actionURL/]
   [/#if]
+
+  [#if !actionText?is_sequence]
+    [#local actionTexts = [actionText]/]
+  [#else]
+    [#local actionTexts = actionText/]
+  [/#if]
+
+  [#list actionURLs as url]
+    [#local actionURL = url/]
+    [#if actionURL?has_content]
+      [#if !actionURL?contains("client_id")]
+        [#if actionURL?contains("?")]
+         [#local actionURL = actionURL + "&client_id=${client_id}"/]
+        [#else]
+         [#local actionURL = actionURL + "?client_id=${client_id}"/]
+        [/#if]
+      [/#if]
+      [#if actionDirection == "back"]
+        <a href="${actionURL}"> <i class="fa fa-arrow-left"></i> ${actionTexts[url_index]}</a>
+      [#else]
+        <a class="d-inline-block mb-2" href="${actionURL}">${actionTexts[url_index]} <i class="fa fa-arrow-right"></i></a>
+      [/#if]
+      [#sep]<br>[/#sep]
+    [/#if]
+  [/#list]
   </div>
 </div>
 [/#macro]
@@ -270,7 +290,7 @@
    <div class="row mb-5 user-details">
       [#-- Column 1 --]
       <div class="col-xs-12 col-md-4 col-lg-4 tight-left" style="padding-bottom: 0;">
-        <div class="avatar pr-2">
+        <div class="avatar pr-2 pb-3">
           <div>
             [#if user.imageUrl??]
               <img src="${user.imageUrl}" class="profile w-100" alt="profile image"/>
@@ -291,7 +311,7 @@
         <div class="panel-actions">
          <div class="status">
            [#if showEdit]
-            <a id="edit-profile" class="blue icon" href="/account/edit?client_id=${client_id}">
+            <a id="edit-profile" class="blue icon" href="${request.contextPath}/account/edit?client_id=${client_id}">
               <span style="font-size: 0.9rem;">
               <i class="fa fa-pencil blue-text" data-tooltip="${theme.message("edit-profile")}"></i>
               </span>
@@ -497,7 +517,7 @@
 <button id="steam-login-button" class="steam login-button" data-login-method="UseRedirect" data-scope="${identityProvider.lookupScope(clientId)!''}" data-identity-provider-id="${identityProvider.id}">
   <div>
     <div class="icon">
-      <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 233 233">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 233 233">
        <defs>
         <linearGradient id="a" x2="50%" x1="50%" y2="100%">
          <stop stop-color="#111D2E" offset="0"/>
@@ -522,7 +542,7 @@
 <button id="twitch-login-button" class="twitch login-button" data-login-method="UseRedirect" data-scope="${identityProvider.lookupScope(clientId)!''}" data-identity-provider-id="${identityProvider.id}">
   <div>
     <div class="icon">
-      <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 2400 2800">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2400 2800">
         <g>
           <polygon fill="#FFFFFF" points="2200,1300 1800,1700 1400,1700 1050,2050 1050,1700 600,1700 600,200 2200,200"/>
           <g>
@@ -553,7 +573,7 @@
 </button>
 [/#macro]
 
-[#macro alternativeLogins clientId identityProviders passwordlessEnabled]
+[#macro alternativeLogins clientId identityProviders passwordlessEnabled bootStrapWebauthnEnabled]
   [#if identityProviders?has_content || passwordlessEnabled]
     <div class="login-button-container">
       <div class="hr-container">
@@ -570,6 +590,32 @@
                 <i class="fa fa-link"></i>
               </div>
               <div class="text">${theme.message('passwordless-button-text')}</div>
+            </div>
+          </div>
+        [/@link]
+      </div>
+      [/#if]
+
+      [#if bootStrapWebauthnEnabled]
+      <div class="form-row push-less-top">
+        [@link url = "/oauth2/webauthn"]
+          <div class="magic login-button">
+            <div>
+              <div class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
+                  <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="#FFF" stroke="none">
+                    <path d="M923 4595 c-187 -51 -349 -214 -398 -402 -12 -44 -15 -122 -15 -348 0 -261 2 -294 19 -331 51 -112 193 -135 276 -43 19 21 37 49 40 61 2 13 6 160 7 328 3 338 5 345 72 386 28 17 58 19 336 22 168 1 315 5 328 7 12 3 40 21 61 40 92 83 69 225 -43 276 -37 17 -70 19 -336 18 -221 0 -308 -4 -347 -14z"/>
+                    <path d="M3514 4591 c-112 -51 -135 -193 -43 -276 21 -19 49 -37 61 -40 13 -2 160 -6 328 -7 338 -3 345 -5 386 -72 17 -28 19 -58 22 -336 1 -168 5 -315 7 -328 3 -12 21 -40 40 -61 83 -92 225 -69 276 43 17 37 19 70 19 331 0 320 -5 355 -61 468 -42 82 -154 194 -236 236 -113 56 -148 61 -468 61 -261 0 -294 -2 -331 -19z"/>
+                    <path d="M1640 3229 c-14 -6 -36 -20 -48 -32 -49 -46 -52 -62 -52 -294 0 -193 2 -222 19 -253 48 -91 175 -117 252 -53 61 51 69 86 69 298 0 105 -4 206 -10 224 -11 39 -51 86 -92 107 -31 16 -101 17 -138 3z"/>
+                    <path d="M2500 3233 c-36 -15 -72 -48 -90 -83 -19 -37 -20 -60 -20 -398 l0 -359 -31 -7 c-79 -15 -139 -89 -139 -170 0 -48 31 -109 72 -138 47 -33 153 -33 220 0 70 35 140 103 179 174 l34 63 3 397 c3 382 2 399 -17 437 -30 57 -73 84 -140 88 -31 1 -63 0 -71 -4z"/>
+                    <path d="M3335 3222 c-44 -29 -74 -65 -85 -103 -6 -19 -10 -119 -10 -224 0 -212 8 -247 69 -298 77 -64 204 -38 252 53 17 31 19 60 19 256 0 213 -1 222 -22 254 -37 54 -71 73 -135 77 -45 3 -65 0 -88 -15z"/>
+                    <path d="M2006 1870 c-34 -11 -82 -54 -102 -92 -19 -37 -18 -106 4 -148 34 -69 212 -173 387 -226 84 -26 102 -28 265 -28 163 0 181 2 265 28 175 53 353 157 387 226 70 139 -75 297 -213 231 -24 -11 -72 -38 -107 -60 -99 -62 -169 -83 -302 -88 -165 -7 -265 22 -421 122 -60 39 -114 50 -163 35z"/>
+                    <path d="M627 1696 c-50 -18 -76 -42 -98 -91 -17 -36 -19 -70 -19 -330 0 -320 5 -355 61 -468 42 -82 154 -194 236 -236 113 -56 148 -61 468 -61 261 0 294 2 331 19 112 51 135 193 43 276 -21 19 -49 37 -61 40 -13 2 -160 6 -328 7 -435 4 -403 -29 -410 423 -3 217 -9 326 -17 340 -19 33 -66 72 -102 84 -43 14 -57 13 -104 -3z"/>
+                    <path d="M4385 1698 c-33 -11 -80 -51 -98 -83 -8 -14 -14 -123 -17 -340 -7 -452 25 -419 -410 -423 -168 -1 -315 -5 -328 -7 -12 -3 -40 -21 -61 -40 -92 -83 -69 -225 43 -276 37 -17 70 -19 331 -19 320 0 355 5 468 61 82 42 194 154 236 236 56 113 61 148 61 468 0 260 -2 294 -19 330 -22 49 -48 73 -98 91 -45 16 -67 16 -108 2z"/>
+                  </g>
+                </svg>
+              </div>
+              <div class="text">${theme.message('webauthn-button-text')}</div>
             </div>
           </div>
         [/@link]
@@ -1038,7 +1084,7 @@
     [#if captchaMethod == "HCaptcha" || captchaMethod == "HCaptchaEnterprise"]
       <script src="https://hcaptcha.com/1/api.js" async defer></script>
     [/#if]
-    <script src="/js/oauth2/Captcha.js?version=${version}"></script>
+    <script src="${request.contextPath}/js/oauth2/Captcha.js?version=${version}"></script>
     <script data-captcha-method="${captchaMethod!''}" data-site-key="${siteKey!''}">
       Prime.Document.onReady(function() {
         new FusionAuth.OAuth2.Captcha();

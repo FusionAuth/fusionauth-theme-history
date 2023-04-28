@@ -42,7 +42,7 @@
                        [/#if]
                       </td>
                      <td class="action">
-                      <a class="small-square gray button ml-2 pr-0" href="/account/two-factor/disable?client_id=${client_id}&methodId=${method.id?url}" data-tooltip="${theme.message('disable')}"> <i class="fa fa-minus"></i> </a>
+                      <a class="small-square gray button ml-2 pr-0" href="${request.contextPath}/account/two-factor/disable?client_id=${client_id}&methodId=${method.id?url}" data-tooltip="${theme.message('disable')}"> <i class="fa fa-minus"></i> </a>
                      </td>
                    </tr>
                  [#else]
@@ -54,7 +54,9 @@
              </table>
 
              <div class="form-row mt-3">
-               <a class="blue button" href="/account/two-factor/enable?client_id=${client_id}"><i class="fa fa-plus"></i> ${theme.message("add-two-factor")}</a>
+               <a class="blue button" href="${request.contextPath}/account/two-factor/enable?client_id=${client_id}">
+                 <i class="fa fa-plus"></i> ${theme.message("add-two-factor")}
+               </a>
              </div>
 
            </fieldset>

@@ -6,6 +6,7 @@
 [#-- @ftlvariable name="showCaptcha" type="boolean" --]
 [#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]
 [#-- @ftlvariable name="tenantId" type="java.util.UUID" --]
+[#-- @ftlvariable name="version" type="java.lang.String" --]
 [#import "../_helpers.ftl" as helpers/]
 
 [@helpers.html]
@@ -18,9 +19,19 @@
         [@helpers.oauthHiddenFields/]
         <input type="hidden" name="code" value="${code}">
         <input type="hidden" name="postMethod" value="true">
+        [@helpers.hidden name="userVerifyingPlatformAuthenticatorAvailable"/]
       </form>
       <script type="text/javascript">
-        document.forms[0].submit();
+        if (PublicKeyCredential && PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable) {
+          PublicKeyCredential
+            .isUserVerifyingPlatformAuthenticatorAvailable()
+            .then(result => {
+              document.querySelector('input[name="userVerifyingPlatformAuthenticatorAvailable"]').value = result;
+              document.forms[0].submit();
+            });
+        } else {
+          document.forms[0].submit();
+        }
       </script>
     [#else]
       [@helpers.header]
