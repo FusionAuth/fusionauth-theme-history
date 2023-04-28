@@ -1,4 +1,4 @@
-# fusionauth-theme-history
+# Fusionauth Theme History
 
 Here you can compare different versions of the default, stock FusionAuth theme.
 
@@ -14,7 +14,12 @@ To use:
 * Click the `tags` tab.
 * Choose the later version you are interested in comparing.
 
-Review the differences between the versions.
+## Differences
 
-Here's an example: https://github.com/FusionAuth/fusionauth-theme-history/compare/1.23.3...1.26.0
+Here's how you review the differences between the versions.
 
+An example of seeing differences using GitHub's UX: https://github.com/FusionAuth/fusionauth-theme-history/compare/1.23.3...1.26.0
+
+How to get a set of patches, assuming you've cloned these: `git format-patch tag1..tag2`
+
+How to apply patches to an existing downloaded theme: TBD, but here's the [git apply documentation](https://git-scm.com/docs/git-apply).
