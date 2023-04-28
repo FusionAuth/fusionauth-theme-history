@@ -80,8 +80,8 @@
             <div class="form-row">
               [@helpers.button icon="key" text=theme.message('register')/]
             [#else]
-              [@helpers.button icon="arrow-right" text="Next"/]
-            </div>
+              [@helpers.button icon="arrow-right" text=theme.message('next')/]
+              </div>
           [/#if]
         [#-- End Custom Self Service Registration Form Steps --]
         [#else]
