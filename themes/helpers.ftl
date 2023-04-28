@@ -93,7 +93,7 @@
     </style>
   [/#if]
 
-  <script src="${request.contextPath}/js/prime-min-1.6.0.js?version=${version}"></script>
+  <script src="${request.contextPath}/js/prime-min-1.6.1.js?version=${version}"></script>
   <script src="/js/oauth2/LocaleSelect.js?version=${version}"></script>
   <script>
     "use strict";
@@ -143,7 +143,7 @@
           [#elseif request.requestURI?starts_with("/account")]
             <li><a href="${request.contextPath}/account/logout?client_id=${client_id!''}" title="Logout"><i class="fa fa-sign-out"></i></a></li>
           [#else]
-            <li class="help"><a target="_blank" href="https://fusionauth.io/docs"><i class="fa fa-question-circle-o"></i> ${theme.message("help")}</a></li>
+            <li class="help"><a target="_blank" href="https://fusionauth.io/docs/"><i class="fa fa-question-circle-o"></i> ${theme.message("help")}</a></li>
           [/#if]
         </ul>
       </nav>
