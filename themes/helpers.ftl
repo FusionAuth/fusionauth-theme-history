@@ -155,6 +155,14 @@
 [/#macro]
 
 [#macro alternativeLoginsScript clientId identityProviders]
+  [#if identityProviders["EpicGames"]?has_content || identityProviders["Facebook"]?has_content || identityProviders["Google"]?has_content ||
+         identityProviders["LinkedIn"]?has_content || identityProviders["Nintendo"]?has_content || identityProviders["OpenIDConnect"]?has_content ||
+         identityProviders["SAMLv2"]?has_content || identityProviders["SonyPSN"]?has_content || identityProviders["Steam"]?has_content ||
+         identityProviders["Twitch"]?has_content || identityProviders["Xbox"]?has_content || identityProviders["Apple"]?has_content ||
+         identityProviders["Twitter"]?has_content]
+    [#-- Include Helper.js instead of loading dynamically from other IdP JS. IdP JS files will still load the script if it has not already been loaded --]
+    <script id="idp_helper" src="${request.contextPath}/js/identityProvider/Helper.js?version=${version}"></script>
+  [/#if]
   [#if identityProviders["Apple"]?has_content]
     <script src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></script>
     <script src="${request.contextPath}/js/identityProvider/Apple.js?version=${version}"></script>
@@ -163,7 +171,7 @@
     <script src="https://connect.facebook.net/en_US/sdk.js"></script>
     <script src="${request.contextPath}/js/identityProvider/Facebook.js?version=${version}" data-app-id="${identityProviders["Facebook"][0].lookupAppId(clientId)}"></script>
   [/#if]
-  [#if identityProviders["Google"]?has_content && identityProviders["Google"][0].loginMethod != "UseRedirect"]
+  [#if identityProviders["Google"]?has_content && identityProviders["Google"][0].lookupLoginMethod(clientId) != "UseRedirect"]
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="${request.contextPath}/js/identityProvider/Google.js?version=${version}" data-client-id="${identityProviders["Google"][0].lookupClientId(clientId)}"></script>
   [/#if]
