@@ -1,4 +1,6 @@
 [#ftl/]
+[#-- @ftlvariable name="application" type="io.fusionauth.domain.Application" --]
+[#-- @ftlvariable name="client_id" type="java.lang.String" --]
 [#-- @ftlvariable name="email" type="java.lang.String" --]
 [#-- @ftlvariable name="emailSent" type="boolean" --]
 [#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]

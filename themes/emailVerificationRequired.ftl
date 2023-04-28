@@ -1,5 +1,7 @@
 [#ftl/]
 [#-- @ftlvariable name="allowEmailChange" type="boolean" --]
+[#-- @ftlvariable name="application" type="io.fusionauth.domain.Application" --]
+[#-- @ftlvariable name="client_id" type="java.lang.String" --]
 [#-- @ftlvariable name="currentUser" type="io.fusionauth.domain.User" --]
 [#-- @ftlvariable name="collectVerificationCode" type="boolean" --]
 [#-- @ftlvariable name="email" type="java.lang.String" --]

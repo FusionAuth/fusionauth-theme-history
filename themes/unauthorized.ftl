@@ -1,8 +1,8 @@
 [#ftl/]
 [#-- @ftlvariable name="application" type="io.fusionauth.domain.Application" --]
 [#-- @ftlvariable name="cause" type="java.lang.String" --]
-[#-- @ftlvariable name="currentUser" type="io.fusionauth.domain.User" --]
 [#-- @ftlvariable name="client_id" type="java.lang.String" --]
+[#-- @ftlvariable name="currentUser" type="io.fusionauth.domain.User" --]
 [#-- @ftlvariable name="incidentId" type="java.lang.String" --]
 [#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]
 [#-- @ftlvariable name="tenantId" type="java.util.UUID" --]
@@ -23,6 +23,7 @@
       [/#if]
       <p>
       ${theme.message('ip-address')}${theme.message('propertySeparator')} ${currentIPAddress}
+      [#assign currentLocation = fusionAuth.currentLocation()!{}/]
       [#if currentLocation?has_content]
       <br>${theme.message('location')}${theme.message('propertySeparator')} ${currentLocation.displayString}
       [/#if]
