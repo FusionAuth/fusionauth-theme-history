@@ -1064,7 +1064,7 @@
   [/#if]
 [/#function]
 
-[#macro passwordField field]
+[#macro passwordField field showCurrentPasswordField=false]
   [#-- Render checkbox used to determine whether the form submit should update password--]
   <div class="form-row">
     <label for="editPasswordOption"> ${theme.optionalMessage("change-password")} </label>
@@ -1076,6 +1076,11 @@
     </label>
   </div>
   <div id="password-fields" class="slide-open ${(editPasswordOption == "update")?then('open', '')}">
+    [#-- See if the application requires the current password --]
+    [#if showCurrentPasswordField]
+      [@customField field=field key="currentPassword" autofocus=false label=theme.optionalMessage("current-password")/]
+    [/#if]
+
     [#-- Show the Password Validation Rules if there is a field error for 'user.password' --]
     [#if (fieldMessages?keys?seq_contains("user.password")!false) && passwordValidationRules??]
       [@passwordRules passwordValidationRules/]

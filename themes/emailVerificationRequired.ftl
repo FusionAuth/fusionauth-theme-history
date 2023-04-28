@@ -57,7 +57,6 @@
          [@helpers.hidden name="allowEmailChange"/]
          [@helpers.hidden name="collectVerificationCode"/]
          [@helpers.hidden name="email"/]
-         [@helpers.hidden name="verificationId"/]
          <div class="form-row">
            <button style="background: #fff; border: none; cursor: pointer;" class="link blue-text"><i class="fa fa-arrow-right"></i> ${theme.message('email-verification-required-send-another')} </button>
          </div>
@@ -74,7 +73,6 @@
            [@helpers.hidden name="action" value="changeEmail"/]
            [@helpers.hidden name="allowEmailChange"/]
            [@helpers.hidden name="collectVerificationCode"/]
-           [@helpers.hidden name="verificationId"/]
            <p class="mb-3">
              ${theme.message('{description}email-verification-required-change-email')}
            </p>

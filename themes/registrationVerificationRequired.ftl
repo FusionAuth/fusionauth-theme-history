@@ -51,7 +51,6 @@
          [@helpers.oauthHiddenFields/]
          [@helpers.hidden name="action" value="resend"/]
          [@helpers.hidden name="collectVerificationCode"/]
-         [@helpers.hidden name="verificationId"/]
          <div class="form-row">
            <button style="background: #fff; border: none; cursor: pointer;" class="link blue-text"><i class="fa fa-arrow-right"></i> ${theme.message('registration-verification-required-send-another')} </button>
          </div>

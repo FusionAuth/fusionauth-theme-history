@@ -51,7 +51,7 @@
 
                   [#list fieldValues as field]
                     [#if field.key == "user.password"]
-                       [@helpers.passwordField field/]
+                       [@helpers.passwordField field application.formConfiguration.selfServiceFormConfiguration.requireCurrentPasswordOnPasswordChange/]
                     [#else]
                        [@helpers.customField field=field key=field.key autofocus=false placeholder=field.key label=theme.optionalMessage(field.key) leftAddon="false"/]
                        [#if field.confirm]
