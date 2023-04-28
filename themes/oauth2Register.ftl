@@ -28,16 +28,19 @@
 
     [@helpers.main title=theme.message('register')]
       [#-- During a linking work flow, optionally indicate to the user which IdP is being linked. --]
-      [#if devicePendingIdPLink??]
+      [#if devicePendingIdPLink?? || pendingIdPLink??]
         <p class="mt-0">
-          ${theme.message('pending-device-link', devicePendingIdPLink.identityProviderName)}
-        </p>
-      [/#if]
-      [#-- During a linking work flow, optionally indicate to the user which IdP is being linked. --]
-      [#if pendingIdPLink??]
-        <p class="mt-0">
+        [#if devicePendingIdPLink?? && pendingIdPLink??]
+          ${theme.message('pending-links-register-to-complete', devicePendingIdPLink.identityProviderName, pendingIdPLink.identityProviderName)}
+        [#elseif devicePendingIdPLink??]
+          ${theme.message('pending-link-register-to-complete', devicePendingIdPLink.identityProviderName)}
+        [#else]
           ${theme.message('pending-link-register-to-complete', pendingIdPLink.identityProviderName)}
+        [/#if]
+        [#-- A pending link can be cancled. If we also have a device link in progress, this cannot be canceled. --]
+        [#if pendingIdPLink??]
           [@helpers.link url="" extraParameters="&cancelPendingIdpLink=true"]${theme.message('register-cancel-link')}[/@helpers.link]
+        [/#if]
         </p>
       [/#if]
       <form action="register" method="POST" class="full">

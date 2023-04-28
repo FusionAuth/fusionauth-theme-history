@@ -20,10 +20,14 @@
 
     [@helpers.main title=theme.message('start-idp-link-title')]
       <p class="mb-5">
-        [#if devicePendingIdPLink??]
+        [#if pendingIdPLink??]
+          ${theme.message('pending-link-info', pendingIdPLink.identityProviderName)}<br><br>
+        [/#if]
+        [#if devicePendingIdPLink?? && pendingIdPLink??]
+          ${theme.message('pending-device-links', devicePendingIdPLink.identityProviderName, pendingIdPLink.identityProviderName)}
+        [#elseif devicePendingIdPLink??]
           ${theme.message('pending-device-link', devicePendingIdPLink.identityProviderName)}
         [/#if]
-        ${theme.message('pending-link-info', pendingIdPLink.identityProviderName)}<br><br>
         [#if registrationEnabled]
           ${theme.message('pending-link-next-step')}
         [#else]
@@ -50,6 +54,7 @@
        </div>
       [/#if]
 
+      [#if pendingIdPLink??]
       <div class="hr-container">
         <hr>
         <div>${theme.message('or')}</div>
@@ -62,6 +67,7 @@
         [/@helpers.link]
         </div>
       </div>
+      [/#if]
 
     [/@helpers.main]
 
