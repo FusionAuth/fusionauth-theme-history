@@ -1,8 +1,10 @@
 [#ftl/]
 [#setting url_escaping_charset="UTF-8"]
+[#-- @ftlvariable name="application" type="io.fusionauth.domain.Application" --]
 [#-- @ftlvariable name="client_id" type="java.lang.String" --]
 [#-- @ftlvariable name="code_challenge" type="java.lang.String" --]
 [#-- @ftlvariable name="code_challenge_method" type="java.lang.String" --]
+[#-- @ftlvariable name="devicePendingIdPLink" type="io.fusionauth.domain.provider.PendingIdPLink" --]
 [#-- @ftlvariable name="hasDomainBasedIdentityProviders" type="boolean" --]
 [#-- @ftlvariable name="identityProviders" type="java.util.Map<java.lang.String, java.util.List<io.fusionauth.domain.provider.BaseIdentityProvider<?>>>" --]
 [#-- @ftlvariable name="loginId" type="java.lang.String" --]
@@ -15,10 +17,11 @@
 [#-- @ftlvariable name="scope" type="java.lang.String" --]
 [#-- @ftlvariable name="showPasswordField" type="boolean" --]
 [#-- @ftlvariable name="state" type="java.lang.String" --]
+[#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]
+[#-- @ftlvariable name="tenantId" type="java.util.UUID" --]
 [#-- @ftlvariable name="timezone" type="java.lang.String" --]
 [#-- @ftlvariable name="user_code" type="java.lang.String" --]
 [#-- @ftlvariable name="version" type="java.lang.String" --]
-
 [#import "../_helpers.ftl" as helpers/]
 
 [@helpers.html]
@@ -41,6 +44,12 @@
     [/@helpers.header]
 
     [@helpers.main title=theme.message('login')]
+      [#-- During a linking work flow, optionally indicate to the user which IdP is being linked. --]
+      [#if devicePendingIdPLink??]
+        <p class="mt-0">
+          ${theme.message('pending-device-link', devicePendingIdPLink.identityProviderName)}
+        </p>
+      [/#if]
       [#-- During a linking work flow, optionally indicate to the user which IdP is being linked. --]
       [#if pendingIdPLink??]
         <p class="mt-0">

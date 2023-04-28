@@ -1,7 +1,10 @@
 [#ftl/]
+[#-- @ftlvariable name="application" type="io.fusionauth.domain.Application" --]
 [#-- @ftlvariable name="client_id" type="java.lang.String" --]
 [#-- @ftlvariable name="code" type="java.lang.String" --]
 [#-- @ftlvariable name="identityProviderId" type="java.util.UUID" --]
+[#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]
+[#-- @ftlvariable name="tenantId" type="java.util.UUID" --]
 [#-- @ftlvariable name="waitURL" type="java.lang.String" --]
 [#import "../_helpers.ftl" as helpers/]
 

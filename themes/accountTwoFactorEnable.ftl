@@ -1,4 +1,5 @@
 [#ftl/]
+[#-- @ftlvariable name="application" type="io.fusionauth.domain.Application" --]
 [#-- @ftlvariable name="availableMethods" type="java.util.List<java.lang.String>" --]
 [#-- @ftlvariable name="client_id" type="java.lang.String" --]
 [#-- @ftlvariable name="email" type="java.lang.String" --]
@@ -8,6 +9,7 @@
 [#-- @ftlvariable name="secret" type="java.lang.String" --]
 [#-- @ftlvariable name="secretBase32Encoded" type="java.lang.String" --]
 [#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]
+[#-- @ftlvariable name="tenantId" type="java.util.UUID" --]
 [#-- @ftlvariable name="user" type="io.fusionauth.domain.User" --]
 
 [#import "../../_helpers.ftl" as helpers/]
@@ -134,7 +136,7 @@
              [@helpers.hidden name="secret" /]
              [@helpers.hidden name="secretBase32Encoded" /]
              <fieldset>
-               [@helpers.input type="text" name="code" id="verification-code" label=theme.message("verification-code") placeholder="${theme.message('{placeholder}two-factor-code')}" autocapitalize="none"  autocomplete="off" autocorrect="off" required=true/]
+               [@helpers.input type="text" name="code" id="verification-code" label=theme.message("verification-code") placeholder="${theme.message('{placeholder}two-factor-code')}" autocapitalize="none"  autocomplete="one-time-code" autocorrect="off" required=true/]
              </fieldset>
              <div class="form-row">
                [@helpers.button icon="save" text=theme.message("enable")/]

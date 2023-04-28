@@ -1,6 +1,7 @@
 [#ftl/]
 [#-- @ftlvariable name="oauthJSONError" type="java.lang.String" --]
-
+[#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]
+[#-- @ftlvariable name="tenantId" type="java.util.UUID" --]
 [#import "../_helpers.ftl" as helpers/]
 
 [@helpers.html]

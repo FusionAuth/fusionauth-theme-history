@@ -2,6 +2,7 @@
 [#-- @ftlvariable name="application" type="io.fusionauth.domain.Application" --]
 [#-- @ftlvariable name="client_id" type="java.lang.String" --]
 [#-- @ftlvariable name="collectBirthDate" type="boolean" --]
+[#-- @ftlvariable name="devicePendingIdPLink" type="io.fusionauth.domain.provider.PendingIdPLink" --]
 [#-- @ftlvariable name="fields" type="java.util.List<io.fusionauth.domain.form.FormField>" --]
 [#-- @ftlvariable name="hideBirthDate" type="boolean" --]
 [#-- @ftlvariable name="identityProviders" type="java.util.Map<java.lang.String, java.util.List<io.fusionauth.domain.provider.BaseIdentityProvider<?>>>" --]
@@ -9,8 +10,9 @@
 [#-- @ftlvariable name="parentEmailRequired" type="boolean" --]
 [#-- @ftlvariable name="pendingIdPLink" type="io.fusionauth.domain.provider.PendingIdPLink" --]
 [#-- @ftlvariable name="step" type="int" --]
+[#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]
+[#-- @ftlvariable name="tenantId" type="java.util.UUID" --]
 [#-- @ftlvariable name="totalSteps" type="int" --]
-
 [#import "../_helpers.ftl" as helpers/]
 
 [@helpers.html]
@@ -25,6 +27,12 @@
     [/@helpers.header]
 
     [@helpers.main title=theme.message('register')]
+      [#-- During a linking work flow, optionally indicate to the user which IdP is being linked. --]
+      [#if devicePendingIdPLink??]
+        <p class="mt-0">
+          ${theme.message('pending-device-link', devicePendingIdPLink.identityProviderName)}
+        </p>
+      [/#if]
       [#-- During a linking work flow, optionally indicate to the user which IdP is being linked. --]
       [#if pendingIdPLink??]
         <p class="mt-0">

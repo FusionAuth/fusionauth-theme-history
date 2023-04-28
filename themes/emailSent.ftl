@@ -1,7 +1,8 @@
 [#ftl/]
 [#-- @ftlvariable name="email" type="java.lang.String" --]
 [#-- @ftlvariable name="emailSent" type="boolean" --]
-
+[#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]
+[#-- @ftlvariable name="tenantId" type="java.util.UUID" --]
 [#import "../_helpers.ftl" as helpers/]
 
 [@helpers.html]

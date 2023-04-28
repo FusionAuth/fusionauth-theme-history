@@ -1,7 +1,11 @@
 [#ftl/]
 [#-- @ftlvariable name="allLogoutURLs" type="java.util.Set<java.lang.String>" --]
+[#-- @ftlvariable name="application" type="io.fusionauth.domain.Application" --]
+[#-- @ftlvariable name="client_id" type="java.lang.String" --]
 [#-- @ftlvariable name="registeredLogoutURLs" type="java.util.Set<java.lang.String>" --]
 [#-- @ftlvariable name="redirectURL" type="java.lang.String" --]
+[#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]
+[#-- @ftlvariable name="tenantId" type="java.util.UUID" --]
 [#import "../_helpers.ftl" as helpers/]
 
 [#-- You may adjust the duration before we redirect the user --]

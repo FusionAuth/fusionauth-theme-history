@@ -1,9 +1,11 @@
 [#ftl/]
 [#-- @ftlvariable name="application" type="io.fusionauth.domain.Application" --]
+[#-- @ftlvariable name="client_id" type="java.lang.String" --]
 [#-- @ftlvariable name="fields" type="java.util.List<io.fusionauth.domain.form.FormField>" --]
 [#-- @ftlvariable name="step" type="int" --]
+[#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]
+[#-- @ftlvariable name="tenantId" type="java.util.UUID" --]
 [#-- @ftlvariable name="totalSteps" type="int" --]
-
 [#import "../_helpers.ftl" as helpers/]
 
 [@helpers.html]

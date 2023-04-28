@@ -1,5 +1,6 @@
 [#ftl/]
-
+[#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]
+[#-- @ftlvariable name="tenantId" type="java.util.UUID" --]
 [#import "../_helpers.ftl" as helpers/]
 
 [@helpers.html]

@@ -1,7 +1,11 @@
 [#ftl/]
+[#-- @ftlvariable name="application" type="io.fusionauth.domain.Application" --]
 [#-- @ftlvariable name="client_id" type="java.lang.String" --]
+[#-- @ftlvariable name="devicePendingIdPLink" type="io.fusionauth.domain.provider.PendingIdPLink" --]
 [#-- @ftlvariable name="pendingIdPLink" type="io.fusionauth.domain.provider.PendingIdPLink" --]
 [#-- @ftlvariable name="registrationEnabled" type="boolean" --]
+[#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]
+[#-- @ftlvariable name="tenantId" type="java.util.UUID" --]
 [#import "../_helpers.ftl" as helpers/]
 
 [@helpers.html]
@@ -16,6 +20,9 @@
 
     [@helpers.main title=theme.message('start-idp-link-title')]
       <p class="mb-5">
+        [#if devicePendingIdPLink??]
+          ${theme.message('pending-device-link', devicePendingIdPLink.identityProviderName)}
+        [/#if]
         ${theme.message('pending-link-info', pendingIdPLink.identityProviderName)}<br><br>
         [#if registrationEnabled]
           ${theme.message('pending-link-next-step')}

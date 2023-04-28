@@ -1,13 +1,14 @@
 [#ftl/]
-[#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]
+[#-- @ftlvariable name="application" type="io.fusionauth.domain.Application" --]
+[#-- @ftlvariable name="client_id" type="java.lang.String" --]
 [#-- @ftlvariable name="method" type="io.fusionauth.domain.TwoFactorMethod" --]
 [#-- @ftlvariable name="methodId" type="java.lang.String" --]
 [#-- @ftlvariable name="showResendOrSelectMethod" type="boolean" --]
+[#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]
+[#-- @ftlvariable name="tenantId" type="java.util.UUID" --]
 [#-- @ftlvariable name="trustComputer" type="boolean" --]
 [#-- @ftlvariable name="twoFactorId" type="java.lang.String" --]
-[#-- @ftlvariable name="user" type="io.fusionauth.domain.User" --]
 [#-- @ftlvariable name="version" type="java.lang.String" --]
-
 [#import "../_helpers.ftl" as helpers/]
 
 [@helpers.html]
@@ -29,7 +30,7 @@
     [@helpers.main title=theme.message('two-factor-challenge')]
       [#setting url_escaping_charset='UTF-8']
       <form id="2fa-form" action="two-factor" method="POST" class="full">
-        [@helpers.input type="text" name="code" id="code" autocapitalize="none" autocomplete="off" autocorrect="off" autofocus=true leftAddon="lock" placeholder=theme.message('code')/]
+        [@helpers.input type="text" name="code" id="code" autocapitalize="none" autocomplete="one-time-code" autocorrect="off" autofocus=true leftAddon="lock" placeholder=theme.message('code')/]
 
         [@helpers.oauthHiddenFields/]
         [@helpers.hidden name="methodId"/]

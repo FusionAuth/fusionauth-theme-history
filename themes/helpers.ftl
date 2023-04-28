@@ -335,7 +335,7 @@
 [/#macro]
 
 [#macro epicButton identityProvider clientId]
-<button id="epic-login-button" class="epic login-button" data-login-method="UseRedirect" data-scope="${identityProvider.lookupScope(clientId)!''}" data-identity-provider-id="${identityProvider.id}">
+<button id="epicgames-login-button" class="epicgames login-button" data-login-method="UseRedirect" data-scope="${identityProvider.lookupScope(clientId)!''}" data-identity-provider-id="${identityProvider.id}">
   <div>
     <div class="icon">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="-97.07505 -187.74425 841.3171 1126.4655">

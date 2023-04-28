@@ -1,12 +1,10 @@
 [#ftl/]
+[#-- @ftlvariable name="application" type="io.fusionauth.domain.Application" --]
+[#-- @ftlvariable name="client_id" type="java.lang.String" --]
 [#-- @ftlvariable name="code" type="java.lang.String" --]
 [#-- @ftlvariable name="postMethod" type="boolean" --]
-[#-- @ftlvariable name="pushEnabled" type="boolean" --]
-[#-- @ftlvariable name="pushPreferred" type="boolean" --]
-[#-- @ftlvariable name="systemConfiguration" type="io.fusionauth.domain.SystemConfiguration" --]
-[#-- @ftlvariable name="trustComputer" type="boolean" --]
-[#-- @ftlvariable name="userCanReceivePush" type="boolean" --]
-
+[#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]
+[#-- @ftlvariable name="tenantId" type="java.util.UUID" --]
 [#import "../_helpers.ftl" as helpers/]
 
 [@helpers.html]

@@ -1,6 +1,8 @@
 [#ftl/]
 [#-- @ftlvariable name="allLogoutURLs" type="java.util.Set<java.lang.String>" --]
 [#-- @ftlvariable name="registeredLogoutURLs" type="java.util.Set<java.lang.String>" --]
+[#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]
+[#-- @ftlvariable name="tenantId" type="java.util.UUID" --]
 [#import "../_helpers.ftl" as helpers/]
 
 [#-- You may adjust the duration that we wait before completing the logout. --]

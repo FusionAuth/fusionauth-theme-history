@@ -1,12 +1,13 @@
 [#ftl/]
+[#-- @ftlvariable name="application" type="io.fusionauth.domain.Application" --]
 [#-- @ftlvariable name="availableMethodsMap" type="java.util.Map<java.lang.String, io.fusionauth.domain.TwoFactorMethod>" --]
+[#-- @ftlvariable name="client_id" type="java.lang.String" --]
 [#-- @ftlvariable name="methodId" type="java.lang.String" --]
 [#-- @ftlvariable name="recoverCodesAvailable" type="int" --]
 [#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]
+[#-- @ftlvariable name="tenantId" type="java.util.UUID" --]
 [#-- @ftlvariable name="twoFactorId" type="java.lang.String" --]
-[#-- @ftlvariable name="user" type="io.fusionauth.domain.User" --]
 [#-- @ftlvariable name="version" type="java.lang.String" --]
-
 [#import "../_helpers.ftl" as helpers/]
 
 [#macro methodOption id method]

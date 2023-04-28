@@ -1,6 +1,9 @@
 [#ftl/]
+[#-- @ftlvariable name="application" type="io.fusionauth.domain.Application" --]
 [#-- @ftlvariable name="collectVerificationCode" type="boolean" --]
 [#-- @ftlvariable name="verificationId" type="java.lang.String" --]
+[#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]
+[#-- @ftlvariable name="tenantId" type="java.util.UUID" --]
 [#import "../_helpers.ftl" as helpers/]
 
 [@helpers.html]
@@ -28,7 +31,7 @@
             [@helpers.hidden name="collectVerificationCode"/]
             [@helpers.hidden name="verificationId"/]
             <fieldset>
-              [@helpers.input type="text" name="oneTimeCode" id="otp" autocapitalize="none" autofocus=true autocomplete="on" autocorrect="off" placeholder="${theme.message('code')}" leftAddon="lock"/]
+              [@helpers.input type="text" name="oneTimeCode" id="otp" autocapitalize="none" autofocus=true autocomplete="one-time-code" autocorrect="off" placeholder="${theme.message('code')}" leftAddon="lock"/]
             </fieldset>
             <div class="form-row">
               [@helpers.button text=theme.message('submit')/]

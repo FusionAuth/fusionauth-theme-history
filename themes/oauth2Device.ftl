@@ -1,8 +1,11 @@
 [#ftl/]
 [#-- @ftlvariable name="activationComplete" type="boolean" --]
+[#-- @ftlvariable name="application" type="io.fusionauth.domain.Application" --]
+[#-- @ftlvariable name="devicePendingIdPLink" type="io.fusionauth.domain.provider.PendingIdPLink" --]
+[#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]
+[#-- @ftlvariable name="tenantId" type="java.util.UUID" --]
 [#-- @ftlvariable name="userCodeLength" type="int" --]
 [#-- @ftlvariable name="version" type="java.lang.String" --]
-
 [#import "../_helpers.ftl" as helpers/]
 
 [@helpers.html]
@@ -47,6 +50,12 @@
 
     [@helpers.main title=theme.message('device-form-title')]
       [#setting url_escaping_charset='UTF-8']
+      [#-- During a linking work flow, optionally indicate to the user which IdP is being linked. --]
+      [#if devicePendingIdPLink??]
+        <p class="mt-0">
+          ${theme.message('pending-device-link', devicePendingIdPLink.identityProviderName)}
+        </p>
+      [/#if]
       <form action="/oauth2/device" method="POST" id="device-form">
         [@helpers.oauthHiddenFields/]
         <p>${theme.message('userCode')}</p>
