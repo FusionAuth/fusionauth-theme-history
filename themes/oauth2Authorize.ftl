@@ -1,7 +1,7 @@
 [#ftl/]
 [#setting url_escaping_charset="UTF-8"]
 [#-- @ftlvariable name="application" type="io.fusionauth.domain.Application" --]
-[#-- @ftlvariable name="bootStrapWebauthnEnabled" type="boolean" --]
+[#-- @ftlvariable name="bootstrapWebauthnEnabled" type="boolean" --]
 [#-- @ftlvariable name="client_id" type="java.lang.String" --]
 [#-- @ftlvariable name="code_challenge" type="java.lang.String" --]
 [#-- @ftlvariable name="code_challenge_method" type="java.lang.String" --]
@@ -109,7 +109,7 @@
      [#if showWebAuthnReauthLink]
        [@helpers.link url="${request.contextPath}/oauth2/webauthn-reauth"] ${theme.message('return-to-webauthn-reauth')} [/@helpers.link]
      [/#if]
-      [@helpers.alternativeLogins clientId=client_id identityProviders=identityProviders passwordlessEnabled=passwordlessEnabled bootStrapWebauthnEnabled=bootStrapWebauthnEnabled/]
+      [@helpers.alternativeLogins clientId=client_id identityProviders=identityProviders passwordlessEnabled=passwordlessEnabled bootstrapWebauthnEnabled=bootstrapWebauthnEnabled/]
     [/@helpers.main]
 
     [@helpers.footer]

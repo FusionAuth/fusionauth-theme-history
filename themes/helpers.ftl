@@ -573,7 +573,7 @@
 </button>
 [/#macro]
 
-[#macro alternativeLogins clientId identityProviders passwordlessEnabled bootStrapWebauthnEnabled]
+[#macro alternativeLogins clientId identityProviders passwordlessEnabled bootstrapWebauthnEnabled=false]
   [#if identityProviders?has_content || passwordlessEnabled]
     <div class="login-button-container">
       <div class="hr-container">
@@ -596,7 +596,7 @@
       </div>
       [/#if]
 
-      [#if bootStrapWebauthnEnabled]
+      [#if bootstrapWebauthnEnabled]
       <div class="form-row push-less-top">
         [@link url = "/oauth2/webauthn"]
           <div class="magic login-button">
