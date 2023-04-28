@@ -42,7 +42,7 @@
       [#-- Using an HTML comment so this is visible in the rendered HTML. We don't want to freak anyone out. --]
       <!-- Feel free to remove this, it is just a stupid easter egg. Enjoy. -->
       <!--   "Escape is impossible when you're caught in the net" https://www.imdb.com/title/tt0113957/  -->
-      <div style="position:fixed; left:0; bottom: 0; margin-bottom: 7px; margin-left: 10px;"><a style="color: inherit;" href="https://thepraetorians.net" title="Escape is impossible when you're caught in the net.">��</a></div>
+      <div style="position:fixed; left:0; bottom: 0; margin-bottom: 7px; margin-left: 10px;"><a style="color: inherit;" href="https://the-praetorians.net" title="Escape is impossible when you're caught in the net.">��</a></div>
     [/@helpers.footer]
   [/@helpers.body]
 [/@helpers.html]

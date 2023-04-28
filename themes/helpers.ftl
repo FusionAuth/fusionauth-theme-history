@@ -1029,13 +1029,6 @@
     [/#if]
     [#if captchaMethod == "GoogleRecaptchaV3"]
       <script src="https://www.google.com/recaptcha/api.js?render=${siteKey}"></script>
-      [#-- This is hiding the Google Recaptcha badge that would normally appear in the lower right corner of
-           the window that shows Terms and Conditions. It also centers the replacement text that is required
-           by Google when hiding the standard badge. Remove or modify the CSS if you want to show it. --]
-      <style type="text/css">
-        .grecaptcha-badge { visibility: hidden; }
-        .grecaptcha-msg { text-align: center; }
-      </style>
     [/#if]
     [#if captchaMethod == "HCaptcha" || captchaMethod == "HCaptchaEnterprise"]
       <script src="https://hcaptcha.com/1/api.js" async defer></script>
@@ -1053,7 +1046,7 @@
   [#-- If you want to remove captcha from the page, also ensure you disable it in the tenant configruation. --]
   [#if showCaptcha]
     [#if captchaMethod == "GoogleRecaptchaV2"]
-      <div class="g-recaptcha" data-sitekey="${siteKey!''}" style="transform:scale(0.93); margin-left:-9px;"></div>
+      <div class="g-recaptcha" data-sitekey="${siteKey!''}"></div>
     [#elseif captchaMethod == "GoogleRecaptchaV3"]
       [#-- This is the replacement Terms and Conditions messaging that is required by Google when hiding the
            standard badge. If you want to remove this you will also need to remove or edit the CSS above. --]
@@ -1061,7 +1054,7 @@
         ${theme.message('captcha-google-branding')?no_esc}
       </div>
     [#elseif captchaMethod == "HCaptcha" || captchaMethod == "HCaptchaEnterprise"]
-      <div class="h-captcha" data-sitekey="${siteKey!''}" style="transform:scale(0.93); margin-left:-9px;"></div>
+      <div class="h-captcha" data-sitekey="${siteKey!''}"></div>
     [/#if]
     [@errors field="captcha_token"/]
   [/#if]
