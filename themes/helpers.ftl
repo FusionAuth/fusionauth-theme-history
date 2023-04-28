@@ -574,7 +574,7 @@
 [/#macro]
 
 [#macro alternativeLogins clientId identityProviders passwordlessEnabled bootstrapWebauthnEnabled=false]
-  [#if identityProviders?has_content || passwordlessEnabled]
+  [#if identityProviders?has_content || passwordlessEnabled || bootstrapWebauthnEnabled]
     <div class="login-button-container">
       <div class="hr-container">
         <hr>
@@ -940,6 +940,7 @@
   [@hidden name="metaData.device.name"/]
   [@hidden name="metaData.device.type"/]
   [@hidden name="nonce"/]
+  [@hidden name="oauth_context"/]
   [@hidden name="pendingIdPLinkId"/]
   [@hidden name="redirect_uri"/]
   [@hidden name="response_mode"/]

@@ -22,11 +22,12 @@
         [@helpers.hidden name="userVerifyingPlatformAuthenticatorAvailable"/]
       </form>
       <script type="text/javascript">
-        if (PublicKeyCredential && PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable) {
+        const uvpaAvailableField = document.querySelector('input[name="userVerifyingPlatformAuthenticatorAvailable"]');
+        if (uvpaAvailableField !== null && PublicKeyCredential && PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable) {
           PublicKeyCredential
             .isUserVerifyingPlatformAuthenticatorAvailable()
             .then(result => {
-              document.querySelector('input[name="userVerifyingPlatformAuthenticatorAvailable"]').value = result;
+              uvpaAvailableField.value = result;
               document.forms[0].submit();
             });
         } else {

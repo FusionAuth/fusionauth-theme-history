@@ -23,7 +23,7 @@
      [#elseif method.method == "authenticator"]
        &nbsp;<span>${theme.message('two-factor-method-authenticator')}</span>
         <span>
-         ${theme.message('two-factor-get-code-autenticator')}
+         ${theme.message('two-factor-get-code-at-authenticator')}
         </span>
      [#elseif method.method == "sms"]
         <span>${theme.message('two-factor-method-sms')}</span>
@@ -85,7 +85,7 @@
 
     [@helpers.main title=theme.message('two-factor-challenge-options')]
       [#setting url_escaping_charset='UTF-8']
-      <form id="2fa-form" action="two-factor-methods" method="POST" class="full">
+      <form id="2fa-form" action="${request.contextPath}/oauth2/two-factor-methods" method="POST" class="full">
 
         [@helpers.oauthHiddenFields/]
         [@helpers.hidden name="twoFactorId"/]

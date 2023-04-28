@@ -96,10 +96,8 @@
                 <p> ${theme.message("{description}recovery-codes-1", recoveryCodes?size)} </p>
               </fieldset>
               <fieldset>
-                <div class="d-flex center" style="flex-wrap: wrap;">
-                  [#list recoveryCodes as code]
-                  <div class="p-2 mr-2 mb-2 code">${code}</div>
-                  [/#list]
+                <div class="code d-flex" style="justify-content: center; flex-wrap: wrap; gap: 5px 15px;">
+                  [#list recoveryCodes as code]<div>${code}</div>[/#list]
                 </div>
               </fieldset>
               <fieldset>
@@ -144,11 +142,11 @@
           </form>
         [/#if]
 
-     [/@helpers.accountPanelFull]
+      [/@helpers.accountPanelFull]
     [/@helpers.accountMain]
 
     [@helpers.footer]
-       [#-- Custom footer code goes here --]
+      [#-- Custom footer code goes here --]
     [/@helpers.footer]
 
   [/@helpers.body]
