@@ -1,6 +1,7 @@
 [#ftl/]
 [#-- @ftlvariable name="application" type="io.fusionauth.domain.Application" --]
 [#-- @ftlvariable name="client_id" type="java.lang.String" --]
+[#-- @ftlvariable name="currentUser" type="io.fusionauth.domain.User" --]
 [#-- @ftlvariable name="fields" type="java.util.Map<java.lang.Integer, java.util.List<io.fusionauth.domain.form.FormField>>" --]
 [#-- @ftlvariable name="user" type="io.fusionauth.domain.User" --]
 [#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]
@@ -32,7 +33,7 @@
     [/@helpers.header]
 
     [@helpers.accountMain rowClass="row center" colClass="col-xs-12 col-sm-12 col-md-10 col-lg-8" actionURL="/account/" actionText=theme.message("cancel-go-back")]
-      [@helpers.accountPanel title="" tenant=tenant user=user action="edit" showEdit=true]
+      [@helpers.accountPanel title="" tenant=tenant user=currentUser action="edit" showEdit=true]
        <div class="row" style="border-bottom: 0;">
         <div class="col-xs-12 col-md-12">
           <form action="edit" method="POST" class="full" id="user-form">

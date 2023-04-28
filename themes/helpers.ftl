@@ -93,7 +93,7 @@
     </style>
   [/#if]
 
-  <script src="${request.contextPath}/js/prime-min-1.5.3.js?version=${version}"></script>
+  <script src="${request.contextPath}/js/prime-min-1.6.0.js?version=${version}"></script>
   <script src="/js/oauth2/LocaleSelect.js?version=${version}"></script>
   <script>
     "use strict";
@@ -871,18 +871,16 @@
 [/#macro]
 
 [#macro locale_select field name id autocapitalize="none" autofocus=false label="" required=false tooltip="" disabled=false class="checkbox-list" options=[]]
+  [#-- Note: This is a simple imlementation that does not support selecting more than one locale.
+             You may wish to use a multi-select or some other JavaScript widget to allow for more than one selection and to improve UX --]
   [#local value=("((" + name + ")!'')")?eval/]
   <div class="form-row">
-    <div id="${id}" class="${class}">
+    <select name="${name}" id="${id}" class="${class}">
       [#list fusionAuth.locales() as l, n]
         [#local checked = value?is_sequence && value?seq_contains(l)/]
-         <label class="checkbox">
-           <input type="checkbox" name="${name}" value="${l}" [#if checked]checked="checked"[/#if]>
-           <span class="box"></span>
-           <span class="label">${l.getDisplayName()}</span>
-         </label>
+        <option  value="${l}" [#if checked]selected[/#if]>${l.getDisplayName()}</option>
       [/#list]
-    </div>
+    </select>
   </div>
 [/#macro]
 

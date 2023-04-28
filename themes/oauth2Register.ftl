@@ -61,6 +61,7 @@
         [#-- Begin Self Service Custom Registration Form Steps --]
         [#if fields?has_content]
           <fieldset>
+            [@helpers.hidden name="collectBirthDate"/]
             [#list fields as field]
               [@helpers.customField field field.key field?is_first?then(true, false) field.key /]
               [#if field.confirm]
@@ -79,9 +80,11 @@
             [/@helpers.input]
             <div class="form-row">
               [@helpers.button icon="key" text=theme.message('register')/]
-            [#else]
+            </div>
+          [#else]
+            <div class="form-row">
               [@helpers.button icon="arrow-right" text=theme.message('next')/]
-              </div>
+            </div>
           [/#if]
         [#-- End Custom Self Service Registration Form Steps --]
         [#else]
