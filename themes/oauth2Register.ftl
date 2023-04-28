@@ -125,7 +125,7 @@
               [#if application.registrationConfiguration.lastName.enabled]
                   [@helpers.input type="text" name="user.lastName" id="lastName" placeholder=theme.message('lastName') leftAddon="user" required=application.registrationConfiguration.lastName.required/]
               [/#if]
-              [#if application.registrationConfiguration.birthDate.enabled]
+              [#if application.registrationConfiguration.birthDate.enabled && !hideBirthDate]
                   [@helpers.input type="text" name="user.birthDate" id="birthDate" placeholder=theme.message('birthDate') leftAddon="calendar" class="date-picker" dateTimeFormat="yyyy-MM-dd" required=application.registrationConfiguration.birthDate.required/]
               [/#if]
               [#if application.registrationConfiguration.mobilePhone.enabled]

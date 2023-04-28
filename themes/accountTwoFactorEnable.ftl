@@ -59,7 +59,7 @@
 [@helpers.html]
   [@helpers.head title=theme.message("authenticator-configuration")]
     [#-- JavaScript is used for rendering authenticator QR code --]
-    <script src="/js/qrcode-min-0.1.js"></script>
+    <script src="/js/qrcode-min-1.0.js"></script>
     <script src="/js/account/EnableTwoFactor.js?version=${version}"></script>
     <script>
       Prime.Document.onReady(function() {
