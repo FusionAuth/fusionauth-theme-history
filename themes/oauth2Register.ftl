@@ -170,7 +170,7 @@
 
         [#-- Identity Provider Buttons (if you want to include these, remove the if-statement) --]
         [#if true]
-          [@helpers.alternativeLogins clientId=client_id identityProviders=identityProviders![] passwordlessEnabled=false bootstrapWebauthnEnabled=false/]
+          [@helpers.alternativeLogins clientId=client_id identityProviders=identityProviders![] passwordlessEnabled=false bootStrapWebauthnEnabled=false/]
         [/#if]
         [#-- End Identity Provider Buttons --]
 

@@ -41,7 +41,7 @@
             <label>
               <input type="checkbox" name="trustComputer" [#if trustComputer]checked[/#if]/>
               [#assign trustInDays = (tenant.externalIdentifierConfiguration.twoFactorTrustIdTimeToLiveInSeconds / (24 * 60 * 60))?string("##0")/]
-              [#if (application.externalIdentifierConfiguration.twoFactorTrustIdTimeToLiveInSeconds)??]
+              [#if application.externalIdentifierConfiguration.twoFactorTrustIdTimeToLiveInSeconds??]
                 [#assign trustInDays = (application.externalIdentifierConfiguration.twoFactorTrustIdTimeToLiveInSeconds / (24 * 60 * 60))?string("##0")/]
               [/#if]
               ${theme.message('trust-computer', trustInDays)}

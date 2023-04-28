@@ -5,6 +5,7 @@
 [#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]
 [#-- @ftlvariable name="tenantId" type="java.util.UUID" --]
 [#-- @ftlvariable name="user" type="io.fusionauth.domain.User" --]
+[#-- @ftlvariable name="webAuthnCredentials" type="java.util.List<io.fusionauth.domain.WebAuthnCredential>" --]
 
 [#import "../../_helpers.ftl" as helpers/]
 
