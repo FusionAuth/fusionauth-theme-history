@@ -9,6 +9,7 @@
 [#-- @ftlvariable name="metaData" type="io.fusionauth.domain.jwt.RefreshToken.MetaData" --]
 [#-- @ftlvariable name="nonce" type="java.lang.String" --]
 [#-- @ftlvariable name="passwordlessEnabled" type="boolean" --]
+[#-- @ftlvariable name="pendingIdPLink" type="io.fusionauth.domain.provider.PendingIdPLink" --]
 [#-- @ftlvariable name="redirect_uri" type="java.lang.String" --]
 [#-- @ftlvariable name="response_type" type="java.lang.String" --]
 [#-- @ftlvariable name="scope" type="java.lang.String" --]
@@ -24,22 +25,12 @@
   [@helpers.head]
     <script src="/js/jstz-min-1.0.6.js"></script>
     <script src="/js/oauth2/Authorize.js?version=${version}"></script>
+    <script src="/js/identityProvider/InProgress.js?version=${version}"></script>
     [@helpers.alternativeLoginsScript clientId=client_id identityProviders=identityProviders/]
     <script>
       Prime.Document.onReady(function() {
         [#-- This object handles guessing the timezone and filling in the device id of the user --]
         new FusionAuth.OAuth2.Authorize();
-        [#--
-         To use an in-progress indicator when waiting for an external identity provider such as Google.
-           - The panel class will make the default FusionAuth login panel show "in progress". Modify
-             this selector if your HTML has been modified, or use your own in progress indicator.
-        --]
-        var panel = Prime.Document.queryFirst('.panel');
-        if (panel !== null) {
-          FusionAuth = FusionAuth || {};
-          FusionAuth.IdentityProvider = FusionAuth.IdentityProvider || {};
-          FusionAuth.IdentityProvider.InProgress = new Prime.Widgets.InProgress(panel);
-        }
       });
     </script>
   [/@helpers.head]
@@ -50,6 +41,13 @@
     [/@helpers.header]
 
     [@helpers.main title=theme.message('login')]
+      [#-- During a linking work flow, optionally indicate to the user which IdP is being linked. --]
+      [#if pendingIdPLink??]
+        <p class="mt-0">
+          ${theme.message('pending-link-login-to-complete', pendingIdPLink.identityProviderName)}
+          [@helpers.link url="" extraParameters="&cancelPendingIdpLink=true"]${theme.message('login-cancel-link')}[/@helpers.link]
+        </p>
+      [/#if]
       <form action="${request.contextPath}/oauth2/authorize" method="POST" class="full">
         [@helpers.oauthHiddenFields/]
         [@helpers.hidden name="showPasswordField"/]
@@ -67,7 +65,7 @@
         <div class="form-row">
           [#if showPasswordField]
             [@helpers.button icon="key" text=theme.message('submit')/]
-            [@helpers.link url="/password/forgot"]${theme.message('forgot-your-password')}[/@helpers.link]
+            [@helpers.link url="${request.contextPath}/password/forgot"]${theme.message('forgot-your-password')}[/@helpers.link]
           [#else]
             [@helpers.button icon="arrow-right" text=theme.message('next')/]
           [/#if]
@@ -81,7 +79,7 @@
       [#if application.registrationConfiguration.enabled]
         <div class="form-row push-top">
           ${theme.message('dont-have-an-account')}
-          [@helpers.link url="register"]${theme.message('create-an-account')}[/@helpers.link]
+          [@helpers.link url="${request.contextPath}/oauth2/register"]${theme.message('create-an-account')}[/@helpers.link]
         </div>
       [/#if]
       [@helpers.alternativeLogins clientId=client_id identityProviders=identityProviders passwordlessEnabled=passwordlessEnabled/]

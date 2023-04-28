@@ -1,10 +1,13 @@
 [#ftl/]
 [#-- @ftlvariable name="application" type="io.fusionauth.domain.Application" --]
+[#-- @ftlvariable name="client_id" type="java.lang.String" --]
 [#-- @ftlvariable name="collectBirthDate" type="boolean" --]
 [#-- @ftlvariable name="fields" type="java.util.List<io.fusionauth.domain.form.FormField>" --]
 [#-- @ftlvariable name="hideBirthDate" type="boolean" --]
+[#-- @ftlvariable name="identityProviders" type="java.util.Map<java.lang.String, java.util.List<io.fusionauth.domain.provider.BaseIdentityProvider<?>>>" --]
 [#-- @ftlvariable name="passwordValidationRules" type="io.fusionauth.domain.PasswordValidationRules" --]
 [#-- @ftlvariable name="parentEmailRequired" type="boolean" --]
+[#-- @ftlvariable name="pendingIdPLink" type="io.fusionauth.domain.provider.PendingIdPLink" --]
 [#-- @ftlvariable name="step" type="int" --]
 [#-- @ftlvariable name="totalSteps" type="int" --]
 
@@ -12,6 +15,8 @@
 
 [@helpers.html]
   [@helpers.head]
+    <script src="/js/identityProvider/InProgress.js?version=${version}"></script>
+    [@helpers.alternativeLoginsScript clientId=client_id identityProviders=identityProviders/]
     [#-- Custom <head> code goes here --]
   [/@helpers.head]
   [@helpers.body]
@@ -20,6 +25,13 @@
     [/@helpers.header]
 
     [@helpers.main title=theme.message('register')]
+      [#-- During a linking work flow, optionally indicate to the user which IdP is being linked. --]
+      [#if pendingIdPLink??]
+        <p class="mt-0">
+          ${theme.message('pending-link-register-to-complete', pendingIdPLink.identityProviderName)}
+          [@helpers.link url="" extraParameters="&cancelPendingIdpLink=true"]${theme.message('register-cancel-link')}[/@helpers.link]
+        </p>
+      [/#if]
       <form action="register" method="POST" class="full">
         [@helpers.oauthHiddenFields/]
         [@helpers.hidden name="step"/]
@@ -115,6 +127,12 @@
           </div>
         [/#if]
         [#-- End Self Service Custom Registration Form Step Counter --]
+
+        [#-- Identity Provider Buttons (if you want to include these, remove the if-statement) --]
+        [#if true]
+          [@helpers.alternativeLogins clientId=client_id identityProviders=identityProviders![] passwordlessEnabled=false/]
+        [/#if]
+        [#-- End Identity Provider Buttons --]
 
       </form>
     [/@helpers.main]

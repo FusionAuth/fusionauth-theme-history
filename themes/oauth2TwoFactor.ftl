@@ -1,6 +1,6 @@
 [#ftl/]
-[#-- @ftlvariable name="method" type="java.lang.String" --]
 [#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]
+[#-- @ftlvariable name="method" type="io.fusionauth.domain.TwoFactorMethod" --]
 [#-- @ftlvariable name="methodId" type="java.lang.String" --]
 [#-- @ftlvariable name="showResendOrSelectMethod" type="boolean" --]
 [#-- @ftlvariable name="trustComputer" type="boolean" --]

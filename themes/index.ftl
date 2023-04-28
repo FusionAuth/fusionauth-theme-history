@@ -12,7 +12,7 @@
       Example landing page. You can use a meta refresh (or via JS) to redirect users who land here to your primary site,
        or add some links here to help direct them to different applications.
 
-       For additinoal details on performing a redirect.
+       For additional details on performing a redirect.
        https://developer.mozilla.org/en-US/docs/Web/HTTP/Redirections#alternative_way_of_specifying_redirections
       --]
       [@helpers.main title="" rowClass="row center-xs" colClass="col-xs-12 col-sm-12 col-md-10 col-lg-10 col-xl-9"]
@@ -37,9 +37,9 @@
     [@helpers.footer]
       [#-- Custom footer code goes here --]
 
-      [#--
-       Feel free to remove this, it is just a stupid easter egg. Enjoy.
-         Escape is impossible when you're caught in the net https://www.imdb.com/title/tt0113957/  --]
+      [#-- Using an HTML comment so this is visible in the rendered HTML. We don't want to freak anyone out. --]
+      <!-- Feel free to remove this, it is just a stupid easter egg. Enjoy. -->
+      <!--   "Escape is impossible when you're caught in the net" https://www.imdb.com/title/tt0113957/  -->
       <div style="position:fixed; left:0; bottom: 0; margin-bottom: 7px; margin-left: 10px;"><a style="color: inherit;" href="https://thepraetorians.net" title="Escape is impossible when you're caught in the net.">��</a></div>
     [/@helpers.footer]
   [/@helpers.body]

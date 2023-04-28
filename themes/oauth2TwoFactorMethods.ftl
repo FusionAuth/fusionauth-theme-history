@@ -1,6 +1,5 @@
 [#ftl/]
 [#-- @ftlvariable name="availableMethodsMap" type="java.util.Map<java.lang.String, io.fusionauth.domain.TwoFactorMethod>" --]
-[#-- @ftlvariable name="method" type="java.lang.String" --]
 [#-- @ftlvariable name="methodId" type="java.lang.String" --]
 [#-- @ftlvariable name="recoverCodesAvailable" type="int" --]
 [#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]
