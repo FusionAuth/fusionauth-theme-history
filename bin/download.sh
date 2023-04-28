@@ -20,4 +20,4 @@ cat $TMP_DIR/themeout.json |jq '.theme.stylesheet // empty'  |sed 's/^"//' |sed 
 #curl -H 'Authorization: '$API_KEY  $FUSIONAUTH_URL/api/theme/$THEME_ID|jq '.theme.localizedMessages' > $TMP_DIR/localizedMessages.properties
 
 
-#rm $TMP_DIR/templates.json $TMP_DIR/themeout.json
+rm $TMP_DIR/templates.json $TMP_DIR/themeout.json
