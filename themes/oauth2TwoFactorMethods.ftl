@@ -15,20 +15,20 @@
    <label>
      <input type="radio" name="methodId" value="${id}" [#if id = methodId!'']checked[/#if]>
      [#if method.method == "email"]
-       <span>Email message</span>
+       <span>${theme.message('two-factor-method-email')}</span>
        <span>
         [#assign index = method.email?index_of("@")/]
-        Get a code at ${method.email?substring(0, index + 2)}&hellip;
+        ${theme.message('two-factor-get-code-at-email', method.email?substring(0, index + 2))}
        </span>
      [#elseif method.method == "authenticator"]
-       &nbsp;<span>Authenticator</span>
+       &nbsp;<span>${theme.message('two-factor-method-authenticator')}</span>
         <span>
-         Get a code from your authenticator app
+         ${theme.message('two-factor-get-code-autenticator')}
         </span>
      [#elseif method.method == "sms"]
-        <span>Text message</span>
+        <span>${theme.message('two-factor-method-sms')}</span>
         <span>
-         Get a code at (***) ***-**${method.mobilePhone?substring(method.mobilePhone?length - 2)}
+          ${theme.message('two-factor-get-code-at-sms', method.mobilePhone?substring(method.mobilePhone?length - 2))}
         </span>
      [#else]
         ${theme.optionalMessage(method.method)}
