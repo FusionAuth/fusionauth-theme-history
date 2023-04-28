@@ -1,6 +1,9 @@
 [#ftl/]
 [#-- @ftlvariable name="allowEmailChange" type="boolean" --]
+[#-- @ftlvariable name="currentUser" type="io.fusionauth.domain.User" --]
 [#-- @ftlvariable name="collectVerificationCode" type="boolean" --]
+[#-- @ftlvariable name="email" type="java.lang.String" --]
+[#-- @ftlvariable name="showCaptcha" type="boolean" --]
 [#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]
 [#-- @ftlvariable name="tenantId" type="java.util.UUID" --]
 [#-- @ftlvariable name="verificationId" type="java.lang.String" --]
@@ -8,6 +11,7 @@
 
 [@helpers.html]
   [@helpers.head]
+    [@helpers.captchaScripts showCaptcha=showCaptcha captchaMethod=tenant.captchaConfiguration.captchaMethod siteKey=tenant.captchaConfiguration.siteKey/]
     [#-- Custom <head> code goes here --]
   [/@helpers.head]
   [@helpers.body]
@@ -34,6 +38,7 @@
             [@helpers.hidden name="verificationId"/]
             <fieldset>
               [@helpers.input type="text" name="oneTimeCode" id="otp" autocapitalize="none" autofocus=true autocomplete="one-time-code" autocorrect="off" placeholder="${theme.message('code')}" leftAddon="lock"/]
+              [@helpers.captchaBadge showCaptcha=showCaptcha captchaMethod=tenant.captchaConfiguration.captchaMethod siteKey=tenant.captchaConfiguration.siteKey/]
             </fieldset>
             <div class="form-row">
               [@helpers.button text=theme.message('submit')/]

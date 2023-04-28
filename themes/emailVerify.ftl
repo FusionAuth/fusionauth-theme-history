@@ -2,6 +2,7 @@
 [#-- @ftlvariable name="application" type="io.fusionauth.domain.Application" --]
 [#-- @ftlvariable name="client_id" type="java.lang.String" --]
 [#-- @ftlvariable name="postMethod" type="boolean" --]
+[#-- @ftlvariable name="showCaptcha" type="boolean" --]
 [#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]
 [#-- @ftlvariable name="tenantId" type="java.util.UUID" --]
 [#-- @ftlvariable name="verificationId" type="java.lang.String" --]
@@ -9,7 +10,7 @@
 
 [@helpers.html]
   [@helpers.head]
-    [#-- Custom <head> code goes here --]
+    [@helpers.captchaScripts showCaptcha=showCaptcha captchaMethod=tenant.captchaConfiguration.captchaMethod siteKey=tenant.captchaConfiguration.siteKey/]
   [/@helpers.head]
   [@helpers.body]
     [#if verificationId?? && postMethod]
@@ -30,6 +31,7 @@
       [@helpers.main title=theme.message('email-verification-form-title')]
         [#-- FusionAuth automatically handles errors that occur during email verification and outputs them in the HTML --]
         <form action="${request.contextPath}/email/verify" method="POST" class="full">
+          [@helpers.hidden name="captcha_token"/]
           [@helpers.hidden name="client_id"/]
           [@helpers.hidden name="tenantId"/]
           <p>
@@ -37,6 +39,7 @@
           </p>
           <fieldset class="push-less-top">
             [@helpers.input type="text" name="email" id="email" autocapitalize="none" autofocus=true autocomplete="on" autocorrect="off" placeholder="${theme.message('email')}" leftAddon="user"/]
+            [@helpers.captchaBadge showCaptcha=showCaptcha captchaMethod=tenant.captchaConfiguration.captchaMethod siteKey=tenant.captchaConfiguration.siteKey/]
           </fieldset>
           <div class="form-row">
             [@helpers.button text=theme.message('submit')/]

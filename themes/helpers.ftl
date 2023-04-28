@@ -19,6 +19,7 @@
 [#-- @ftlvariable name="response_type" type="java.lang.String" --]
 [#-- @ftlvariable name="scope" type="java.lang.String" --]
 [#-- @ftlvariable name="state" type="java.lang.String" --]
+[#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]
 [#-- @ftlvariable name="theme" type="io.fusionauth.domain.Theme" --]
 [#-- @ftlvariable name="timezone" type="java.lang.String" --]
 [#-- @ftlvariable name="user_code" type="java.lang.String" --]
@@ -708,9 +709,21 @@
   [/#if]
 [/#macro]
 
-[#-- Input field of optional type: [number | password | text --]
-[#macro input type name id autocapitalize="none" autocomplete="on" autocorrect="off" autofocus=false spellcheck="false" label="" placeholder="" leftAddon="" required=false tooltip="" disabled=false class="" dateTimeFormat=""]
+[#-- Input field of type. --]
+[#macro input type name id autocapitalize="none" autocomplete="on" autocorrect="off" autofocus=false spellcheck="false" label="" placeholder="" leftAddon="" required=false tooltip="" disabled=false class="" dateTimeFormat="" value="" uncheckedValue=""]
 <div class="form-row">
+  [#if type == "checkbox"]
+    [@_input_checkbox name=name value=value uncheckedValue=uncheckedValue label=label]
+     [#nested]
+    [/@_input_checkbox]
+  [#else]
+    [@_input_text type=type name=name id=id autocapitalize=autocapitalize autocomplete=autocomplete autocorrect=autocorrect autofocus=autofocus spellcheck=spellcheck label=label placeholder=placeholder leftAddon=leftAddon required=required tooltip=tooltip disabled=disabled class=class dateTimeFormat=dateTimeFormat/]
+  [/#if]
+  [@errors field=name/]
+</div>
+[/#macro]
+
+[#macro _input_text type name id autocapitalize autocomplete autocorrect autofocus spellcheck label placeholder leftAddon required tooltip disabled class dateTimeFormat ]
   [#if label?has_content]
   [#compress]
     <label for="${id}"[#if (fieldMessages[name]![])?size > 0] class="error"[/#if]>${label}[#if required] <span class="required">*</span>[/#if]
@@ -732,8 +745,19 @@
   [#if leftAddon?has_content]
   </div>
   [/#if]
-  [@errors field=name/]
-</div>
+[/#macro]
+
+[#macro _input_checkbox name value uncheckedValue label]
+<label>
+  [#local actualValue = ("((" + name + ")!'')")?eval/]
+  [#local checked = actualValue?is_boolean?then(actualValue == value?boolean, actualValue == value)/]
+  [#if uncheckedValue?has_content]
+  <input type="hidden" name="__cb_${name}" value="${uncheckedValue}"/>
+  [/#if]
+  <input type="checkbox" name=${name} value="${value}" [#if checked]checked=checked[/#if]/>
+  &nbsp; ${label?has_content?then(label, theme.message(name))}
+  [#nested/]
+</label>
 [/#macro]
 
 [#-- Select --]
@@ -865,6 +889,7 @@
 [#-- End : Used for Advanced Registration. --]
 
 [#macro oauthHiddenFields]
+  [@hidden name="captcha_token"/]
   [@hidden name="client_id"/]
   [@hidden name="code_challenge"/]
   [@hidden name="code_challenge_method"/]
@@ -995,4 +1020,49 @@
       [@customField field "confirm.${field.key}" false "[confirm]${field.key}" /]
     [/#if]
   </div>
+[/#macro]
+
+[#macro captchaScripts showCaptcha captchaMethod siteKey=""]
+  [#if showCaptcha]
+    [#if captchaMethod == "GoogleRecaptchaV2"]
+      <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    [/#if]
+    [#if captchaMethod == "GoogleRecaptchaV3"]
+      <script src="https://www.google.com/recaptcha/api.js?render=${siteKey}"></script>
+      [#-- This is hiding the Google Recaptcha badge that would normally appear in the lower right corner of
+           the window that shows Terms and Conditions. It also centers the replacement text that is required
+           by Google when hiding the standard badge. Remove or modify the CSS if you want to show it. --]
+      <style type="text/css">
+        .grecaptcha-badge { visibility: hidden; }
+        .grecaptcha-msg { text-align: center; }
+      </style>
+    [/#if]
+    [#if captchaMethod == "HCaptcha" || captchaMethod == "HCaptchaEnterprise"]
+      <script src="https://hcaptcha.com/1/api.js" async defer></script>
+    [/#if]
+    <script src="/js/oauth2/Captcha.js?version=${version}"></script>
+    <script data-captcha-method="${captchaMethod!''}" data-site-key="${siteKey!''}">
+      Prime.Document.onReady(function() {
+        new FusionAuth.OAuth2.Captcha();
+      });
+    </script>
+  [/#if]
+[/#macro]
+
+[#macro captchaBadge showCaptcha captchaMethod siteKey=""]
+  [#-- If you want to remove captcha from the page, also ensure you disable it in the tenant configruation. --]
+  [#if showCaptcha]
+    [#if captchaMethod == "GoogleRecaptchaV2"]
+      <div class="g-recaptcha" data-sitekey="${siteKey!''}" style="transform:scale(0.93); margin-left:-9px;"></div>
+    [#elseif captchaMethod == "GoogleRecaptchaV3"]
+      [#-- This is the replacement Terms and Conditions messaging that is required by Google when hiding the
+           standard badge. If you want to remove this you will also need to remove or edit the CSS above. --]
+      <div class="grecaptcha-msg">
+        ${theme.message('captcha-google-branding')?no_esc}
+      </div>
+    [#elseif captchaMethod == "HCaptcha" || captchaMethod == "HCaptchaEnterprise"]
+      <div class="h-captcha" data-sitekey="${siteKey!''}" style="transform:scale(0.93); margin-left:-9px;"></div>
+    [/#if]
+    [@errors field="captcha_token"/]
+  [/#if]
 [/#macro]

@@ -2,6 +2,7 @@
 [#-- @ftlvariable name="allLogoutURLs" type="java.util.Set<java.lang.String>" --]
 [#-- @ftlvariable name="application" type="io.fusionauth.domain.Application" --]
 [#-- @ftlvariable name="client_id" type="java.lang.String" --]
+[#-- @ftlvariable name="currentUser" type="io.fusionauth.domain.User" --]
 [#-- @ftlvariable name="registeredLogoutURLs" type="java.util.Set<java.lang.String>" --]
 [#-- @ftlvariable name="redirectURL" type="java.lang.String" --]
 [#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]

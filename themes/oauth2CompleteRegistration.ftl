@@ -1,6 +1,7 @@
 [#ftl/]
 [#-- @ftlvariable name="application" type="io.fusionauth.domain.Application" --]
 [#-- @ftlvariable name="client_id" type="java.lang.String" --]
+[#-- @ftlvariable name="currentUser" type="io.fusionauth.domain.User" --]
 [#-- @ftlvariable name="fields" type="java.util.List<io.fusionauth.domain.form.FormField>" --]
 [#-- @ftlvariable name="step" type="int" --]
 [#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]
@@ -13,7 +14,7 @@
     [#-- Custom <head> code goes here --]
     <script>
     Prime.Document.onReady(function() {
-      var firstInput = Prime.Document.queryFirst('form[action=complete-registration]').queryFirst('input:not([type=hidden])');
+      var firstInput = Prime.Document.queryFirst('form[action=/oauth2/complete-registration]').queryFirst('input:not([type=hidden])');
       if (firstInput !== null) {
           firstInput.focus();
       }
@@ -26,7 +27,7 @@
     [/@helpers.header]
 
     [@helpers.main title=theme.message('complete-registration')]
-      <form action="complete-registration" method="POST" class="full">
+      <form action="${request.contextPath}/oauth2/complete-registration" method="POST" class="full">
         [@helpers.oauthHiddenFields/]
         [@helpers.hidden name="step"/]
         [@helpers.hidden name="registrationState"/]

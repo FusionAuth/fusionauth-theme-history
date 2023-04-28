@@ -9,6 +9,7 @@
 [#-- @ftlvariable name="passwordValidationRules" type="io.fusionauth.domain.PasswordValidationRules" --]
 [#-- @ftlvariable name="parentEmailRequired" type="boolean" --]
 [#-- @ftlvariable name="pendingIdPLink" type="io.fusionauth.domain.provider.PendingIdPLink" --]
+[#-- @ftlvariable name="showCaptcha" type="boolean" --]
 [#-- @ftlvariable name="step" type="int" --]
 [#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]
 [#-- @ftlvariable name="tenantId" type="java.util.UUID" --]
@@ -19,6 +20,9 @@
   [@helpers.head]
     <script src="/js/identityProvider/InProgress.js?version=${version}"></script>
     [@helpers.alternativeLoginsScript clientId=client_id identityProviders=identityProviders/]
+    [#if step == totalSteps]
+      [@helpers.captchaScripts showCaptcha=showCaptcha captchaMethod=tenant.captchaConfiguration.captchaMethod siteKey=tenant.captchaConfiguration.siteKey/]
+    [/#if]
     [#-- Custom <head> code goes here --]
   [/@helpers.head]
   [@helpers.body]
@@ -63,15 +67,22 @@
                 [@helpers.customField field "confirm.${field.key}" false "[confirm]${field.key}" /]
               [/#if]
             [/#list]
+            [#-- If this is the last step of the form, optionally show a captcha. --]
+            [#if step == totalSteps]
+              [@helpers.captchaBadge showCaptcha=showCaptcha captchaMethod=tenant.captchaConfiguration.captchaMethod siteKey=tenant.captchaConfiguration.siteKey/]
+            [/#if]
           </fieldset>
 
-          <div class="form-row">
           [#if step == totalSteps]
-            [@helpers.button icon="key" text=theme.message('register')/]
-          [#else]
-            [@helpers.button icon="arrow-right" text="Next"/]
+            [@helpers.input id="rememberDevice" type="checkbox" name="rememberDevice" label=theme.message('remember-device') value="true" uncheckedValue="false"]
+              <i class="fa fa-info-circle" data-tooltip="${theme.message('{tooltip}remember-device')}"></i>[#t/]
+            [/@helpers.input]
+            <div class="form-row">
+              [@helpers.button icon="key" text=theme.message('register')/]
+            [#else]
+              [@helpers.button icon="arrow-right" text="Next"/]
+            </div>
           [/#if]
-          </div>
         [#-- End Custom Self Service Registration Form Steps --]
         [#else]
         [#-- Begin Basic Self Service Registration Form --]
@@ -122,7 +133,12 @@
               [/#if]
             [/#if]
           [/#if]
+          [@helpers.captchaBadge showCaptcha=showCaptcha captchaMethod=tenant.captchaConfiguration.captchaMethod siteKey=tenant.captchaConfiguration.siteKey/]
         </fieldset>
+
+        [@helpers.input id="rememberDevice" type="checkbox" name="rememberDevice" label=theme.message('remember-device') value="true" uncheckedValue="false"]
+          <i class="fa fa-info-circle" data-tooltip="${theme.message('{tooltip}remember-device')}"></i>[#t/]
+        [/@helpers.input]
 
         <div class="form-row">
           [@helpers.button icon="key" text=theme.message('register')/]

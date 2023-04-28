@@ -3,12 +3,15 @@
 [#-- @ftlvariable name="client_id" type="java.lang.String" --]
 [#-- @ftlvariable name="code" type="java.lang.String" --]
 [#-- @ftlvariable name="postMethod" type="boolean" --]
+[#-- @ftlvariable name="showCaptcha" type="boolean" --]
 [#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]
 [#-- @ftlvariable name="tenantId" type="java.util.UUID" --]
 [#import "../_helpers.ftl" as helpers/]
 
 [@helpers.html]
-  [@helpers.head/]
+  [@helpers.head]
+    [@helpers.captchaScripts showCaptcha=showCaptcha captchaMethod=tenant.captchaConfiguration.captchaMethod siteKey=tenant.captchaConfiguration.siteKey/]
+  [/@helpers.head]
   [@helpers.body]
     [#if code?? && postMethod]
       <form action="${request.contextPath}/oauth2/passwordless/${code}" method="POST">
@@ -31,7 +34,12 @@
 
           <fieldset>
             [@helpers.input type="text" name="loginId" id="loginId" autocomplete="username" autocapitalize="none" autocomplete="on" autocorrect="off" spellcheck="false" autofocus=true placeholder=theme.message('loginId') leftAddon="user" required=true/]
+            [@helpers.captchaBadge showCaptcha=showCaptcha captchaMethod=tenant.captchaConfiguration.captchaMethod siteKey=tenant.captchaConfiguration.siteKey/]
           </fieldset>
+
+          [@helpers.input id="rememberDevice" type="checkbox" name="rememberDevice" label=theme.message('remember-device') value="true" uncheckedValue="false"]
+            <i class="fa fa-info-circle" data-tooltip="${theme.message('{tooltip}remember-device')}"></i>[#t/]
+          [/@helpers.input]
 
           <div class="form-row">
             [@helpers.button icon="send" text=theme.message('send')/]

@@ -13,8 +13,10 @@
 [#-- @ftlvariable name="passwordlessEnabled" type="boolean" --]
 [#-- @ftlvariable name="pendingIdPLink" type="io.fusionauth.domain.provider.PendingIdPLink" --]
 [#-- @ftlvariable name="redirect_uri" type="java.lang.String" --]
+[#-- @ftlvariable name="rememberDevice" type="boolean" --]
 [#-- @ftlvariable name="response_type" type="java.lang.String" --]
 [#-- @ftlvariable name="scope" type="java.lang.String" --]
+[#-- @ftlvariable name="showCaptcha" type="boolean" --]
 [#-- @ftlvariable name="showPasswordField" type="boolean" --]
 [#-- @ftlvariable name="state" type="java.lang.String" --]
 [#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]
@@ -27,6 +29,7 @@
 [@helpers.html]
   [@helpers.head]
     <script src="/js/jstz-min-1.0.6.js"></script>
+    [@helpers.captchaScripts showCaptcha=showCaptcha captchaMethod=tenant.captchaConfiguration.captchaMethod siteKey=tenant.captchaConfiguration.siteKey/]
     <script src="/js/oauth2/Authorize.js?version=${version}"></script>
     <script src="/js/identityProvider/InProgress.js?version=${version}"></script>
     [@helpers.alternativeLoginsScript clientId=client_id identityProviders=identityProviders/]
@@ -71,17 +74,22 @@
           [@helpers.input type="text" name="loginId" id="loginId" autocomplete="username" autocapitalize="none" autocomplete="on" autocorrect="off" spellcheck="false" autofocus=(!loginId?has_content) placeholder=theme.message('loginId') leftAddon="user" disabled=(showPasswordField && hasDomainBasedIdentityProviders)/]
           [#if showPasswordField]
             [@helpers.input type="password" name="password" id="password" autocomplete="current-password" autofocus=loginId?has_content placeholder=theme.message('password') leftAddon="lock"/]
+            [@helpers.captchaBadge showCaptcha=showCaptcha captchaMethod=tenant.captchaConfiguration.captchaMethod siteKey=tenant.captchaConfiguration.siteKey/]
           [/#if]
         </fieldset>
 
-        <div class="form-row">
-          [#if showPasswordField]
-            [@helpers.button icon="key" text=theme.message('submit')/]
-            [@helpers.link url="${request.contextPath}/password/forgot"]${theme.message('forgot-your-password')}[/@helpers.link]
-          [#else]
-            [@helpers.button icon="arrow-right" text=theme.message('next')/]
-          [/#if]
-        </div>
+          [@helpers.input id="rememberDevice" type="checkbox" name="rememberDevice" label=theme.message('remember-device') value="true" uncheckedValue="false"]
+            <i class="fa fa-info-circle" data-tooltip="${theme.message('{tooltip}remember-device')}"></i>[#t/]
+          [/@helpers.input]
+
+          <div class="form-row">
+            [#if showPasswordField]
+              [@helpers.button icon="key" text=theme.message('submit')/]
+              [@helpers.link url="${request.contextPath}/password/forgot"]${theme.message('forgot-your-password')}[/@helpers.link]
+            [#else]
+              [@helpers.button icon="arrow-right" text=theme.message('next')/]
+            [/#if]
+          </div>
       </form>
       <div>
         [#if showPasswordField && hasDomainBasedIdentityProviders]
