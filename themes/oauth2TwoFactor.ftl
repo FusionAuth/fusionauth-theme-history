@@ -55,7 +55,7 @@
         [#-- If more than one option was available, allow the user to change their mind, or go back and request another code. --]
         [#if showResendOrSelectMethod]
            <div class="form-row mt-4 mb-0">
-            [@helpers.link url="/oauth2/two-factor-methods" extraParameters="&twoFactorId=${twoFactorId?url}&methodId=${methodId!''}&selectMethod=true"]
+            [@helpers.link url="/oauth2/two-factor-methods" extraParameters="&twoFactorId=${twoFactorId?url}&methodId=${(methodId?url)!''}&selectMethod=true"]
               <i class="fa fa-arrow-left"></i>
               ${theme.message('two-factor-select-method')}
             [/@helpers.link]
