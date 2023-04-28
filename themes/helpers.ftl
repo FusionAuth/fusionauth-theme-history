@@ -7,10 +7,12 @@
 [#-- @ftlvariable name="code_challenge" type="java.lang.String" --]
 [#-- @ftlvariable name="code_challenge_method" type="java.lang.String" --]
 [#-- @ftlvariable name="consents" type="java.util.Map<java.util.UUID, java.util.List<java.lang.String>>" --]
+[#-- @ftlvariable name="editPasswordOption" type="java.lang.String" --]
 [#-- @ftlvariable name="locale" type="java.util.Locale" --]
 [#-- @ftlvariable name="loginTheme" type="io.fusionauth.domain.Theme.Templates" --]
 [#-- @ftlvariable name="metaData" type="io.fusionauth.domain.jwt.RefreshToken.MetaData" --]
 [#-- @ftlvariable name="nonce" type="java.lang.String" --]
+[#-- @ftlvariable name="passwordValidationRules" type="io.fusionauth.domain.PasswordValidationRules" --]
 [#-- @ftlvariable name="redirect_uri" type="java.lang.String" --]
 [#-- @ftlvariable name="response_mode" type="java.lang.String" --]
 [#-- @ftlvariable name="response_type" type="java.lang.String" --]
@@ -89,7 +91,7 @@
     </style>
   [/#if]
 
-  <script src="/js/prime-min-1.4.1.js?version=${version}"></script>
+  <script src="${request.contextPath}/js/prime-min-1.5.3.js?version=${version}"></script>
   <script src="/js/oauth2/LocaleSelect.js?version=${version}"></script>
   <script>
     "use strict";
@@ -106,7 +108,11 @@
       Prime.Document.query('.date-picker').each(function(e) {
         new Prime.Widgets.DateTimePicker(e).withDateOnly().initialize();
       });
-      new FusionAuth.OAuth2.LocaleSelect(new Prime.Document.queryById('locale-select'));
+      [#-- You may optionally remove the Locale Selector, or it may not be on every page. --]
+      var localeSelect = Prime.Document.queryById('locale-select');
+      if (localeSelect !== null) {
+        new FusionAuth.OAuth2.LocaleSelect(localeSelect);
+      }
     });
     FusionAuth.Version = "${version}";
   </script>
@@ -127,10 +133,16 @@
 
 [#macro header]
   <header class="app-header">
-    <div class="right-menu">
+    <div class="right-menu" [#if request.requestURI == "/"]style="display: block !important;" [/#if]>
       <nav>
         <ul>
-          <li class="help"><a target="_blank" href="https://fusionauth.io/docs"><i class="fa fa-question-circle-o"></i> ${theme.message('help')}</a></li>
+          [#if request.requestURI == "/"]
+            <li><a href="${request.contextPath}/admin/" title="Administrative login"><i class="fa fa-lock" style="font-size: 18px;"></i></a></li>
+          [#elseif request.requestURI?starts_with("/account")]
+            <li><a href="${request.contextPath}/account/logout?client_id=${client_id!''}" title="Logout"><i class="fa fa-sign-out"></i></a></li>
+          [#else]
+            <li class="help"><a target="_blank" href="https://fusionauth.io/docs"><i class="fa fa-question-circle-o"></i> ${theme.message("help")}</a></li>
+          [/#if]
         </ul>
       </nav>
     </div>
@@ -161,12 +173,12 @@
   [/#if]
 [/#macro]
 
-[#macro main title="Login"]
+[#macro main title="Login" rowClass="row center-xs" colClass="col-xs col-sm-8 col-md-6 col-lg-5 col-xl-4"]
 <main class="page-body container">
-  [@printErrorAlerts/]
-  [@printInfoAlerts/]
-  <div class="row center-xs">
-    <div class="col-xs col-sm-8 col-md-6 col-lg-5 col-xl-4">
+  [@printErrorAlerts rowClass colClass/]
+  [@printInfoAlerts rowClass colClass/]
+  <div class="${rowClass}">
+    <div class="${colClass}">
       <div class="panel">
         [#if title?has_content]
           <h2>${title}</h2>
@@ -177,19 +189,115 @@
       </div>
     </div>
   </div>
-  <div class="row center-xs">
-    <div class="col-xs col-sm-8 col-md-6 col-lg-5 col-xl-4">
-      <label class="select">
-        <select id="locale-select" name="locale" class="select">
-          <option value="en" [#if locale == 'en']selected[/#if]>English</option>
-            [#list theme.additionalLocales() as l]
-              <option value="${l}" [#if locale == l]selected[/#if]>${l.getDisplayLanguage(locale)}</option>
-            [/#list]
-        </select>
-      </label>
+  <div class="${rowClass}">
+    <div class="${colClass}">
+      [@localSelector/]
     </div>
   </div>
 </main>
+[/#macro]
+
+[#macro accountMain rowClass="row center-xs" colClass="col-xs col-sm-8 col-md-6 col-lg-5 col-xl-4" actionURL="" actionText="Go back" actionDirection="back"]
+<main class="page-body container">
+  [@printErrorAlerts rowClass colClass/]
+  [@printInfoAlerts rowClass colClass/]
+  <div class="${rowClass}">
+    <div class="${colClass}">
+      [#nested/]
+    </div>
+  </div>
+  [@accountFooter rowClass "col-xs-6 col-sm-6 col-md-5 col-lg-4" actionURL actionText actionDirection/]
+</main>
+[/#macro]
+
+[#macro localSelector]
+<label class="select">
+  <select id="locale-select" name="locale" class="select">
+    <option value="en" [#if locale == 'en']selected[/#if]>English</option>
+      [#list theme.additionalLocales() as l]
+        <option value="${l}" [#if locale == l]selected[/#if]>${l.getDisplayLanguage(locale)}</option>
+      [/#list]
+  </select>
+</label>
+[/#macro]
+
+[#macro accountFooter rowClass colClass actionURL actionText actionDirection]
+<div class="${rowClass}">
+  <div class="${colClass}">
+    [@localSelector/]
+  </div>
+  <div class="${colClass}" style="text-align: right;">
+  [#if actionURL?has_content]
+    [#if !actionURL?contains("client_id")]
+      [#if actionURL?contains("?")]
+       [#local actionURL = actionURL + "&client_id=${client_id}"/]
+      [#else]
+       [#local actionURL = actionURL + "?client_id=${client_id}"/]
+      [/#if]
+    [/#if]
+    [#if actionDirection == "back"]
+      <a href="${actionURL}"> <i class="fa fa-arrow-left"></i> ${actionText}</a>
+    [#else]
+      <a href="${actionURL}">${actionText} <i class="fa fa-arrow-right"></i></a>
+    [/#if]
+  [/#if]
+  </div>
+</div>
+[/#macro]
+
+[#macro accountPanelFull title=""]
+<div class="panel">
+  [#if title?has_content]
+    <h2>${title}</h2>
+  [/#if]
+  <main>
+    [#nested/]
+  </main>
+</div>
+[/#macro]
+
+[#macro accountPanel title tenant user action showEdit]
+<div class="panel">
+  [#if title?has_content]
+    <h2>${title}</h2>
+  [/#if]
+  <main>
+   <div class="row mb-5 user-details">
+      [#-- Column 1 --]
+      <div class="col-xs-12 col-md-4 col-lg-4 tight-left" style="padding-bottom: 0;">
+        <div class="avatar pr-2">
+          <div>
+            [#if user.imageUrl??]
+              <img src="${user.imageUrl}" class="profile w-100" alt="profile image"/>
+            [#elseif user.lookupEmail()??]
+              <img src="${function.gravatar(user.lookupEmail(), 200)}" class="profile w-100" alt="profile image"/>
+            [#else]
+              <img src="${request.contextPath}/images/missing-user-image.jpg" class="profile w-100" alt="profile image"/>
+            [/#if]
+          </div>
+          <div>${display(user, "name")}</div>
+       </div>
+      </div>
+      [#-- Column 2 --]
+      <div class="col-xs-12 col-md-8 col-lg-8 tight-left">
+        [#nested/]
+      </div>
+      [#if action == "view"]
+        <div class="panel-actions">
+         <div class="status">
+           [#if showEdit]
+            <a id="edit-profile" class="blue icon" href="/account/edit?client_id=${client_id}">
+              <span style="font-size: 0.9rem;">
+              <i class="fa fa-pencil blue-text" data-tooltip="${theme.message("edit-profile")}"></i>
+              </span>
+            </a>
+           [/#if]
+         </div>
+       </div>
+      [/#if]
+  </div>
+  </main>
+</div>
 [/#macro]
 
 [#macro footer]
@@ -406,25 +514,25 @@
 
 [#-- Below are the helpers for errors and alerts --]
 
-[#macro printErrorAlerts]
+[#macro printErrorAlerts rowClass colClass]
   [#if errorMessages?size > 0]
     [#list errorMessages as m]
-      [@alert message=m type="error" icon="exclamation-circle"/]
+      [@alert message=m type="error" icon="exclamation-circle" rowClass=rowClass colClass=colClass/]
     [/#list]
   [/#if]
 [/#macro]
 
-[#macro printInfoAlerts]
+[#macro printInfoAlerts rowClass colClass]
   [#if infoMessages?size > 0]
     [#list infoMessages as m]
-      [@alert message=m type="info" icon="info-circle"/]
+      [@alert message=m type="info" icon="info-circle" rowClass=rowClass colClass=colClass/]
     [/#list]
   [/#if]
 [/#macro]
 
-[#macro alert message type icon includeDismissButton=true]
-<div class="row center-xs">
-  <div class="col-xs col-sm-8 col-md-6 col-lg-5 col-xl-4">
+[#macro alert message type icon includeDismissButton=true rowClass="row center-xs" colClass="col-xs col-sm-8 col-md-6 col-lg-5 col-xl-4"]
+<div class="${rowClass}">
+  <div class="${colClass}">
     <div class="alert ${type}">
       <i class="fa fa-${icon}"></i>
       <p>
@@ -443,7 +551,9 @@
 
 [#-- Hidden Input --]
 [#macro hidden name value="" dateTimeFormat=""]
-  [#local value=("((" + name + ")!'')")?eval?string/]
+  [#if !value?has_content]
+    [#local value=("((" + name + ")!'')")?eval?string/]
+  [/#if]
   <input type="hidden" name="${name}" [#if value == ""]value="${value}" [#else]value="${value?string}"[/#if]/>
   [#if dateTimeFormat != ""]
   <input type="hidden" name="${name}@dateTimeFormat" value="${dateTimeFormat}"/>
@@ -467,7 +577,7 @@
     <span class="icon"><i class="fa fa-${leftAddon}"></i></span>
   [/#if]
   [#local value=("((" + name + ")!'')")?eval/]
-      <input id="${id}" type="${type}" name="${name}" [#if type != "password"]value="${value}"[/#if] class="${class}" autocapitalize="${autocapitalize}" autocomplete="${autocomplete}" autocorrect="${autocorrect}" spellcheck="${spellcheck}" [#if autofocus]autofocus="autofocus"[/#if] placeholder="${placeholder}[#if required] *[/#if]" [#if disabled]disabled="disabled"[/#if]/>
+      <input id="${id}" type="${type}" name="${name}" [#if type != "password"]value="${value}"[/#if] class="${class}" autocapitalize="${autocapitalize}" autocomplete="${autocomplete}" autocorrect="${autocorrect}" spellcheck="${spellcheck}" [#if autofocus]autofocus="autofocus"[/#if] placeholder="${placeholder}" [#if disabled]disabled="disabled"[/#if]/>
   [#if dateTimeFormat != ""]
       <input type="hidden" name="${name}@dateTimeFormat" value="${dateTimeFormat}"/>
   [/#if]
@@ -481,14 +591,32 @@
 [#-- Select --]
 [#macro select name id autocapitalize="none" autofocus=false label="" required=false tooltip="" disabled=false class="select" options=[]]
 <div class="form-row">
+  [#if label?has_content]
+  [#compress]
+    <label for="${id}"[#if (fieldMessages[name]![])?size > 0] class="error"[/#if]>${label}[#if required] <span class="required">*</span>[/#if]
+    [#if tooltip?has_content]
+      <i class="fa fa-info-circle" data-tooltip="${tooltip}"></i>
+    [/#if]
+    </label>
+  [/#compress]
+  [/#if]
   <label class="select">
     [#local value=("((" + name + ")!'')")?eval/]
+    [#if name == "user.timezone" || name == "registration.timezone"]
+      <select id="${id}" class="${class}" name="${name}">
+        [#list timezones as option]
+          [#local selected = value == option/]
+          <option value="${option}" [#if selected]selected="selected"[/#if] >${option}</option>
+        [/#list]]
+      </select>
+    [#else]
     <select id="${id}" class="${class}" name="${name}">
       [#list options as option]
         [#local selected = value == option/]
         <option value="${option}" [#if selected]selected="selected"[/#if] >${theme.optionalMessage(option)}</option>
       [/#list]
     </select>
+    [/#if]
   </label>
   [@errors field=name/]
 </div>
@@ -540,8 +668,8 @@
        [#local checked = consents(field.consentId)??]
      [/#if]
      <input id="${id}" type="checkbox" name="${name}" value="${value}" [#if checked]checked="checked"[/#if]>
-     <span class="box"></span>
-     <span class="label">${theme.optionalMessage(name)}</span>
+       <span class="box"></span>
+       <span class="label">${theme.optionalMessage(name)}</span>
    </label>
   [@errors field=name/]
 </div>
@@ -570,6 +698,22 @@
 </div>
 [/#macro]
 
+[#macro locale_select field name id autocapitalize="none" autofocus=false label="" required=false tooltip="" disabled=false class="checkbox-list" options=[]]
+  [#local value=("((" + name + ")!'')")?eval/]
+  <div class="form-row">
+    <div id="${id}" class="${class}">
+      [#list fusionAuth.locales() as l, n]
+        [#local checked = value?is_sequence && value?seq_contains(l)/]
+         <label class="checkbox">
+           <input type="checkbox" name="${name}" value="${l}" [#if checked]checked="checked"[/#if]>
+           <span class="box"></span>
+           <span class="label">${l.getDisplayName()}</span>
+         </label>
+      [/#list]
+    </div>
+  </div>
+[/#macro]
+
 [#-- End : Used for Advanced Registration. --]
 
 [#macro oauthHiddenFields]
@@ -595,14 +739,18 @@
 [/#if]
 [/#macro]
 
-[#macro button text icon="arrow-right" color="blue" disabled=false]
-<button class="${color} button${disabled?then(' disabled', '')}"[#if disabled] disabled="disabled"[/#if]><i class="fa fa-${icon}"></i> ${text}</button>
+[#macro button text icon="arrow-right" color="blue" disabled=false name="" value=""]
+<button class="${color} button${disabled?then(' disabled', '')}"[#if disabled] disabled="disabled"[/#if][#if name !=""]name="${name}"[/#if][#if value !=""]value="${value}"[/#if]><i class="fa fa-${icon}"></i> ${text}</button>
 [/#macro]
 
 [#macro link url extraParameters=""]
 <a href="${url}?tenantId=${(tenantId)!''}&client_id=${(client_id?url)!''}&nonce=${(nonce?url)!''}&redirect_uri=${(redirect_uri?url)!''}&response_mode=${(response_mode?url)!''}&response_type=${(response_type?url)!''}&scope=${(scope?url)!''}&state=${(state?url)!''}&timezone=${(timezone?url)!''}&metaData.device.name=${(metaData.device.name?url)!''}&metaData.device.type=${(metaData.device.type?url)!''}${extraParameters!''}&code_challenge=${(code_challenge?url)!''}&code_challenge_method=${(code_challenge_method?url)!''}&user_code=${(user_code?url)!''}">
 [#nested/]
 </a>
+[/#macro]
+
+[#macro defaultIfNull text default]
+  ${text!default}
 [/#macro]
 
 [#macro passwordRules passwordValidationRules]
@@ -628,30 +776,74 @@
 </div>
 [/#macro]
 
-[#macro customField field key autofocus=false placeholder=""]
+[#macro customField field key autofocus=false placeholder="" label="" leftAddon="true"]
   [#assign fieldId = field.key?replace(".", "_") /]
-  [#local leftAddon = field.data.leftAddon!'info' /]
-  [#if field.control == "checkbox"]
+  [#local leftAddon = (leftAddon == "true")?then(field.data.leftAddon!'info', "") /]
+
+  [#if field.key == "user.preferredLanguages" || field.key == "registration.preferredLanguages"]
+    [@locale_select field=field id=fieldId name=field.key required=field.required autofocus=autofocus label=label /]
+  [#elseif field.control == "checkbox"]
     [#if field.options?has_content]
-      [@checkbox_list field=field id="${fieldId}" name="${key}" required=field.required autofocus=autofocus options=field.options /]
+      [@checkbox_list field=field id="${fieldId}" name="${key}" required=field.required autofocus=autofocus label=label options=field.options /]
     [#else]
-      [@checkbox field=field id="${fieldId}" name="${key}" required=field.required autofocus=autofocus /]
+      [@checkbox field=field id="${fieldId}" name="${key}" required=field.required autofocus=autofocus label=label /]
     [/#if]
   [#elseif field.control == "number"]
-    [@input id="${fieldId}" type="number" name="${key}" leftAddon="${leftAddon}" required=field.required autofocus=autofocus placeholder=theme.optionalMessage(placeholder) /]
+    [@input id="${fieldId}" type="number" name="${key}" leftAddon="${leftAddon}" required=field.required autofocus=autofocus label=label placeholder=theme.optionalMessage(placeholder) /]
   [#elseif field.control == "password"]
-    [@input id="${fieldId}" type="password" name="${key}" leftAddon="lock" autocomplete="new-password" autofocus=autofocus placeholder=theme.optionalMessage(placeholder)/]
+    [@input id="${fieldId}" type="password" name="${key}" leftAddon="lock" autocomplete="new-password" autofocus=autofocus label=label placeholder=theme.optionalMessage(placeholder)/]
   [#elseif field.control == "radio"]
-    [@radio_list field=field id="${fieldId}" name="${key}" required=field.required autofocus=autofocus options=field.options /]
+    [@radio_list field=field id="${fieldId}" name="${key}" required=field.required autofocus=autofocus label=label options=field.options /]
   [#elseif field.control == "select"]
-    [@select id="${fieldId}" name="${key}" required=field.required autofocus=autofocus options=field.options /]
+    [@select id="${fieldId}" name="${key}" required=field.required autofocus=autofocus label=label options=field.options /]
   [#elseif field.control == "textarea"]
-    [@textarea id="${fieldId}" name="${key}" required=field.required autofocus=autofocus placeholder=theme.optionalMessage(placeholder) /]
+    [@textarea id="${fieldId}" name="${key}" required=field.required autofocus=autofocus label=label placeholder=theme.optionalMessage(placeholder) /]
   [#elseif field.control == "text"]
     [#if field.type == "date"]
-      [@input id="${fieldId}" type="text" name="${key}" leftAddon="${leftAddon}" required=field.required autofocus=autofocus placeholder=theme.optionalMessage(placeholder) class="date-picker" dateTimeFormat="yyyy-MM-dd" /]
+      [@input id="${fieldId}" type="text" name="${key}" leftAddon="${leftAddon}" required=field.required autofocus=autofocus label=label placeholder=theme.optionalMessage(placeholder) class="date-picker" dateTimeFormat="yyyy-MM-dd" /]
     [#else]
-      [@input id="${fieldId}" type="text" name="${key}" leftAddon="${leftAddon}" required=field.required autofocus=autofocus placeholder=theme.optionalMessage(placeholder)/]
+      [@input id="${fieldId}" type="text" name="${key}" leftAddon="${leftAddon}" required=field.required autofocus=autofocus label=label placeholder=theme.optionalMessage(placeholder)/]
     [/#if]
   [/#if]
+[/#macro]
+
+[#function display object propertyName default="\x2013" ]
+  [#assign value=("((object." + propertyName + ")!'')")?eval/]
+  [#-- ?has_content is false for boolean types, check it first --]
+  [#if value?has_content]
+    [#if value?is_number]
+      [#return value?string('#,###')]
+    [#else]
+      [#return (value == default?is_markup_output?then(default?markup_string, default))?then(value, value?string)]
+    [/#if]
+  [#else]
+    [#return default]
+  [/#if]
+[/#function]
+
+[#macro passwordField field]
+  [#-- Render checkbox used to determine whether the form submit should update password--]
+  <div class="form-row">
+    <label for="editPasswordOption"> ${theme.optionalMessage("change-password")} </label>
+    <input type="hidden" name="__cb_editPasswordOption" value="useExisting">
+    <label class="toggle">
+      <input id="editPasswordOption" type="checkbox" name="editPasswordOption" value="update" data-slide-open="password-fields" [#if editPasswordOption == "update"]checked[/#if]>
+      <span class="rail"></span>
+      <span class="pin"></span>
+    </label>
+  </div>
+  <div id="password-fields" class="slide-open ${(editPasswordOption == "update")?then('open', '')}">
+    [#-- Show the Password Validation Rules if there is a field error for 'user.password' --]
+    [#if (fieldMessages?keys?seq_contains("user.password")!false) && passwordValidationRules??]
+      [@passwordRules passwordValidationRules/]
+    [/#if]
+
+    [#-- Render password field--]
+    [@customField field=field key=field.key autofocus=false placeholder=field.key label=theme.optionalMessage(field.key) leftAddon="false"/]
+
+    [#-- Render confirm if set to true on the field     --]
+    [#if field.confirm]
+      [@customField field "confirm.${field.key}" false "[confirm]${field.key}" /]
+    [/#if]
+  </div>
 [/#macro]

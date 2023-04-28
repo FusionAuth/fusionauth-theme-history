@@ -49,7 +49,6 @@
       [#-- Custom header code goes here --]
     [/@helpers.header]
 
-
     [@helpers.main title=theme.message('login')]
       <form action="authorize" method="POST" class="full">
         [@helpers.oauthHiddenFields/]

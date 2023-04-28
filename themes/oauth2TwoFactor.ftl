@@ -1,9 +1,11 @@
 [#ftl/]
-[#-- @ftlvariable name="pushEnabled" type="boolean" --]
-[#-- @ftlvariable name="pushPreferred" type="boolean" --]
+[#-- @ftlvariable name="method" type="java.lang.String" --]
 [#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]
+[#-- @ftlvariable name="methodId" type="java.lang.String" --]
+[#-- @ftlvariable name="showResendOrSelectMethod" type="boolean" --]
 [#-- @ftlvariable name="trustComputer" type="boolean" --]
-[#-- @ftlvariable name="userCanReceivePush" type="boolean" --]
+[#-- @ftlvariable name="twoFactorId" type="java.lang.String" --]
+[#-- @ftlvariable name="user" type="io.fusionauth.domain.User" --]
 [#-- @ftlvariable name="version" type="java.lang.String" --]
 
 [#import "../_helpers.ftl" as helpers/]
@@ -30,26 +32,32 @@
         [@helpers.input type="text" name="code" id="code" autocapitalize="none" autocomplete="off" autocorrect="off" autofocus=true leftAddon="lock" placeholder=theme.message('code')/]
 
         [@helpers.oauthHiddenFields/]
+        [@helpers.hidden name="methodId"/]
         [@helpers.hidden name="twoFactorId"/]
-        [@helpers.hidden name="resendCode" value="false"/]
+        <fieldset>
+          <div class="form-row">
+            <label>
+              <input type="checkbox" name="trustComputer" [#if trustComputer]checked[/#if]/>
+              [#assign trustInDays = (tenant.externalIdentifierConfiguration.twoFactorTrustIdTimeToLiveInSeconds / (24 * 60 * 60))?string("##0")/]
+              ${theme.message('trust-computer', trustInDays)}
+              <i class="fa fa-info-circle" data-tooltip="${theme.message('{tooltip}trustComputer')}"></i>[#t/]
+            </label>
+          </div>
+        </fieldset>
         <div class="form-row">
-          <label>
-            <input type="checkbox" name="trustComputer" [#if trustComputer]checked[/#if]/>
-            [#assign trustInDays = (tenant.externalIdentifierConfiguration.twoFactorTrustIdTimeToLiveInSeconds / (24 * 60 * 60))?string("##0")/]
-            ${theme.message('trust-computer', trustInDays)}
-            <i class="fa fa-info-circle" data-tooltip="${theme.message('{tooltip}trustComputer')}"></i>[#t/]
-          </label>
+          [@helpers.button text=theme.message('verify')/]
         </div>
-        [@helpers.button text=theme.message('verify')/]
-        [#if pushEnabled && userCanReceivePush]
-          <a id="resend-2fa" href="#">
-            [#if pushPreferred]
-              ${theme.message('send-another-code')}
-            [#else]
-              ${theme.message('send-code-to-phone')}
-            [/#if]
-          </a>
+
+        [#-- If more than one option was available, allow the user to change their mind, or go back and request another code. --]
+        [#if showResendOrSelectMethod]
+           <div class="form-row mt-4 mb-0">
+            [@helpers.link url="/oauth2/two-factor-methods" extraParameters="&twoFactorId=${twoFactorId?url}&methodId=${methodId!''}&selectMethod=true"]
+              <i class="fa fa-arrow-left"></i>
+              ${theme.message('two-factor-select-method')}
+            [/@helpers.link]
+           </div>
         [/#if]
+
       </form>
     [/@helpers.main]
 
