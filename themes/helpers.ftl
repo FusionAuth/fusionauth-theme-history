@@ -272,7 +272,7 @@
             [#elseif user.lookupEmail()??]
               <img src="${function.gravatar(user.lookupEmail(), 200)}" class="profile w-100" alt="profile image"/>
             [#else]
-              <img src="${request.contextPath}/images/missing-user-image.jpg" class="profile w-100" alt="profile image"/>
+              <img src="${request.contextPath}/images/missing-user-image.svg" class="profile w-100" alt="profile image"/>
             [/#if]
           </div>
           <div>${display(user, "name")}</div>

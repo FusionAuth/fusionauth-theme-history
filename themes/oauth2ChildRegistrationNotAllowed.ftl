@@ -1,4 +1,6 @@
 [#ftl/]
+[#-- @ftlvariable name="client_id" type="java.lang.String" --]
+[#-- @ftlvariable name="tenantId" type="java.util.UUID" --]
 
 [#import "../_helpers.ftl" as helpers/]
 
@@ -13,6 +15,8 @@
 
     [@helpers.main title=theme.message('provide-parent-email')]
       <form action="child-registration-not-allowed" method="POST" class="full">
+        [@helpers.hidden name="client_id"/]
+        [@helpers.hidden name="tenantId"/]
         <p>
           ${theme.message('child-registration-not-allowed')}
         </p>

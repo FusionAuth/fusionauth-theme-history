@@ -50,7 +50,7 @@
     [/@helpers.header]
 
     [@helpers.main title=theme.message('login')]
-      <form action="authorize" method="POST" class="full">
+      <form action="${request.contextPath}/oauth2/authorize" method="POST" class="full">
         [@helpers.oauthHiddenFields/]
         [@helpers.hidden name="showPasswordField"/]
         [#if showPasswordField && hasDomainBasedIdentityProviders]
