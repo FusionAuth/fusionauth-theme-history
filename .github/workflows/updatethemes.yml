@@ -32,11 +32,6 @@ jobs:
           - 5432:5432
     env:
       version: 1.45.1
-      ROOT_DATABASE_PASSWORD: postgres
-      ROOT_DATABASE_USER: postgres
-      DATABASE_PASSWORD: fusionauth
-      DATABASE_USER: fusionauth
-      FUSIONAUTH_APP_RUNTIME_MODE: development
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - uses: actions/checkout@v3
@@ -50,6 +45,7 @@ jobs:
           unzip ../$version.zip
           cp ../fusionauth.properties config/
           ./bin/startup.sh
+          cat config/fusionauth.properties
           
           sleep 60
           #PGPASSWORD=fusionauth psql -h localhost -U fusionauth -c "select 1"
