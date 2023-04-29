@@ -44,6 +44,8 @@ jobs:
       - name: Download and install FusionAuth
         run: |
           export API_KEY=`cat kickstart/kickstart.json |jq '.apiKeys[].key'`
+          echo $API_KEY
+          echo $FUSIONAUTH_APP_KICKSTART_FILE
 
           curl -o $version.zip https://files.fusionauth.io/products/fusionauth/$version/fusionauth-app-$version.zip
           mkdir fusionauth && cd fusionauth
