@@ -28,5 +28,5 @@ jobs:
           ./bin/startup.sh
           sleep 10
           
-          curl -o - http://localhost:9011
+          curl -o - 'http://localhost:9011/css/fusionauth-style.css?version=1.45.1'
         shell: bash
