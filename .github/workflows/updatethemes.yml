@@ -26,7 +26,7 @@ jobs:
           echo "3"
           ls -l
           ./bin/startup.sh
-          sleep 10
+          sleep 30
           
           curl -o - 'http://localhost:9011/css/fusionauth-style.css?version=1.45.1'
         shell: bash
