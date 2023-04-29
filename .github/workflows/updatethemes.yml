@@ -36,7 +36,7 @@ jobs:
       ROOT_DATABASE_USER: postgres
       DATABASE_PASSWORD: fusionauth
       DATABASE_USER: fusionauth
-      FUSIONAUTH_APP_RUNTIME_MODE: production
+      FUSIONAUTH_APP_RUNTIME_MODE: development
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - uses: actions/checkout@v3
