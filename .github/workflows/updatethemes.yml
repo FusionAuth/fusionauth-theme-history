@@ -37,7 +37,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Download and install FusionAuth
         run: |
-          export API_KEY=`cat kickstart/kickstart.json |jq '.apiKeys[].key'`
+          export API_KEY=`cat kickstart/kickstart.json |jq '.apiKeys[].key'|sed 's/"//g'`
           echo $API_KEY
 
           curl -o $version.zip https://files.fusionauth.io/products/fusionauth/$version/fusionauth-app-$version.zip
