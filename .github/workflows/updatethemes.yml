@@ -57,6 +57,6 @@ jobs:
           cat /home/runner/work/fusionauth-theme-history/fusionauth-theme-history/fusionauth/logs/fusionauth-app.log
           #curl -o - 'http://localhost:9011/'
           #sleep 5 && echo "aaaaaaaaa"
-          curl -o - 'http://localhost:9011/admin/'
-          curl -o - -H 'Authorization: '$API_KEY 'http://localhost:9011/api/applications'
+          curl -o - 'http://localhost:9011/api/status'
+          #curl -o - -H 'Authorization: '$API_KEY 'http://localhost:9011/api/applications'
         shell: bash
