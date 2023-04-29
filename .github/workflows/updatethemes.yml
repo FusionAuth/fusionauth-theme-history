@@ -20,9 +20,12 @@ jobs:
       - uses: actions/checkout@v3
       - name: Download and install FusionAuth
         run: |
-          curl -o $version.deb https://files.fusionauth.io/products/fusionauth/$version/fusionauth-app_$version-1_all.deb  
-          dpkg -i $version.deb
-          systemctl start fusionauth-app
+          curl -o $version.deb https://files.fusionauth.io/products/fusionauth/$version/fusionauth-app-$version.zip
+          mkdir fusionauth && cd fusionauth
+          unzip ../$version.zip
+          ls -l
+          ./bin/startup.sh
           sleep 10
+          
           curl -o - http://localhost:9011
         shell: bash
