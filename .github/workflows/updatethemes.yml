@@ -55,5 +55,5 @@ jobs:
           curl -o - 'http://localhost:9011/api/status'
           #curl -o - 'http://localhost:9011/css/fusionauth-style.css?version=1.45.1'
           echo curl -H 'Authorization: '$API_KEY 'http://localhost:9011/api/applications'
-          curl -H 'Authorization: '$API_KEY 'http://localhost:9011/api/applications'
+          curl -H 'Authorization: '$API_KEY 'http://localhost:9011/api/application'
         shell: bash
