@@ -46,7 +46,7 @@ jobs:
           export FUSIONAUTH_APP_KICKSTART_FILE=`pwd`/kickstart/kickstart.json
           echo $API_KEY
           echo $FUSIONAUTH_APP_KICKSTART_FILE
-          ll `pwd`/kickstart/kickstart.json
+          ls -l `pwd`/kickstart/kickstart.json
 
           #curl -o $version.zip https://files.fusionauth.io/products/fusionauth/$version/fusionauth-app-$version.zip
           #mkdir fusionauth && cd fusionauth
