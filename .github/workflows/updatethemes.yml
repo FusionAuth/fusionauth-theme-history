@@ -37,11 +37,14 @@ jobs:
       DATABASE_PASSWORD: fusionauth
       DATABASE_USER: fusionauth
       FUSIONAUTH_APP_RUNTIME_MODE: development
+      FUSIONAUTH_APP_KICKSTART_FILE: ../kickstart/kickstart.json
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - uses: actions/checkout@v3
       - name: Download and install FusionAuth
         run: |
+          export API_KEY=`cat kickstart/kickstart.json |jq '.apiKeys[].key'`
+
           curl -o $version.zip https://files.fusionauth.io/products/fusionauth/$version/fusionauth-app-$version.zip
           mkdir fusionauth && cd fusionauth
           unzip ../$version.zip
