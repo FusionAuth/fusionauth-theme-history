@@ -46,16 +46,17 @@ jobs:
           export FUSIONAUTH_APP_KICKSTART_FILE=`pwd`/kickstart/kickstart.json
           echo $API_KEY
           echo $FUSIONAUTH_APP_KICKSTART_FILE
+          ll `pwd`/kickstart/kickstart.json
 
-          curl -o $version.zip https://files.fusionauth.io/products/fusionauth/$version/fusionauth-app-$version.zip
-          mkdir fusionauth && cd fusionauth
-          unzip ../$version.zip
-          ./bin/startup.sh
+          #curl -o $version.zip https://files.fusionauth.io/products/fusionauth/$version/fusionauth-app-$version.zip
+          #mkdir fusionauth && cd fusionauth
+          #unzip ../$version.zip
+          #./bin/startup.sh
           
-          sleep 60
+          #sleep 60
           #PGPASSWORD=fusionauth psql -h localhost -U fusionauth -c "select 1"
-          cat /home/runner/work/fusionauth-theme-history/fusionauth-theme-history/fusionauth/logs/fusionauth-app.log
-          curl -L -o - 'http://localhost:9011/'
+          #cat /home/runner/work/fusionauth-theme-history/fusionauth-theme-history/fusionauth/logs/fusionauth-app.log
+          #curl -L -o - 'http://localhost:9011/'
           #sleep 5 && echo "aaaaaaaaa"
           #curl -o - 'http://localhost:9011/api/status'
           #curl -o - 'http://localhost:9011/css/fusionauth-style.css?version=1.45.1'
