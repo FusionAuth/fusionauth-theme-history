@@ -21,8 +21,15 @@ jobs:
       - name: Download and install FusionAuth
         run: |
           curl -o $version.deb https://files.fusionauth.io/products/fusionauth/$version/fusionauth-app-$version.zip
+          echo "1"
+          ls -l
           mkdir fusionauth && cd fusionauth
+          echo "2"
+          ls -l
+          echo "2.4"
+          ls -l ..
           unzip ../$version.zip
+          echo "3"
           ls -l
           ./bin/startup.sh
           sleep 10
