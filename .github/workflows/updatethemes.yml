@@ -49,8 +49,8 @@ jobs:
           
           sleep 60
           #PGPASSWORD=fusionauth psql -h localhost -U fusionauth -c "select 1"
-          tail -40 /home/runner/work/fusionauth-theme-history/fusionauth-theme-history/fusionauth/logs/fusionauth-app.log
-          curl -o - 'http://localhost:9011/'
-          sleep 5 && echo "aaaaaaaaa"
-          curl -o - 'http://localhost:9011/admin/'
+          cat /home/runner/work/fusionauth-theme-history/fusionauth-theme-history/fusionauth/logs/fusionauth-app.log
+          #curl -o - 'http://localhost:9011/'
+          #sleep 5 && echo "aaaaaaaaa"
+          #curl -o - 'http://localhost:9011/admin/'
         shell: bash
