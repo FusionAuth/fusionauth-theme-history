@@ -14,9 +14,9 @@
       [#-- Custom header code goes here --]
     [/@helpers.header]
 
-    [@helpers.main title=theme.message('parent-notified-title')]
+    [@helpers.main title=theme.message("parent-notified-title")]
       <p>
-        ${theme.message('parent-notified')}
+        ${theme.message("parent-notified")}
       </p>
     [/@helpers.main]
 

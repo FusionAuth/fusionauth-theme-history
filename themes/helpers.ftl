@@ -321,7 +321,7 @@
            [#if showEdit]
             <a id="edit-profile" class="blue icon" href="${request.contextPath}/account/edit?client_id=${client_id}">
               <span style="font-size: 0.9rem;">
-              <i class="fa fa-pencil blue-text" data-tooltip="${theme.message("edit-profile")}"></i>
+              <i class="fa fa-pencil blue-text" data-tooltip="${theme.message('edit-profile')}"></i>
               </span>
             </a>
            [/#if]
@@ -603,7 +603,7 @@
     <div id="login-button-container" class="login-button-container" data-federated-csrf="${federatedCSRFToken}">
       <div class="hr-container">
         <hr>
-        <div>${theme.message('or')}</div>
+        <div>${theme.message("or")}</div>
       </div>
 
       [#if passwordlessEnabled]

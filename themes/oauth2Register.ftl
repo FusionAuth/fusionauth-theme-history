@@ -42,7 +42,7 @@
       [#-- Custom header code goes here --]
     [/@helpers.header]
 
-    [@helpers.main title=theme.message('register')]
+    [@helpers.main title=theme.message("register")]
       [#-- During a linking work flow, optionally indicate to the user which IdP is being linked. --]
       [#if devicePendingIdPLink?? || pendingIdPLink??]
         <p class="mt-0">
@@ -55,7 +55,7 @@
         [/#if]
         [#-- A pending link can be cancled. If we also have a device link in progress, this cannot be canceled. --]
         [#if pendingIdPLink??]
-          [@helpers.link url="" extraParameters="&cancelPendingIdpLink=true"]${theme.message('register-cancel-link')}[/@helpers.link]
+          [@helpers.link url="" extraParameters="&cancelPendingIdpLink=true"]${theme.message("register-cancel-link")}[/@helpers.link]
         [/#if]
         </p>
       [/#if]
@@ -88,7 +88,7 @@
           </fieldset>
 
           [#if step == totalSteps]
-            [@helpers.input id="rememberDevice" type="checkbox" name="rememberDevice" label=theme.message('remember-device') value="true" uncheckedValue="false"]
+            [@helpers.input id="rememberDevice" type="checkbox" name="rememberDevice" label=theme.message("remember-device") value="true" uncheckedValue="false"]
               <i class="fa fa-info-circle" data-tooltip="${theme.message('{tooltip}remember-device')}"></i>[#t/]
             [/@helpers.input]
             <div class="form-row">

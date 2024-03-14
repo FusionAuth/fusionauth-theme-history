@@ -33,7 +33,7 @@
       [#-- Custom header code goes here --]
     [/@helpers.header]
 
-    [@helpers.main title=theme.message('complete-registration')]
+    [@helpers.main title=theme.message("complete-registration")]
       <form action="${request.contextPath}/oauth2/complete-registration" method="POST" class="full">
         [@helpers.oauthHiddenFields/]
         [@helpers.hidden name="step"/]
@@ -53,7 +53,7 @@
 
           <div class="form-row">
           [#if step == totalSteps]
-            [@helpers.button icon="key" text=theme.message('register')/]
+            [@helpers.button icon="key" text=theme.message("register")/]
           [#else]
             [@helpers.button icon="arrow-right" text="Next"/]
           [/#if]
@@ -63,30 +63,30 @@
         [#-- Begin Basic Self Service Registration Form --]
         <fieldset>
           [#if application.registrationConfiguration.firstName.enabled]
-            [@helpers.input type="text" name="user.firstName" id="firstName" placeholder=theme.message('firstName') leftAddon="user" required=application.registrationConfiguration.firstName.required/]
+            [@helpers.input type="text" name="user.firstName" id="firstName" placeholder=theme.message("firstName") leftAddon="user" required=application.registrationConfiguration.firstName.required/]
           [/#if]
           [#if application.registrationConfiguration.fullName.enabled]
-            [@helpers.input type="text" name="user.fullName" id="fullName" placeholder=theme.message('fullName') leftAddon="user" required=application.registrationConfiguration.fullName.required/]
+            [@helpers.input type="text" name="user.fullName" id="fullName" placeholder=theme.message("fullName") leftAddon="user" required=application.registrationConfiguration.fullName.required/]
           [/#if]
           [#if application.registrationConfiguration.middleName.enabled]
-            [@helpers.input type="text" name="user.middleName" id="middleName" placeholder=theme.message('middleName') leftAddon="user" required=application.registrationConfiguration.middleName.required/]
+            [@helpers.input type="text" name="user.middleName" id="middleName" placeholder=theme.message("middleName") leftAddon="user" required=application.registrationConfiguration.middleName.required/]
           [/#if]
           [#if application.registrationConfiguration.lastName.enabled]
-            [@helpers.input type="text" name="user.lastName" id="lastName" placeholder=theme.message('lastName') leftAddon="user" required=application.registrationConfiguration.lastName.required/]
+            [@helpers.input type="text" name="user.lastName" id="lastName" placeholder=theme.message("lastName") leftAddon="user" required=application.registrationConfiguration.lastName.required/]
           [/#if]
           [#if application.registrationConfiguration.birthDate.enabled]
-            [@helpers.input type="text" name="user.birthDate" id="birthDate" placeholder=theme.message('birthDate') leftAddon="calendar" class="date-picker" dateTimeFormat="yyyy-MM-dd" required=application.registrationConfiguration.birthDate.required/]
+            [@helpers.input type="text" name="user.birthDate" id="birthDate" placeholder=theme.message("birthDate") leftAddon="calendar" class="date-picker" dateTimeFormat="yyyy-MM-dd" required=application.registrationConfiguration.birthDate.required/]
           [/#if]
           [#if application.registrationConfiguration.mobilePhone.enabled]
-            [@helpers.input type="text" name="user.mobilePhone" id="mobilePhone" placeholder=theme.message('mobilePhone') leftAddon="phone" required=application.registrationConfiguration.mobilePhone.required/]
+            [@helpers.input type="text" name="user.mobilePhone" id="mobilePhone" placeholder=theme.message("mobilePhone") leftAddon="phone" required=application.registrationConfiguration.mobilePhone.required/]
           [/#if]
           [#if application.registrationConfiguration.preferredLanguages.enabled]
-            [@helpers.locale_select field="" name="user.preferredLanguages"  id="preferredLanguages" label=theme.message('preferredLanguage') required=application.registrationConfiguration.preferredLanguages.required /]
+            [@helpers.locale_select field="" name="user.preferredLanguages"  id="preferredLanguages" label=theme.message("preferredLanguage") required=application.registrationConfiguration.preferredLanguages.required /]
           [/#if]
         </fieldset>
 
         <div class="form-row">
-          [@helpers.button icon="key" text=theme.message('submit')/]
+          [@helpers.button icon="key" text=theme.message("submit")/]
         </div>
         [/#if]
         [#-- End Basic Self Service Registration Form --]
