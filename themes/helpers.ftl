@@ -93,7 +93,7 @@
     </style>
   [/#if]
 
-  <script src="${request.contextPath}/js/prime-min-1.6.4.js?version=${version}"></script>
+  <script src="${request.contextPath}/js/prime-min-1.7.0.js?version=${version}"></script>
   <script src="${request.contextPath}/js/Util.js?version=${version}"></script>
   <script src="${request.contextPath}/js/oauth2/LocaleSelect.js?version=${version}"></script>
   <script>
