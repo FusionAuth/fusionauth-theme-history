@@ -21,7 +21,7 @@
       [#-- Custom header code goes here --]
     [/@helpers.header]
 
-    [@helpers.main title=theme.message('email-verification-required-title')]
+    [@helpers.main title=theme.message("email-verification-required-title")]
       [#-- The user does not have a verified email. Add optional messaging here with instruction to the user. --]
 
        [#-- Let the user know why they ended up here --]
@@ -43,11 +43,11 @@
               [@helpers.captchaBadge showCaptcha=showCaptcha captchaMethod=tenant.captchaConfiguration.captchaMethod siteKey=tenant.captchaConfiguration.siteKey/]
             </fieldset>
             <div class="form-row">
-              [@helpers.button text=theme.message('submit')/]
+              [@helpers.button text=theme.message("submit")/]
             </div>
          </form>
        [#else]
-         <p> ${theme.message("{description}email-verification-required-non-interactive")} </p>
+         <p class="mb-3"> ${theme.message("{description}email-verification-required-non-interactive")} </p>
        [/#if]
 
        [#-- Resend a verification email --]
@@ -58,7 +58,7 @@
          [@helpers.hidden name="collectVerificationCode"/]
          [@helpers.hidden name="email"/]
          <div class="form-row">
-           <button style="background: #fff; border: none; cursor: pointer;" class="link blue-text"><i class="fa fa-arrow-right"></i> ${theme.message('email-verification-required-send-another')} </button>
+           <button style="background: #fff; border: none; cursor: pointer;" class="link blue-text"><i class="fa fa-arrow-right"></i> ${theme.message("email-verification-required-send-another")} </button>
          </div>
        </form>
 
@@ -66,21 +66,21 @@
        [#if allowEmailChange]
          <div class="hr-container">
            <hr>
-           <div>${theme.message('or')}</div>
+           <div>${theme.message("or")}</div>
          </div>
-         <form id="verification-required-change-email"action="${request.contextPath}/email/verification-required" method="POST" class="full">
+         <form id="verification-required-change-email" action="${request.contextPath}/email/verification-required" method="POST" class="full">
            [@helpers.oauthHiddenFields/]
            [@helpers.hidden name="action" value="changeEmail"/]
            [@helpers.hidden name="allowEmailChange"/]
            [@helpers.hidden name="collectVerificationCode"/]
            <p class="mb-3">
-             ${theme.message('{description}email-verification-required-change-email')}
+             ${theme.message("{description}email-verification-required-change-email")}
            </p>
            <fieldset>
              [@helpers.input type="text" name="email" id="email" autocapitalize="none" autocomplete="on" autocorrect="off" placeholder="${theme.message('email')}" leftAddon="user"/]
            </fieldset>
            <div class="form-row">
-              [@helpers.button text=theme.message('submit')/]
+              [@helpers.button text=theme.message("submit")/]
            </div>
          </form>
        [/#if]

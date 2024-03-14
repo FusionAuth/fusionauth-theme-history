@@ -44,7 +44,7 @@
                   <span>${helpers.display(credential, "displayName")}</span>
                   <span class="sub-text">
                     ${theme.message("last-used")}
-                    ${theme.formatZoneDateTime(credential.lastUseInstant, theme.message('date-format'), zoneId)}</span>
+                    ${theme.formatZoneDateTime(credential.lastUseInstant, theme.message("date-format"), zoneId)}</span>
                 </span>
                 <i class="fa fa-chevron-right"></i>
               </button>

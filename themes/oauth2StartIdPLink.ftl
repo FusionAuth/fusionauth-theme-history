@@ -26,7 +26,7 @@
     [#-- If a pending link will cause us to exceed our linking limit, the next step will be to lgoout. --]
     [#assign logoutToContinue = (devicePendingIdPLink?? && devicePendingIdPLink.linkLimitExceeded) || (pendingIdPLink?? && pendingIdPLink.linkLimitExceeded) /]
 
-    [@helpers.main title=theme.message('start-idp-link-title')]
+    [@helpers.main title=theme.message("start-idp-link-title")]
       [#if pendingIdPLink??]
         ${theme.message('pending-link-info', pendingIdPLink.identityProviderName)}
       [/#if]
@@ -42,7 +42,7 @@
           <p>${theme.message('link-count-exceeded-pending-logout', pendingIdPLink.identityProviderName)}</p>
         [/#if]
         <p class="mb-4">
-          ${theme.message('link-count-exceeded-next-step${registrationEnabled?then("", "-no-registration")}')}
+          ${theme.message("link-count-exceeded-next-step${registrationEnabled?then('', '-no-registration')}")}
         </p>
       [#else]
         <p class="mb-5">
@@ -51,7 +51,7 @@
         [#elseif devicePendingIdPLink??]
           ${theme.message('pending-device-link', devicePendingIdPLink.identityProviderName)}
         [/#if]
-        ${theme.message('pending-link-next-step${registrationEnabled?then("", "-no-registration")}')}
+        ${theme.message("pending-link-next-step${registrationEnabled?then('', '-no-registration')}")}
         </p>
       [/#if]
 
@@ -59,11 +59,11 @@
         <div class="col-xs">
           [#if logoutToContinue]
             [@helpers.logoutLink redirectURI="/oauth2/start-idp-link"]
-              <button class="blue button w-100" style="height: 35px;"><i class="fa fa-arrow-right"></i> ${theme.message('logout')} </button>
+              <button class="blue button w-100" style="height: 35px;"><i class="fa fa-arrow-right"></i> ${theme.message("logout")} </button>
             [/@helpers.logoutLink]
           [#else]
             [@helpers.link url="/oauth2/authorize"]
-              <button class="blue button w-100" style="height: 35px;"><i class="fa fa-arrow-right"></i> ${theme.message('link-to-existing-user')} </button>
+              <button class="blue button w-100" style="height: 35px;"><i class="fa fa-arrow-right"></i> ${theme.message("link-to-existing-user")} </button>
             [/@helpers.link]
           [/#if]
         </div>
@@ -74,7 +74,7 @@
        <div class="row mb-3">
          <div class="col-xs">
            [@helpers.link url="/oauth2/register"]
-             <button class="blue button w-100" style="height: 35px;"> <i class="fa fa-arrow-right"></i> ${theme.message('link-to-new-user')} </button>
+             <button class="blue button w-100" style="height: 35px;"> <i class="fa fa-arrow-right"></i> ${theme.message("link-to-new-user")} </button>
            [/@helpers.link]
          </div>
        </div>
@@ -83,13 +83,13 @@
       [#if pendingIdPLink??]
       <div class="hr-container">
         <hr>
-        <div>${theme.message('or')}</div>
+        <div>${theme.message("or")}</div>
       </div>
 
       <div class="row mt-3 mb-3">
         <div class="col-xs">
         [@helpers.link url="/oauth2/authorize" extraParameters="&cancelPendingIdpLink=true"]
-          <button class="blue button w-100" style="height: 35px;"><i class="fa fa-arrow-right"></i> ${theme.message('cancel-link')} </button>
+          <button class="blue button w-100" style="height: 35px;"><i class="fa fa-arrow-right"></i> ${theme.message("cancel-link")} </button>
         [/@helpers.link]
         </div>
       </div>

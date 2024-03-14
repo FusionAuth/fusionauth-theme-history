@@ -15,13 +15,13 @@
    <label>
      <input type="radio" name="methodId" value="${id}" [#if id = methodId!'']checked[/#if]>
      [#if method.method == "email"]
-       <span>${theme.message('two-factor-method-email')}</span>
+       <span>${theme.message("two-factor-method-email")}</span>
        <span>
         [#assign index = method.email?index_of("@")/]
         ${theme.message('two-factor-get-code-at-email', method.email?substring(0, index + 2))}
        </span>
      [#elseif method.method == "authenticator"]
-       &nbsp;<span>${theme.message('two-factor-method-authenticator')}</span>
+       &nbsp;<span>${theme.message("two-factor-method-authenticator")}</span>
         <span>
          ${theme.message('two-factor-get-code-at-authenticator')}
         </span>
