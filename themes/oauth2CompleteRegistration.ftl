@@ -80,6 +80,9 @@
           [#if application.registrationConfiguration.mobilePhone.enabled]
             [@helpers.input type="text" name="user.mobilePhone" id="mobilePhone" placeholder=theme.message('mobilePhone') leftAddon="phone" required=application.registrationConfiguration.mobilePhone.required/]
           [/#if]
+          [#if application.registrationConfiguration.preferredLanguages.enabled]
+            [@helpers.locale_select field="" name="user.preferredLanguages"  id="preferredLanguages" label=theme.message('preferredLanguage') required=application.registrationConfiguration.preferredLanguages.required /]
+          [/#if]
         </fieldset>
 
         <div class="form-row">

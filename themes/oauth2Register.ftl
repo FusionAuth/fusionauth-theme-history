@@ -3,6 +3,7 @@
 [#-- @ftlvariable name="client_id" type="java.lang.String" --]
 [#-- @ftlvariable name="collectBirthDate" type="boolean" --]
 [#-- @ftlvariable name="devicePendingIdPLink" type="io.fusionauth.domain.provider.PendingIdPLink" --]
+[#-- @ftlvariable name="federatedCSRFToken" type="java.lang.String" --]
 [#-- @ftlvariable name="fields" type="java.util.List<io.fusionauth.domain.form.FormField>" --]
 [#-- @ftlvariable name="hideBirthDate" type="boolean" --]
 [#-- @ftlvariable name="identityProviders" type="java.util.Map<java.lang.String, java.util.List<io.fusionauth.domain.provider.BaseIdentityProvider<?>>>" --]
@@ -126,25 +127,29 @@
             application.registrationConfiguration.fullName.enabled     ||
             application.registrationConfiguration.middleName.enabled   ||
             application.registrationConfiguration.lastName.enabled     ||
-            application.registrationConfiguration.mobilePhone.enabled   ]
+            application.registrationConfiguration.mobilePhone.enabled  ||
+            application.registrationConfiguration.preferredLanguages.enabled ]
               <div class="mt-5 mb-5"></div>
               [#if application.registrationConfiguration.firstName.enabled]
-                  [@helpers.input type="text" name="user.firstName" id="firstName" placeholder=theme.message('firstName') leftAddon="user" required=application.registrationConfiguration.firstName.required/]
+                [@helpers.input type="text" name="user.firstName" id="firstName" placeholder=theme.message('firstName') leftAddon="user" required=application.registrationConfiguration.firstName.required/]
               [/#if]
               [#if application.registrationConfiguration.fullName.enabled]
-                  [@helpers.input type="text" name="user.fullName" id="fullName" placeholder=theme.message('fullName') leftAddon="user" required=application.registrationConfiguration.fullName.required/]
+                [@helpers.input type="text" name="user.fullName" id="fullName" placeholder=theme.message('fullName') leftAddon="user" required=application.registrationConfiguration.fullName.required/]
               [/#if]
               [#if application.registrationConfiguration.middleName.enabled]
-                  [@helpers.input type="text" name="user.middleName" id="middleName" placeholder=theme.message('middleName') leftAddon="user" required=application.registrationConfiguration.middleName.required/]
+                [@helpers.input type="text" name="user.middleName" id="middleName" placeholder=theme.message('middleName') leftAddon="user" required=application.registrationConfiguration.middleName.required/]
               [/#if]
               [#if application.registrationConfiguration.lastName.enabled]
-                  [@helpers.input type="text" name="user.lastName" id="lastName" placeholder=theme.message('lastName') leftAddon="user" required=application.registrationConfiguration.lastName.required/]
+                [@helpers.input type="text" name="user.lastName" id="lastName" placeholder=theme.message('lastName') leftAddon="user" required=application.registrationConfiguration.lastName.required/]
               [/#if]
               [#if application.registrationConfiguration.birthDate.enabled && !hideBirthDate]
-                  [@helpers.input type="text" name="user.birthDate" id="birthDate" placeholder=theme.message('birthDate') leftAddon="calendar" class="date-picker" dateTimeFormat="yyyy-MM-dd" required=application.registrationConfiguration.birthDate.required/]
+                [@helpers.input type="text" name="user.birthDate" id="birthDate" placeholder=theme.message('birthDate') leftAddon="calendar" class="date-picker" dateTimeFormat="yyyy-MM-dd" required=application.registrationConfiguration.birthDate.required/]
               [/#if]
               [#if application.registrationConfiguration.mobilePhone.enabled]
-                  [@helpers.input type="text" name="user.mobilePhone" id="mobilePhone" placeholder=theme.message('mobilePhone') leftAddon="phone" required=application.registrationConfiguration.mobilePhone.required/]
+                [@helpers.input type="text" name="user.mobilePhone" id="mobilePhone" placeholder=theme.message('mobilePhone') leftAddon="phone" required=application.registrationConfiguration.mobilePhone.required/]
+              [/#if]
+              [#if application.registrationConfiguration.preferredLanguages.enabled]
+                [@helpers.locale_select field="" name="user.preferredLanguages" id="preferredLanguages" label=theme.message("preferredLanguage") required=application.registrationConfiguration.preferredLanguages.required /]
               [/#if]
             [/#if]
           [/#if]
@@ -172,7 +177,7 @@
 
         [#-- Identity Provider Buttons (if you want to include these, remove the if-statement) --]
         [#if true]
-          [@helpers.alternativeLogins clientId=client_id identityProviders=identityProviders![] passwordlessEnabled=false bootstrapWebauthnEnabled=false idpRedirectState=idpRedirectState/]
+          [@helpers.alternativeLogins clientId=client_id identityProviders=identityProviders![] passwordlessEnabled=false bootstrapWebauthnEnabled=false idpRedirectState=idpRedirectState federatedCSRFToken=federatedCSRFToken/]
         [/#if]
         [#-- End Identity Provider Buttons --]
 
