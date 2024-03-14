@@ -1,3 +1,7 @@
+# IMPORTANT NOTE
+
+This is a prototype designed during a company wide hackfest. **This repository is not currently maintained.**
+
 # Fusionauth Theme History
 
 Here you can compare different versions of the default, stock FusionAuth theme.
