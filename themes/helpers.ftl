@@ -93,7 +93,7 @@
     </style>
   [/#if]
 
-  <script src="${request.contextPath}/js/prime-min-1.6.4.js?version=${version}"></script>
+  <script src="${request.contextPath}/js/prime-min-1.7.0.js?version=${version}"></script>
   <script src="${request.contextPath}/js/Util.js?version=${version}"></script>
   <script src="${request.contextPath}/js/oauth2/LocaleSelect.js?version=${version}"></script>
   <script>
@@ -321,7 +321,7 @@
            [#if showEdit]
             <a id="edit-profile" class="blue icon" href="${request.contextPath}/account/edit?client_id=${client_id}">
               <span style="font-size: 0.9rem;">
-              <i class="fa fa-pencil blue-text" data-tooltip="${theme.message("edit-profile")}"></i>
+              <i class="fa fa-pencil blue-text" data-tooltip="${theme.message('edit-profile')}"></i>
               </span>
             </a>
            [/#if]
@@ -598,12 +598,12 @@
 </button>
 [/#macro]
 
-[#macro alternativeLogins clientId identityProviders passwordlessEnabled bootstrapWebauthnEnabled=false idpRedirectState=""]
+[#macro alternativeLogins clientId identityProviders passwordlessEnabled bootstrapWebauthnEnabled=false idpRedirectState="" federatedCSRFToken=""]
   [#if identityProviders?has_content || passwordlessEnabled || bootstrapWebauthnEnabled]
-    <div class="login-button-container">
+    <div id="login-button-container" class="login-button-container" data-federated-csrf="${federatedCSRFToken}">
       <div class="hr-container">
         <hr>
-        <div>${theme.message('or')}</div>
+        <div>${theme.message("or")}</div>
       </div>
 
       [#if passwordlessEnabled]
@@ -649,7 +649,7 @@
 
       [#if identityProviders["Apple"]?has_content]
       <div class="form-row push-less-top">
-        [@appleButton identityProvider=identityProviders["Apple"][0] clientId=clientId /]
+        [@appleButton identityProvider=identityProviders["Apple"][0] clientId=clientId/]
       </div>
       [/#if]
 
@@ -809,7 +809,7 @@
     <span class="icon"><i class="fa fa-${leftAddon}"></i></span>
   [/#if]
   [#local value=("((" + name + ")!'')")?eval/]
-      <input id="${id}" type="${type}" name="${name}" [#if type != "password"]value="${value}"[/#if] class="${class}" autocapitalize="${autocapitalize}" autocomplete="${autocomplete}" autocorrect="${autocorrect}" spellcheck="${spellcheck}" [#if autofocus]autofocus="autofocus"[/#if] placeholder="${placeholder}" [#if disabled]disabled="disabled"[/#if]/>
+  <input id="${id}" type="${type}" name="${name}" [#if type != "password"]value="${value}"[/#if] class="${class}" autocapitalize="${autocapitalize}" autocomplete="${autocomplete}" autocorrect="${autocorrect}" spellcheck="${spellcheck}" [#if autofocus]autofocus="autofocus"[/#if] placeholder="${placeholder}" [#if disabled]disabled="disabled"[/#if]/>
   [#if dateTimeFormat != ""]
       <input type="hidden" name="${name}@dateTimeFormat" value="${dateTimeFormat}"/>
   [/#if]
@@ -941,17 +941,28 @@
 </div>
 [/#macro]
 
-[#macro locale_select field name id autocapitalize="none" autofocus=false label="" required=false tooltip="" disabled=false class="checkbox-list" options=[]]
+[#macro locale_select field name id autofocus=false label="" required=false tooltip="" class="select"]
   [#-- Note: This is a simple imlementation that does not support selecting more than one locale.
              You may wish to use a multi-select or some other JavaScript widget to allow for more than one selection and to improve UX --]
   [#local value=("((" + name + ")!'')")?eval/]
   <div class="form-row">
-    <select name="${name}" id="${id}" class="${class}">
+    [#if label?has_content][#t/]
+    <label for="${id}"[#if (fieldMessages[name]![])?size > 0] class="error"[/#if]>${label}[#if required] <span class="required">*</span>[/#if][#t/]
+      [#if tooltip?has_content][#t/]
+        <i class="fa fa-info-circle" data-tooltip="${tooltip}"></i>[#t/]
+      [/#if][#t/]
+    </label>[#t/]
+    [/#if]
+    <label class="select">
+      <select name="${name}" id="${id}" class="${class}" [#if autofocus]autofocus="autofocus"[/#if]>
+        <option value="">${theme.optionalMessage("none-selected")}</option>
       [#list fusionAuth.locales() as l, n]
         [#local checked = value?is_sequence && value?seq_contains(l)/]
         <option  value="${l}" [#if checked]selected[/#if]>${l.getDisplayName()}</option>
       [/#list]
-    </select>
+     </select>
+   </label>
+   [@errors field=name/]
   </div>
 [/#macro]
 
@@ -988,14 +999,15 @@
 [/#macro]
 
 [#macro link url extraParameters=""]
-<a href="${url}?tenantId=${(tenantId)!''}&client_id=${(client_id?url)!''}&nonce=${(nonce?url)!''}&pendingIdPLinkId=${(pendingIdPLinkId)!''}&redirect_uri=${(redirect_uri?url)!''}&response_mode=${(response_mode?url)!''}&response_type=${(response_type?url)!''}&scope=${(scope?url)!''}&state=${(state?url)!''}&timezone=${(timezone?url)!''}&metaData.device.name=${(metaData.device.name?url)!''}&metaData.device.type=${(metaData.device.type?url)!''}${(extraParameters!'')?no_esc}&code_challenge=${(code_challenge?url)!''}&code_challenge_method=${(code_challenge_method?url)!''}&user_code=${(user_code?url)!''}">
+<a href="${url}?tenantId=${(tenantId)!''}&client_id=${(client_id)!''}&nonce=${(nonce?url)!''}&pendingIdPLinkId=${(pendingIdPLinkId)!''}&redirect_uri=${(redirect_uri?url)!''}&response_mode=${(response_mode?url)!''}&response_type=${(response_type?url)!''}&scope=${(scope?url)!''}&state=${(state?url)!''}&timezone=${(timezone?url)!''}&metaData.device.name=${(metaData.device.name?url)!''}&metaData.device.type=${(metaData.device.type?url)!''}${(extraParameters!'')?no_esc}&code_challenge=${(code_challenge?url)!''}&code_challenge_method=${(code_challenge_method?url)!''}&user_code=${(user_code?url)!''}">
 [#nested/]
 </a>
 [/#macro]
 
 [#macro logoutLink redirectURI extraParameters=""]
-[#local post_logout_redirect_uri = "${redirectURI}?tenantId=${(tenantId)!''}&client_id=${(client_id?url)!''}&nonce=${(nonce?url)!''}&pendingIdPLinkId=${(pendingIdPLinkId)!''}&redirect_uri=${(redirect_uri?url)!''}&response_mode=${(response_mode?url)!''}&response_type=${(response_type?url)!''}&scope=${(scope?url)!''}&state=${(state?url)!''}&timezone=${(timezone?url)!''}&metaData.device.name=${(metaData.device.name?url)!''}&metaData.device.type=${(metaData.device.type?url)!''}${(extraParameters?no_esc)!''}&code_challenge=${(code_challenge?url)!''}&code_challenge_method=${(code_challenge_method?url)!''}&user_code=${(user_code?url)!''}"/]
-<a href="/oauth2/logout?tenantId=${(tenantId)!''}&client_id=${(client_id?url)!''}&post_logout_redirect_uri=${post_logout_redirect_uri}">[#t]
+[#-- Note that in order for the post_logout_redirect_uri to be correctly URL escaped, you must use this syntax for assignment --]
+[#local post_logout_redirect_uri]${redirectURI}?tenantId=${(tenantId)!''}&client_id=${(client_id)!''}&nonce=${(nonce?url)!''}&pendingIdPLinkId=${(pendingIdPLinkId)!''}&redirect_uri=${(redirect_uri?url)!''}&response_mode=${(response_mode?url)!''}&response_type=${(response_type?url)!''}&scope=${(scope?url)!''}&state=${(state?url)!''}&timezone=${(timezone?url)!''}&metaData.device.name=${(metaData.device.name?url)!''}&metaData.device.type=${(metaData.device.type?url)!''}${(extraParameters?no_esc)!''}&code_challenge=${(code_challenge?url)!''}&code_challenge_method=${(code_challenge_method?url)!''}&user_code=${(user_code?url)!''}[/#local]
+<a href="/oauth2/logout?tenantId=${(tenantId)!''}&client_id=${(client_id)!''}&post_logout_redirect_uri=${post_logout_redirect_uri?markup_string?url}">[#t]
   [#nested/][#t]
 </a>[#t]
 [/#macro]
@@ -1032,7 +1044,7 @@
   [#local leftAddon = (leftAddon == "true")?then(field.data.leftAddon!'info', "") /]
 
   [#if field.key == "user.preferredLanguages" || field.key == "registration.preferredLanguages"]
-    [@locale_select field=field id=fieldId name=field.key required=field.required autofocus=autofocus label=label /]
+    [@locale_select field=field id="${fieldId}" name="${field.key}" required=field.required autofocus=autofocus label=label /]
   [#elseif field.control == "checkbox"]
     [#if field.options?has_content]
       [@checkbox_list field=field id="${fieldId}" name="${key}" required=field.required autofocus=autofocus label=label options=field.options /]
@@ -1128,7 +1140,13 @@
   [#-- If you want to remove captcha from the page, also ensure you disable it in the tenant configruation. --]
   [#if showCaptcha]
     [#if captchaMethod == "GoogleRecaptchaV2"]
-      <div class="g-recaptcha" data-sitekey="${siteKey!''}"></div>
+      <div class="g-recaptcha" data-sitekey="${siteKey!''}"
+        [#-- To use the invisible mode, un-comment the following two data- attributes. For more information see: https://developers.google.com/recaptcha/docs/invisible --]
+        [#--
+        data-size="invisible"
+        data-callback="reCaptchaV2InvisibleCallback"
+        --]
+      ></div>
     [#elseif captchaMethod == "GoogleRecaptchaV3"]
       [#-- This is the replacement Terms and Conditions messaging that is required by Google when hiding the
            standard badge. If you want to remove this you will also need to remove or edit the CSS above. --]
