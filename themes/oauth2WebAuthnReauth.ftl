@@ -40,7 +40,7 @@
           [@helpers.hidden name="workflow" value="reauthentication"/]
           [@helpers.hidden name="userVerifyingPlatformAuthenticatorAvailable" /]
 
-          <p><em>${theme.message("webauthn-reauth-select-passkey")}</em></p>
+          <p><em>${theme.message('webauthn-reauth-select-passkey')}</em></p>
           <fieldset class="mt-3 hover push-bottom">
           [#list webAuthnCredentials![] as credential]
             <button class="chunky-wide-submit" name="credentialId" value="${credential.id}">
@@ -53,14 +53,14 @@
           [/#list]
           </fieldset>
 
-          <p><em>${theme.message("webauthn-reauth-return-to-login")}</em></p>
+          <p><em>${theme.message('webauthn-reauth-return-to-login')}</em></p>
 
-          [@helpers.input id="rememberDevice" type="checkbox" name="rememberDevice" label=theme.message("remember-device") value="true" uncheckedValue="false"]
+          [@helpers.input id="rememberDevice" type="checkbox" name="rememberDevice" label=theme.message('remember-device') value="true" uncheckedValue="false"]
             <i class="fa fa-info-circle" data-tooltip="${theme.message('{tooltip}remember-device')}"></i>[#t/]
           [/@helpers.input]
 
           <div class="form-row">
-            <p class="mt-2">[@helpers.link url="/oauth2/authorize" extraParameters="&skipWebAuthnReauth=true"]${theme.message("return-to-normal-login")}[/@helpers.link]</p>
+            <p class="mt-2">[@helpers.link url="/oauth2/authorize" extraParameters="&skipWebAuthnReauth=true"]${theme.message('return-to-normal-login')}[/@helpers.link]</p>
           </div>
         </form>
     [/@helpers.main]

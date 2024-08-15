@@ -9,7 +9,7 @@
 [#import "../_helpers.ftl" as helpers/]
 
 [@helpers.html]
-  [@helpers.head title=theme.message("wait-title")]
+  [@helpers.head title=theme.message('wait-title')]
   <meta http-equiv="Refresh" content="2; url=${waitURL}">
   [/@helpers.head ]
 
@@ -18,9 +18,9 @@
       [#-- Custom header code goes here --]
     [/@helpers.header]
 
-    [@helpers.main title=theme.message("waiting")]
-      <span>${theme.message("complete-external-login")}</span>
-      <p class="mt-2">[@helpers.link url="/oauth2/authorize"]${theme.message("return-to-login")}[/@helpers.link]</p>
+    [@helpers.main title=theme.message('waiting')]
+      <span>${theme.message('complete-external-login')}</span>
+      <p class="mt-2">[@helpers.link url="/oauth2/authorize"]${theme.message('return-to-login')}[/@helpers.link]</p>
     [/@helpers.main]
 
     [@helpers.footer]

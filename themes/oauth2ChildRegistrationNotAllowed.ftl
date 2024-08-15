@@ -14,19 +14,19 @@
       [#-- Custom header code goes here --]
     [/@helpers.header]
 
-    [@helpers.main title=theme.message("provide-parent-email")]
+    [@helpers.main title=theme.message('provide-parent-email')]
       <form action="child-registration-not-allowed" method="POST" class="full">
         [@helpers.hidden name="client_id"/]
         [@helpers.hidden name="tenantId"/]
         <p>
-          ${theme.message("child-registration-not-allowed")}
+          ${theme.message('child-registration-not-allowed')}
         </p>
         <fieldset>
-          [@helpers.input type="text" name="parentEmail" id="parentEmail" placeholder=theme.message("parentEmail") leftAddon="user" required=true/]
+          [@helpers.input type="text" name="parentEmail" id="parentEmail" placeholder=theme.message('parentEmail') leftAddon="user" required=true/]
         </fieldset>
 
         <div class="form-row">
-          [@helpers.button icon="left-arrow" text=theme.message("submit")/]
+          [@helpers.button icon="left-arrow" text=theme.message('submit')/]
         </div>
       </form>
     [/@helpers.main]

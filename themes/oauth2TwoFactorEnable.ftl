@@ -82,7 +82,7 @@
       [#-- Custom header code goes here --]
     [/@helpers.header]
 
-    [@helpers.main title=theme.message("enable-instructions")]
+    [@helpers.main title=theme.message('enable-instructions')]
       [#setting url_escaping_charset='UTF-8']
          [#-- Heading --]
          <form class="full">

@@ -27,10 +27,10 @@
       [#-- Custom header code goes here --]
     [/@helpers.header]
 
-    [@helpers.main title=theme.message("two-factor-challenge")]
+    [@helpers.main title=theme.message('two-factor-challenge')]
       [#setting url_escaping_charset='UTF-8']
       <form id="2fa-form" action="${request.contextPath}/oauth2/two-factor" method="POST" class="full">
-        [@helpers.input type="text" name="code" id="code" autocapitalize="none" autocomplete="one-time-code" autocorrect="off" autofocus=true leftAddon="lock" placeholder=theme.message("code")/]
+        [@helpers.input type="text" name="code" id="code" autocapitalize="none" autocomplete="one-time-code" autocorrect="off" autofocus=true leftAddon="lock" placeholder=theme.message('code')/]
 
         [@helpers.oauthHiddenFields/]
         [@helpers.hidden name="methodId"/]
@@ -50,7 +50,7 @@
           </div>
         </fieldset>
         <div class="form-row">
-          [@helpers.button text=theme.message("verify")/]
+          [@helpers.button text=theme.message('verify')/]
         </div>
 
         [#-- If more than one option was available, allow the user to change their mind, or go back and request another code. --]
@@ -58,7 +58,7 @@
            <div class="form-row mt-4 mb-0">
             [@helpers.link url="/oauth2/two-factor-methods" extraParameters="&twoFactorId=${twoFactorId?url}&methodId=${(methodId?url)!''}&selectMethod=true"]
               <i class="fa fa-arrow-left"></i>
-              ${theme.message("two-factor-select-method")}
+              ${theme.message('two-factor-select-method')}
             [/@helpers.link]
            </div>
         [/#if]

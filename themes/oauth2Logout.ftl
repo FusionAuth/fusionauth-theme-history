@@ -13,7 +13,7 @@
 [#assign logoutDurationInSeconds = 2 /]
 
 [@helpers.html]
-  [@helpers.head title=theme.message("logout-title")]
+  [@helpers.head title=theme.message('logout-title')]
   [#if redirectURL?has_content]
     <meta http-equiv="Refresh" content="${logoutDurationInSeconds}; url=${redirectURL}">
   [/#if]
@@ -23,7 +23,7 @@
       [#-- Custom header code goes here --]
     [/@helpers.header]
 
-    [@helpers.main title=theme.message("logging-out")]
+    [@helpers.main title=theme.message('logging-out')]
       <div class="progress-bar" >
         <div style="animation-duration: ${logoutDurationInSeconds + 1}s; animation-timing-function: ease-out;">
         </div>

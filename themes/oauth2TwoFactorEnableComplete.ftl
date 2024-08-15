@@ -18,7 +18,7 @@
       [#-- Custom header code goes here --]
     [/@helpers.header]
 
-    [@helpers.main title=theme.message("two-factor-recovery-codes")]
+    [@helpers.main title=theme.message('two-factor-recovery-codes')]
       [#setting url_escaping_charset='UTF-8']
       <form action="${request.contextPath}/oauth2/two-factor-enable-complete" method="POST" class="full">
         [@helpers.oauthHiddenFields/]
@@ -30,7 +30,7 @@
           <p> ${theme.message("{description}oauth2-recovery-codes-2")}  </p>
         </fieldset>
         <div class="form-row">
-          [@helpers.button text=theme.message("done")/]
+          [@helpers.button text=theme.message('done')/]
         </div>
       </form>
     [/@helpers.main]

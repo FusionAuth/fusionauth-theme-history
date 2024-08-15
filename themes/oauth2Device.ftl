@@ -12,7 +12,7 @@
 [#import "../_helpers.ftl" as helpers/]
 
 [@helpers.html]
-  [@helpers.head title=theme.message("device-title")]
+  [@helpers.head title=theme.message('device-title')]
   <script src="${request.contextPath}/js/oauth2/Device.js?version=${version}"></script>
   <script>
     Prime.Document.onReady(function() {
@@ -54,7 +54,7 @@
     [#-- If a pending link will cause us to exceed our linking limit, the next step will be to lgoout. --]
     [#assign logoutToContinue = devicePendingIdPLink?? && devicePendingIdPLink.linkLimitExceeded /]
 
-    [@helpers.main title=theme.message("device-form-title")]
+    [@helpers.main title=theme.message('device-form-title')]
       [#setting url_escaping_charset='UTF-8']
 
       [#-- During a linking work flow, optionally indicate to the user which IdP is being linked. --]
@@ -74,11 +74,11 @@
           [#if logoutToContinue]
             [#-- The user must logout before continuing because the currently logged in user has exceeded the number of allowed links to this IdP. --]
             <p>${theme.message('device-link-count-exceeded-pending-logout', currentLoginId, devicePendingIdPLink.identityProviderName)}</p>
-            <p class="pb-3">${theme.message("device-link-count-exceeded-next-step")}</p>
+            <p class="pb-3">${theme.message('device-link-count-exceeded-next-step')}</p>
             <div class="row">
               <div class="col-xs">
                 [@helpers.logoutLink redirectURI="/oauth2/device"]
-                  <button class="blue button w-100" style="height: 35px;"><i class="fa fa-arrow-right"></i> ${theme.message("logout-and-continue")}</button>
+                  <button class="blue button w-100" style="height: 35px;"><i class="fa fa-arrow-right"></i> ${theme.message('logout-and-continue')}</button>
                 [/@helpers.logoutLink]
               </div>
             </div>
@@ -87,7 +87,7 @@
             <div class="row">
               <div class="col-xs">
                 [@helpers.logoutLink redirectURI="/oauth2/device"]
-                  <button class="blue button"><i class="fa fa-arrow-right"></i> ${theme.message("logout-and-continue")}</button>
+                  <button class="blue button"><i class="fa fa-arrow-right"></i> ${theme.message('logout-and-continue')}</button>
                 [/@helpers.logoutLink]
               </div>
             </div>
@@ -99,7 +99,7 @@
       [#if !logoutToContinue]
       <form action="${request.contextPath}/oauth2/device" method="POST" id="device-form">
         [@helpers.oauthHiddenFields/]
-        <p>${theme.message("userCode")}</p>
+        <p>${theme.message('userCode')}</p>
         <fieldset>
           <div id="user_code_container">
             [#list 0..<userCodeLength as i]

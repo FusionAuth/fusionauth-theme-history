@@ -28,8 +28,8 @@
             </p>
             <p>Here are some links to help you get started! Welcome to the FusionAuth community, we're glad to have you!</p>
             <ul style="list-style: none; padding-left: 20px; margin-top: 20px;">
-              <li class="pt-2"><i class="fa fa-arrow-right blue-text">&nbsp; <a href="https://fusionauth.io/docs/get-started/">Getting started</a></i></li>
-              <li class="pt-2"><i class="fa fa-arrow-right blue-text">&nbsp; <a href="https://fusionauth.io/docs/customize/look-and-feel/">Themes</a></i></li>
+              <li class="pt-2"><i class="fa fa-arrow-right blue-text">&nbsp; <a href="https://fusionauth.io/docs/v1/tech/getting-started/">Getting started</a></i></li>
+              <li class="pt-2"><i class="fa fa-arrow-right blue-text">&nbsp; <a href="https://fusionauth.io/docs/v1/tech/themes/">Themes</a></i></li>
               <li class="pt-2"><i class="fa fa-arrow-right blue-text">&nbsp; <a href="https://fusionauth.io/docs/">Documentation</a></i></li>
               <li class="pt-2"><i class="fa fa-arrow-right blue-text">&nbsp; <a href="https://fusionauth.io/community/">Community & Support</a></i></li>
             </ul>

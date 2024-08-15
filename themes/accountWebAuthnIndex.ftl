@@ -55,7 +55,7 @@
                 <td>${theme.formatZoneDateTime(cred.insertInstant, theme.message('date-time-format'), zoneId)}</td>
                 <td>${theme.formatZoneDateTime(cred.lastUseInstant, theme.message('date-time-format'), zoneId)}</td>
                 <td class="action">
-                  <a href="${request.contextPath}/account/webauthn/delete/${cred.id}?client_id=${client_id}" data-tooltip="${theme.message('delete-webauthn-passkey')}" title="${theme.message('delete-webauthn-passkey')}" class="small-square button red" >
+                  <a href="${request.contextPath}/account/webauthn/delete/${cred.id}?client_id=${client_id}" data-tooltip="${theme.message("delete-webauthn-passkey")}" title="${theme.message("delete-webauthn-passkey")}" class="small-square button red" >
                     <i class="fa fa-trash"></i>
                   </a>
                 </td>

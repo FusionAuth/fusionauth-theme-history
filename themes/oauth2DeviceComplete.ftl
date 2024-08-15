@@ -8,14 +8,14 @@
 [#import "../_helpers.ftl" as helpers/]
 
 [@helpers.html]
-  [@helpers.head title=theme.message("device-title")/]
+  [@helpers.head title=theme.message('device-title')/]
   [@helpers.body]
 
     [@helpers.header]
       [#-- Custom header code goes here --]
     [/@helpers.header]
 
-    [@helpers.main title=theme.message("device-form-title")]
+    [@helpers.main title=theme.message('device-form-title')]
       [#if completedLinks?has_content]
         [#if completedLinks?size == 1]
         ${theme.message('completed-link', completedLinks.get(0).identityProviderType)}
