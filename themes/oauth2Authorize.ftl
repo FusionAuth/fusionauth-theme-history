@@ -6,6 +6,7 @@
 [#-- @ftlvariable name="code_challenge" type="java.lang.String" --]
 [#-- @ftlvariable name="code_challenge_method" type="java.lang.String" --]
 [#-- @ftlvariable name="devicePendingIdPLink" type="io.fusionauth.domain.provider.PendingIdPLink" --]
+[#-- @ftlvariable name="federatedCSRFToken" type="java.lang.String" --]
 [#-- @ftlvariable name="hasDomainBasedIdentityProviders" type="boolean" --]
 [#-- @ftlvariable name="identityProviders" type="java.util.Map<java.lang.String, java.util.List<io.fusionauth.domain.provider.BaseIdentityProvider<?>>>" --]
 [#-- @ftlvariable name="idpRedirectState" type="java.lang.String" --]
@@ -110,7 +111,7 @@
      [#if showWebAuthnReauthLink]
        [@helpers.link url="${request.contextPath}/oauth2/webauthn-reauth"] ${theme.message('return-to-webauthn-reauth')} [/@helpers.link]
      [/#if]
-      [@helpers.alternativeLogins clientId=client_id identityProviders=identityProviders passwordlessEnabled=passwordlessEnabled bootstrapWebauthnEnabled=bootstrapWebauthnEnabled idpRedirectState=idpRedirectState/]
+      [@helpers.alternativeLogins clientId=client_id identityProviders=identityProviders passwordlessEnabled=passwordlessEnabled bootstrapWebauthnEnabled=bootstrapWebauthnEnabled idpRedirectState=idpRedirectState federatedCSRFToken=federatedCSRFToken/]
     [/@helpers.main]
 
     [@helpers.footer]

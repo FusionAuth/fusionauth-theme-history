@@ -598,9 +598,9 @@
 </button>
 [/#macro]
 
-[#macro alternativeLogins clientId identityProviders passwordlessEnabled bootstrapWebauthnEnabled=false idpRedirectState=""]
+[#macro alternativeLogins clientId identityProviders passwordlessEnabled bootstrapWebauthnEnabled=false idpRedirectState="" federatedCSRFToken=""]
   [#if identityProviders?has_content || passwordlessEnabled || bootstrapWebauthnEnabled]
-    <div class="login-button-container">
+    <div id="login-button-container" class="login-button-container" data-federated-csrf="${federatedCSRFToken}">
       <div class="hr-container">
         <hr>
         <div>${theme.message('or')}</div>
@@ -649,7 +649,7 @@
 
       [#if identityProviders["Apple"]?has_content]
       <div class="form-row push-less-top">
-        [@appleButton identityProvider=identityProviders["Apple"][0] clientId=clientId /]
+        [@appleButton identityProvider=identityProviders["Apple"][0] clientId=clientId/]
       </div>
       [/#if]
 
@@ -941,17 +941,28 @@
 </div>
 [/#macro]
 
-[#macro locale_select field name id autocapitalize="none" autofocus=false label="" required=false tooltip="" disabled=false class="checkbox-list" options=[]]
+[#macro locale_select field name id autofocus=false label="" required=false tooltip="" class="select"]
   [#-- Note: This is a simple imlementation that does not support selecting more than one locale.
              You may wish to use a multi-select or some other JavaScript widget to allow for more than one selection and to improve UX --]
   [#local value=("((" + name + ")!'')")?eval/]
   <div class="form-row">
-    <select name="${name}" id="${id}" class="${class}">
+    [#if label?has_content][#t/]
+    <label for="${id}"[#if (fieldMessages[name]![])?size > 0] class="error"[/#if]>${label}[#if required] <span class="required">*</span>[/#if][#t/]
+      [#if tooltip?has_content][#t/]
+        <i class="fa fa-info-circle" data-tooltip="${tooltip}"></i>[#t/]
+      [/#if][#t/]
+    </label>[#t/]
+    [/#if]
+    <label class="select">
+      <select name="${name}" id="${id}" class="${class}" [#if autofocus]autofocus="autofocus"[/#if]>
+        <option value="">${theme.optionalMessage("none-selected")}</option>
       [#list fusionAuth.locales() as l, n]
         [#local checked = value?is_sequence && value?seq_contains(l)/]
         <option  value="${l}" [#if checked]selected[/#if]>${l.getDisplayName()}</option>
       [/#list]
-    </select>
+     </select>
+   </label>
+   [@errors field=name/]
   </div>
 [/#macro]
 
@@ -1033,7 +1044,7 @@
   [#local leftAddon = (leftAddon == "true")?then(field.data.leftAddon!'info', "") /]
 
   [#if field.key == "user.preferredLanguages" || field.key == "registration.preferredLanguages"]
-    [@locale_select field=field id=fieldId name=field.key required=field.required autofocus=autofocus label=label /]
+    [@locale_select field=field id="${fieldId}" name="${field.key}" required=field.required autofocus=autofocus label=label /]
   [#elseif field.control == "checkbox"]
     [#if field.options?has_content]
       [@checkbox_list field=field id="${fieldId}" name="${key}" required=field.required autofocus=autofocus label=label options=field.options /]
