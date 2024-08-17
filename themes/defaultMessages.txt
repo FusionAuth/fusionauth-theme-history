@@ -19,7 +19,7 @@ add-two-factor=Add two-factor
 add-webauthn-passkey=Add passkey
 back-to-login=Return to Login
 cancel=Cancel
-captcha-google-branding=This site is protected by reCAPTCHA and the Google <a href=\"https://policies.google.com/privacy\">Privacy Policy</a> and <a href=\"https://policies.google.com/terms\">Terms of Service</a> apply.
+captcha-google-branding=This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy">Privacy Policy</a> and <a href="https://policies.google.com/terms">Terms of Service</a> apply.
 created=Created
 authorized-not-registered=Registration is required to access this application and your account has not been registered for this application. Please complete your registration and try again.
 authorized-not-registered-title=Registration Required
@@ -31,7 +31,7 @@ complete-registration=Complete registration
 configure=Configure
 configured=Configured
 create-an-account=Create an account
-complete-external-login=Complete login on your external device\\u2026
+complete-external-login=Complete login on your external device\u2026
 completed-link=You have successfully linked your %s account.
 completed-links=You have successfully linked your %s and %s account.
 confirm=Confirm
@@ -78,8 +78,8 @@ login=Login
 login-cancel-link=Or, cancel the link request.
 login-with-passkey=Login with passkey
 logout=Logout
-logout-and-continue=Logout and continue\\u2026
-logging-out=Logging out\\u2026
+logout-and-continue=Logout and continue\u2026
+logging-out=Logging out\u2026
 logout-title=Logging out
 manage-webauthn-passkeys=Manage passkeys
 method=Method
@@ -154,12 +154,12 @@ wait-title=Complete login on your external device
 waiting=Waiting
 warning=Warning
 webauthn-button-text=Fingerprint, device or key
-webauthn-reauth-return-to-login=If you don't recognize the passkeys(s) above click \"Return to normal login\" below.
+webauthn-reauth-return-to-login=If you don't recognize the passkeys(s) above click "Return to normal login" below.
 webauthn-reauth-select-passkey=Welcome back, click on a passkey to continue.
 
 # Locale Specific separators, etc
 #  - list separator - comma and a space
-listSeparator=,\\u0020
+listSeparator=,\u0020
 propertySeparator=:
 
 #
@@ -239,7 +239,7 @@ two-factor-method-authenticator=Authenticator
 two-factor-method-email=Email message
 two-factor-method-sms=Text message
 two-factor-get-code-at-authenticator=Get a code from your authenticator app
-two-factor-get-code-at-email=Get a code at %s\\u2026
+two-factor-get-code-at-email=Get a code at %s\u2026
 two-factor-get-code-at-sms=Get a code at (***) ***-**%s
 
 # Form input place-holders
@@ -297,7 +297,7 @@ go-back-to-send=Go back to send
 {description}webauthn-passkeys=Passkeys allow you to securely authenticate without a password. Configure one or more passkeys in order to complete authentication.
 {description}webauthn-reauth=Do you want to skip the password next time?
 {description}webauthn-reauth-existing-credential=You can select an existing passkey from the list below and skip the password on your next login.
-{description}webauthn-reauth-add-credential=Register a new passkey. Enter a display name to uniquely identify this key. For example, \"Chrome Touch ID\".
+{description}webauthn-reauth-add-credential=Register a new passkey. Enter a display name to uniquely identify this key. For example, "Chrome Touch ID".
 
 #
 # Custom Self-service User form sections.
@@ -599,4 +599,3 @@ go-back-to-send=Go back to send
 
 [TrustTokenRequired]=Please complete this step-up authentication request to complete this request.
 [TrustTokenExpired]=Your trust expired, please retry.
-
