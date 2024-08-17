@@ -83,6 +83,9 @@
 
   <link rel="stylesheet" href="/css/font-awesome-4.7.0.min.css"/>
   <link rel="stylesheet" href="/css/fusionauth-style.css?version=${version}"/>
+  [#if theme.type == "simple"]
+    <link rel="stylesheet" href="/css/simple-theme.css?version=${version}"/>
+  [/#if]
 
   [#-- Theme Stylesheet, only Authorize defines this boolean.
        Using the ?no_esc on the stylesheet to allow selectors that contain a > symbols.
@@ -135,21 +138,23 @@
 [/#macro]
 
 [#macro header]
-  <header class="app-header">
-    <div class="right-menu" [#if request.requestURI == "/"]style="display: block !important;" [/#if]>
-      <nav>
-        <ul>
-          [#if request.requestURI == "/"]
-            <li><a href="${request.contextPath}/admin/" title="Administrative login"><i class="fa fa-lock" style="font-size: 18px;"></i></a></li>
-          [#elseif request.requestURI?starts_with("/account")]
-            <li><a href="${request.contextPath}/account/logout?client_id=${client_id!''}" title="Logout"><i class="fa fa-sign-out"></i></a></li>
-          [#else]
-            <li class="help"><a target="_blank" href="https://fusionauth.io/docs/"><i class="fa fa-question-circle-o"></i> ${theme.message("help")}</a></li>
-          [/#if]
-        </ul>
-      </nav>
-    </div>
-  </header>
+  [#if theme.type != 'simple' || request.requestURI == "/" || request.requestURI?starts_with("/account")]
+    <header class="app-header">
+      <div class="right-menu" [#if request.requestURI == "/"]style="display: block !important;" [/#if]>
+        <nav>
+          <ul>
+            [#if request.requestURI == "/"]
+              <li><a href="${request.contextPath}/admin/" title="Administrative login"><i class="fa fa-lock" style="font-size: 18px;"></i></a></li>
+            [#elseif request.requestURI?starts_with("/account")]
+              <li><a href="${request.contextPath}/account/logout?client_id=${client_id!''}" title="Logout"><i class="fa fa-sign-out"></i></a></li>
+            [#else]
+              <li class="help"><a target="_blank" href="https://fusionauth.io/docs/"><i class="fa fa-question-circle-o"></i> ${theme.message("help")}</a></li>
+            [/#if]
+          </ul>
+        </nav>
+      </div>
+    </header>
+  [/#if]
 
   [#nested/]
 [/#macro]
@@ -194,6 +199,9 @@
   <div class="${rowClass}">
     <div class="${colClass}">
       <div class="panel" data-in-progress>
+        <div class="logo-container">
+          <img id="imgThemeLogo" alt="logo"/>
+        </div>
         [#if title?has_content]
           <h2>${title}</h2>
         [/#if]
@@ -338,10 +346,10 @@
 
   [#-- Powered by FusionAuth branding. This backlink helps FusionAuth web ranking so more
        people can find us! However, we always want to give the developer choice, remove this if you like. --]
-  <div style="position: fixed; bottom: 5px; right: 0; padding-bottom: 5px; padding-right: 10px;">
+  <div id="fa-footer" style="position: fixed; bottom: 5px; right: 0; padding-bottom: 5px; padding-right: 10px; align-items: center">
     <span style="padding-right: 5px;">Powered by </span>
     <a href="https://fusionauth.io" title="The best developer IAM in the universe!">
-      <img src="/images/logo-gray.svg" alt="FusionAuth" height="24" style="margin-bottom: -7px;">
+      <img src="/images/footer-logo.svg" alt="FusionAuth" height="24" style="margin-bottom: -7px;">
     </a>
   </div>
 [/#macro]

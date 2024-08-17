@@ -52,7 +52,7 @@
          [@helpers.hidden name="action" value="resend"/]
          [@helpers.hidden name="collectVerificationCode"/]
          <div class="form-row">
-           <button style="background: #fff; border: none; cursor: pointer;" class="link blue-text"><i class="fa fa-arrow-right"></i> ${theme.message('registration-verification-required-send-another')} </button>
+           <button class="link blue-text send-another-button"><i class="fa fa-arrow-right"></i> ${theme.message('registration-verification-required-send-another')} </button>
          </div>
        </form>
 

@@ -49,30 +49,6 @@
 </div>
 [/#macro]
 
-<style>
-  .radio-items .form-row label {
-    border-left: 2px solid transparent;
-    font-weight: 500;
-    padding-bottom: 15px;
-    padding-left: 15px;
-    padding-top: 5px;
-  }
-
-  .radio-items .form-row label span:first-of-type {
-    margin-left: 5px;
-  }
-
-  .radio-items .form-row label span:last-of-type {
-    border-top: 1px solid #d2d2d2;
-    display: block;
-    font-size: 12px;
-    font-weight: 400;
-    margin-left: 22px;
-    margin-top: 2px;
-    padding-top:2px;
-  }
-</style>
-
 [@helpers.html]
   [@helpers.head]
     [#-- Custom <head> code goes here --]
