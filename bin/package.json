@@ -1,9 +1,0 @@
-{
-  "scripts": {
-    "watch": "node --dns-result-order ipv4first ./startwatch.js"
-  },
-  "dependencies": {
-    "dotenv": "^16.0.3",
-    "@fusionauth/typescript-client": "^1.41.0"
-  }
-}
