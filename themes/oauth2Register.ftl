@@ -28,7 +28,7 @@
     <script type="text/javascript">
       document.addEventListener('DOMContentLoaded', () => {
         const uvpaAvailableField = document.querySelector('input[name="userVerifyingPlatformAuthenticatorAvailable"]');
-        if (uvpaAvailableField !== null && PublicKeyCredential && PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable) {
+        if (uvpaAvailableField !== null && typeof(PublicKeyCredential) !== 'undefined' && PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable) {
           PublicKeyCredential
             .isUserVerifyingPlatformAuthenticatorAvailable()
             .then(result => uvpaAvailableField.value = result);
