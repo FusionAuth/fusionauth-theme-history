@@ -75,7 +75,7 @@
             [@helpers.input type="text" name="user.lastName" id="lastName" placeholder=theme.message("lastName") leftAddon="user" required=application.registrationConfiguration.lastName.required/]
           [/#if]
           [#if application.registrationConfiguration.birthDate.enabled]
-            [@helpers.input type="text" name="user.birthDate" id="birthDate" placeholder=theme.message("birthDate") leftAddon="calendar" class="date-picker" dateTimeFormat="yyyy-MM-dd" required=application.registrationConfiguration.birthDate.required/]
+            [@helpers.input type="date" name="user.birthDate" id="birthDate" placeholder=theme.message("birthDate") leftAddon="calendar" class="date-picker" required=application.registrationConfiguration.birthDate.required/]
           [/#if]
           [#if application.registrationConfiguration.mobilePhone.enabled]
             [@helpers.input type="text" name="user.mobilePhone" id="mobilePhone" placeholder=theme.message("mobilePhone") leftAddon="phone" required=application.registrationConfiguration.mobilePhone.required/]

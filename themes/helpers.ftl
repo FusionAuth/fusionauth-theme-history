@@ -111,8 +111,13 @@
       Prime.Document.query('[data-tooltip]').each(function(e) {
         new Prime.Widgets.Tooltip(e).withClassName('tooltip').initialize();
       });
-      Prime.Document.query('.date-picker').each(function(e) {
-        new Prime.Widgets.DateTimePicker(e).withDateOnly().initialize();
+      document.querySelectorAll('.date-picker').forEach(datePicker => {
+        datePicker.onfocus = () => datePicker.type = 'date';
+        datePicker.onblur = () => {
+          if (datePicker.value === '') {
+            datePicker.type = 'text';
+          }
+        };
       });
       [#-- You may optionally remove the Locale Selector, or it may not be on every page. --]
       var localeSelect = Prime.Document.queryById('locale-select');
@@ -817,9 +822,21 @@
     <span class="icon"><i class="fa fa-${leftAddon}"></i></span>
   [/#if]
   [#local value=("((" + name + ")!'')")?eval/]
-  <input id="${id}" type="${type}" name="${name}" [#if type != "password"]value="${value}"[/#if] class="${class}" autocapitalize="${autocapitalize}" autocomplete="${autocomplete}" autocorrect="${autocorrect}" spellcheck="${spellcheck}" [#if autofocus]autofocus="autofocus"[/#if] placeholder="${placeholder}" [#if disabled]disabled="disabled"[/#if]/>
+  [#if (placeholder?has_content) && (type == "date") && (value == "")]
+    [#-- If the value is empty, we want to show the placeholder. This is a workaround for the date picker. --]
+    [#assign the_type="text" /]
+    [#assign the_class=class + " date-picker" /]
+    [#-- it is possible that this element is the first in the form list. We want it to focus on something else so that the placeholder shows. --]
+    <input type="text" style="display:none" autofocus="autofocus" />
+  [#else ]
+    [#assign the_type=type /]
+    [#assign the_class=class /]
+  [/#if]
+  <input id="${id}" type="${the_type}" name="${name}" [#if type != "password"]value="${value}"[/#if] class="${the_class}" autocapitalize="${autocapitalize}" autocomplete="${autocomplete}" autocorrect="${autocorrect}" spellcheck="${spellcheck}" [#if autofocus]autofocus="autofocus"[/#if] placeholder="${placeholder}" [#if disabled]disabled="disabled"[/#if]/>
   [#if dateTimeFormat != ""]
-      <input type="hidden" name="${name}@dateTimeFormat" value="${dateTimeFormat}"/>
+    <input type="hidden" name="${name}@dateTimeFormat" value="${dateTimeFormat}"/>
+  [#elseif type == "date"]
+    <input type="hidden" name="${name}@dateTimeFormat" value="yyyy-MM-dd"/>
   [/#if]
   [#if leftAddon?has_content]
   </div>
@@ -1074,7 +1091,7 @@
     [@textarea id="${fieldId}" name="${key}" required=field.required autofocus=autofocus label=label placeholder=theme.optionalMessage(placeholder) /]
   [#elseif field.control == "text"]
     [#if field.type == "date"]
-      [@input id="${fieldId}" type="text" name="${key}" leftAddon="${leftAddon}" required=field.required autofocus=autofocus label=label placeholder=theme.optionalMessage(placeholder) class="date-picker" dateTimeFormat="yyyy-MM-dd" /]
+      [@input id="${fieldId}" name="${key}" type="date" leftAddon="${leftAddon}" required=field.required autofocus=autofocus label=label placeholder=theme.optionalMessage(placeholder) /]
     [#else]
       [@input id="${fieldId}" type="text" name="${key}" leftAddon="${leftAddon}" required=field.required autofocus=autofocus label=label placeholder=theme.optionalMessage(placeholder)/]
     [/#if]
