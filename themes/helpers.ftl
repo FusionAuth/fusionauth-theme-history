@@ -784,7 +784,7 @@
 [#macro input type name id autocapitalize="none" autocomplete="on" autocorrect="off" autofocus=false spellcheck="false" label="" placeholder="" leftAddon="" required=false tooltip="" disabled=false class="" dateTimeFormat="" value="" uncheckedValue=""]
 <div class="form-row">
   [#if type == "checkbox"]
-    [@_input_checkbox name=name value=value uncheckedValue=uncheckedValue label=label]
+    [@_input_checkbox name=name value=value uncheckedValue=uncheckedValue label=label tooltip=tooltip]
      [#nested]
     [/@_input_checkbox]
   [#else]
@@ -818,7 +818,7 @@
   [/#if]
 [/#macro]
 
-[#macro _input_checkbox name value uncheckedValue label]
+[#macro _input_checkbox name value uncheckedValue label tooltip]
 <label>
   [#local actualValue = ("((" + name + ")!'')")?eval/]
   [#local checked = actualValue?is_boolean?then(actualValue == value?boolean, actualValue == value)/]
@@ -828,6 +828,9 @@
   <input type="checkbox" name=${name} value="${value}" [#if checked]checked=checked[/#if]/>
   &nbsp; ${label?has_content?then(label, theme.message(name))}
   [#nested/]
+  [#if tooltip?has_content]
+    <i class="fa fa-info-circle" data-tooltip="${tooltip}"></i>
+  [/#if]
 </label>
 [/#macro]
 
@@ -1159,3 +1162,53 @@
     [@errors field="captcha_token"/]
   [/#if]
 [/#macro]
+
+[#macro scopeConsentField application scope type]
+  [#-- Resolve the consent message and detail for the provided scope --]
+  [#if type != "unknown"]
+    [#local scopeMessage = resolveScopeMessaging('message', application, scope.name, scope.defaultConsentMessage!scope.name) /]
+    [#local scopeDetail = resolveScopeMessaging('detail', application, scope.name, scope.defaultConsentDetail!'') /]
+  [/#if]
+
+  [#if type == "required"]
+    [#-- Required scopes should use a hidden form field with a value of "true". The user cannot change this selection, --]
+    [#-- but there should be a display element to inform the user that they must consent to the scopes to continue. --]
+    <div class="form-row consent-item col-lg-offset-0">
+      [@hidden name="scopeConsents['${scope.name}']" value="true" /]
+      <i class="fa fa-check"></i>
+      <span>
+        ${scopeMessage}
+        [#if scopeDetail?has_content]
+          <i class="fa fa-info-circle" data-tooltip="${scopeDetail}"></i>
+        [/#if]
+      </span>
+    </div>
+  [#elseif type == "optional"]
+    [#-- Optional scopes should render a checkbox to allow a user to change their selection. The available values should be "true" and "false" --]
+    <div class="consent-item col-lg-offset-0">
+      [@input type="checkbox" name="scopeConsents['${scope.name}']" id="${scope.name}" label=scopeMessage value="true" uncheckedValue="false" tooltip=scopeDetail /]
+    </div>
+  [#elseif type == "unknown"]
+    [#-- Unknown scopes and the reserved "openid" and "offline_access" scopes are considered required and do not have an associated display element. --]
+    [@hidden name="scopeConsents['${scope}']" value="true" /]
+  [/#if]
+[/#macro]
+
+[#function resolveScopeMessaging messageType application scopeName default]
+  [#-- Application specific, tenant specific, not application/tenant specific, then default --]
+  [#local message = theme.optionalMessage("[{application}${application.id}]{scope-${messageType}}${scopeName}") /]
+  [#local resolvedMessage = message != "[{application}${application.id}]{scope-${messageType}}${scopeName}" /]
+  [#if !resolvedMessage]
+     [#local message = theme.optionalMessage("[{tenant}${application.tenantId}]{scope-${messageType}}${scopeName}") /]
+     [#local resolvedMessage = message != "[{tenant}${application.tenantId}]{scope-${messageType}}${scopeName}" /]
+  [/#if]
+  [#if !resolvedMessage]
+    [#local message = theme.optionalMessage("{scope-${messageType}}${scopeName}") /]
+    [#local resolvedMessage = message != "{scope-${messageType}}${scopeName}" /]
+  [/#if]
+  [#if !resolvedMessage]
+    [#return default /]
+  [#else]
+    [#return message /]
+  [/#if]
+[/#function]

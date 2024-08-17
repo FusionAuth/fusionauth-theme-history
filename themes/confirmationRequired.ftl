@@ -2,7 +2,6 @@
 [#-- @ftlvariable name="application" type="io.fusionauth.domain.Application" --]
 [#-- @ftlvariable name="client_id" type="java.lang.String" --]
 [#-- @ftlvariable name="confirmationRequiredReason" type="java.lang.String" --]
-[#-- @ftlvariable name="confirmationRequiredActionURI" type="java.lang.String" --]
 [#-- @ftlvariable name="csrfToken" type="java.lang.String" --]
 [#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]
 [#-- @ftlvariable name="tenantId" type="java.util.UUID" --]
@@ -27,8 +26,6 @@
       [#-- Generic detail about what to do next --]
       <p class="mb-4">${theme.message("{description}confirmation-required-ignore")}</p>
 
-      [#-- Note that the confirmationRequiredActionURI will be the incoming URL that caused us to stop here for confirmation.
-          This value will have a leading slash. --]
       <form action="${request.contextPath}/confirmation-required" method="POST" class="full">
         <input type="hidden" name="csrfToken" value="${csrfToken!""}"/>
         [#list request.parameters as key,value]
