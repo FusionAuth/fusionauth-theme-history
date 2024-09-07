@@ -51,7 +51,7 @@
       [#-- Custom header code goes here --]
     [/@helpers.header]
 
-    [#-- If a pending link will cause us to exceed our linking limit, the next step will be to lgoout. --]
+    [#-- If a pending link will cause us to exceed our linking limit, the next step will be to logout. --]
     [#assign logoutToContinue = devicePendingIdPLink?? && devicePendingIdPLink.linkLimitExceeded /]
 
     [@helpers.main title=theme.message("device-form-title")]
