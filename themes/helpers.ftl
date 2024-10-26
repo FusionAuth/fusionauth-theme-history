@@ -432,7 +432,7 @@
     --]
     <div id="g_id_onload" [#list identityProvider.lookupAPIProperties(clientId)!{} as attribute, value] data-${attribute}="${value}" [/#list]
          data-client_id="${identityProvider.lookupClientId(clientId)}"
-         data-login_uri="${currentBaseURL}/oauth2/callback?state=${idpRedirectState}&identityProviderId=${identityProvider.id}" >
+         data-callback="googleLoginCallback" >
     </div>
     [#-- This the Google Signin button. If only using One tap, you can delete or commment out this element --]
     <div class="g_id_signin" [#list identityProvider.lookupButtonProperties(clientId)!{} as attribute, value] data-${attribute}="${value}" [/#list]
