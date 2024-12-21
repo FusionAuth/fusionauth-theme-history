@@ -17,9 +17,6 @@
 
     [@helpers.main title=theme.message('forgot-password-email-sent-title')]
       <p>
-        [#-- TODO : Daniel : Review : this is safe to change because the templates and messages are copied into themes.
-               A customer will have the old template and old messages. This should not break correct?
-        --]
         ${theme.message('forgot-password-email-sent', email)}
       </p>
       <p class="mt-2">[@helpers.link url="/oauth2/authorize"]${theme.message('return-to-login')}[/@helpers.link]</p>

@@ -21,7 +21,9 @@
       [#-- Message specific to the reason the user is being required to confirm.
            - Adding ?no_esc to allow the message to include <br> (line breaks)
        --]
-      <p> ${theme.message("{description}confirmation-required-${confirmationRequiredReason}")?no_esc} </p>
+      [#if confirmationRequiredReason?has_content]
+        <p> ${theme.message("{description}confirmation-required-${confirmationRequiredReason}")?no_esc} </p>
+      [/#if]
 
       [#-- Generic detail about what to do next --]
       <p class="mb-4">${theme.message("{description}confirmation-required-ignore")}</p>
@@ -34,7 +36,7 @@
           [/#list]
         [/#list]
         <div class="form-row">
-          [@helpers.button text=theme.message('continue')/]
+          [@helpers.button text=theme.message('continue') /]
         </div>
       </form>
     [/@helpers.main]

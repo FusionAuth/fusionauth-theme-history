@@ -17,7 +17,7 @@
     [/@helpers.header]
 
     [@helpers.main title=theme.message('consent-required')]
-      <p><em>${application.name}</em> would like to:</p>
+      <p>${theme.message('consent-required-intro', application.name)?no_esc}${theme.message("propertySeparator")}</p>
 
       <form action="${request.contextPath}/oauth2/consent" method="POST" class="full consent-prompt">
         [@helpers.oauthHiddenFields/]
