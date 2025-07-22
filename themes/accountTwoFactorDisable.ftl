@@ -21,6 +21,7 @@
       <form id="send-two-factor-form" action="${request.contextPath}/account/two-factor/disable" method="POST" class="full">
         [@helpers.hidden name="action" value="send" /]
         [@helpers.hidden name="client_id" /]
+        [@helpers.hidden name="tenantId" /]
         [@helpers.hidden name="methodId" /]
         [#-- Send a code --]
         [@helpers.button icon="arrow-circle-right" color="gray" text="${theme.message('send-one-time-code')}"/]
@@ -55,6 +56,7 @@
 
           <form id="two-factor-form" action="${request.contextPath}/account/two-factor/disable" method="POST" class="full">
             [@helpers.hidden name="client_id" /]
+            [@helpers.hidden name="tenantId" /]
             [@helpers.hidden name="methodId" /]
 
             <fieldset>

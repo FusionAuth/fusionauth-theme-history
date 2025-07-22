@@ -55,7 +55,7 @@
                 <td>${theme.formatZoneDateTime(cred.insertInstant, theme.message('date-time-format'), zoneId)}</td>
                 <td>${theme.formatZoneDateTime(cred.lastUseInstant, theme.message('date-time-format'), zoneId)}</td>
                 <td class="action">
-                  <a href="${request.contextPath}/account/webauthn/delete/${cred.id}?client_id=${client_id}" data-tooltip="${theme.message('delete-webauthn-passkey')}" title="${theme.message('delete-webauthn-passkey')}" class="small-square button red" >
+                  <a href="${request.contextPath}/account/webauthn/delete/${cred.id}?client_id=${client_id}&tenantId=${tenantId!''}" data-tooltip="${theme.message('delete-webauthn-passkey')}" title="${theme.message('delete-webauthn-passkey')}" class="small-square button red" >
                     <i class="fa fa-trash"></i>
                   </a>
                 </td>
@@ -69,7 +69,7 @@
           </table>
 
           <div class="form-row mt-3">
-            <a class="blue button" href="${request.contextPath}/account/webauthn/add?client_id=${client_id}">
+            <a class="blue button" href="${request.contextPath}/account/webauthn/add?client_id=${client_id}&tenantId=${tenantId!''}">
               <i class="fa fa-plus"></i> ${theme.message("add-webauthn-passkey")}
             </a>
           </div>
