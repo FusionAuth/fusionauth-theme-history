@@ -38,7 +38,6 @@
         <div class="col-xs-12 col-md-12">
           <form action="${request.contextPath}/account/edit" method="POST" class="full" id="user-form">
             [@helpers.hidden name="client_id" /]
-            [@helpers.hidden name="tenantId" /]
             [#if fields?has_content]
               <fieldset>
                 [#list fields as fieldKey, fieldValues]

@@ -44,8 +44,6 @@
 
         <form id="webauthn-register-form" action="${request.contextPath}/account/webauthn/add" method="POST" class="full" data-start-registration-action="/account/ajax/webauthn/start-registration">
           [@helpers.hidden name="client_id" /]
-          [@helpers.hidden name="tenantId" /]
-
           [@helpers.hidden name="webAuthnRegisterRequest" /]
 
           <fieldset>

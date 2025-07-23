@@ -31,7 +31,6 @@
       <form id="two-factor-send-form" action="${request.contextPath}/account/two-factor/enable" method="POST" class="full">
         [@helpers.hidden name="action" value="send" /]
         [@helpers.hidden name="client_id" /]
-        [@helpers.hidden name="tenantId" /]
         [@helpers.hidden name="method" /]
         [#-- 'secret' and 'twoFactorSecretBase32' are required for authenticator. --]
         [@helpers.hidden name="secret" /]
@@ -128,7 +127,6 @@
           [#-- Enable Two Factor Form --]
           <form id="two-factor-form" action="${request.contextPath}/account/two-factor/enable" method="POST" class="full">
              [@helpers.hidden name="client_id" /]
-             [@helpers.hidden name="tenantId" /]
              [@helpers.hidden name="email" /]
              [@helpers.hidden name="method" /]
              [@helpers.hidden name="mobilePhone" /]
