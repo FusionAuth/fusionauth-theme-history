@@ -43,6 +43,7 @@
         <form id="webauthn-form" action="${request.contextPath}/account/webauthn/delete" method="POST">
           [@helpers.hidden name="id"/]
           [@helpers.hidden name="client_id"/]
+          [@helpers.hidden name="tenantId"/]
 
           <div class="form-row">
             [@helpers.button icon="trash" color="red" text=theme.message("delete")/]
