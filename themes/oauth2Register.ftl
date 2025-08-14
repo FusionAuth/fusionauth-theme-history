@@ -19,7 +19,7 @@
 [#import "../_helpers.ftl" as helpers/]
 
 [@helpers.html]
-  [@helpers.head]
+  [@helpers.head title=theme.message("register")]
     <script src="${request.contextPath}/js/identityProvider/InProgress.js?version=${version}"></script>
     [@helpers.alternativeLoginsScript clientId=client_id identityProviders=identityProviders/]
     [#if step == totalSteps]
@@ -76,9 +76,10 @@
           <fieldset>
             [@helpers.hidden name="collectBirthDate"/]
             [#list fields as field]
-              [@helpers.customField field field.key field?is_first?then(true, false) field.key /]
+              [#assign key = field.key]
+              [@helpers.customField field key field?is_first field.key /]
               [#if field.confirm]
-                [@helpers.customField field "confirm.${field.key}" false "[confirm]${field.key}" /]
+                [@helpers.customField field "confirm.${key}" false "[confirm]${field.key}" /]
               [/#if]
             [/#list]
             [#-- If this is the last step of the form, optionally show a captcha. --]
@@ -112,6 +113,8 @@
           [#else]
             [#if application.registrationConfiguration.loginIdType == 'email']
               [@helpers.input type="text" name="user.email" id="email" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" autofocus=true placeholder=theme.message('email') leftAddon="user" required=true/]
+            [#elseif application.registrationConfiguration.loginIdType == 'phoneNumber']
+              [@helpers.input type="text" name="user.phoneNumber" id="phoneNumber" autocomplete="mobile" autocapitalize="none" autocorrect="off" spellcheck="false" autofocus=true placeholder=theme.message('phoneNumber') leftAddon="mobile" required=true/]
             [#else]
               [@helpers.input type="text" name="user.username" id="username" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" autofocus=true placeholder=theme.message('username') leftAddon="user" required=true/]
             [/#if]

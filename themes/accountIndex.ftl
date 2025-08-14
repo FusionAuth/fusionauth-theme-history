@@ -39,8 +39,8 @@
                  </dd>
               </dl>
               <dl class="horizontal">
-                 <dt>${theme.message("user.mobilePhone")}</dt>
-                <dd>${helpers.display(user, "mobilePhone")}</dd>
+                 <dt>${theme.message("user.phoneNumber")}</dt>
+                 <dd>${fusionAuth.phone_format(user.phoneNumber!"\x2013")}</dd>
               </dl>
             </div>
           </div>

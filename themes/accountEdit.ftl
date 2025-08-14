@@ -6,6 +6,7 @@
 [#-- @ftlvariable name="user" type="io.fusionauth.domain.User" --]
 [#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]
 [#-- @ftlvariable name="tenantId" type="java.util.UUID" --]
+[#-- @ftlvariable name="passwordSet" type="boolean" --]
 
 [#import "../_helpers.ftl" as helpers/]
 
@@ -52,12 +53,15 @@
 
                   [#list fieldValues as field]
                     [#if field.key == "user.password"]
-                       [@helpers.passwordField field application.formConfiguration.selfServiceFormConfiguration.requireCurrentPasswordOnPasswordChange/]
+                      [@helpers.passwordField field=field
+                                              showCurrentPasswordField=(passwordSet && application.formConfiguration.selfServiceFormConfiguration.requireCurrentPasswordOnPasswordChange)/]
                     [#else]
-                       [@helpers.customField field=field key=field.key autofocus=false placeholder=field.key label=theme.optionalMessage(field.key) leftAddon="false"/]
-                       [#if field.confirm]
-                         [@helpers.customField field "confirm.${field.key}" false "[confirm]${field.key}" /]
-                       [/#if]
+                      [#assign key = field.key]
+                      [@helpers.customField field key field?is_first field.key /]
+
+                      [#if field.confirm]
+                        [@helpers.customField field "confirm.${key}" false "[confirm]${field.key}" /]
+                      [/#if]
                     [/#if]
                   [/#list]
                 [/#list]
