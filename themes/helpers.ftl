@@ -10,6 +10,7 @@
 [#-- @ftlvariable name="editPasswordOption" type="java.lang.String" --]
 [#-- @ftlvariable name="locale" type="java.util.Locale" --]
 [#-- @ftlvariable name="loginTheme" type="io.fusionauth.domain.Theme.Templates" --]
+[#-- @ftlvariable name="max_age" type="java.lang.Long" --]
 [#-- @ftlvariable name="metaData" type="io.fusionauth.domain.jwt.RefreshToken.MetaData" --]
 [#-- @ftlvariable name="nonce" type="java.lang.String" --]
 [#-- @ftlvariable name="passwordValidationRules" type="io.fusionauth.domain.PasswordValidationRules" --]
@@ -182,17 +183,23 @@
     [/#if]
     [#if identityProviders["Facebook"]?has_content]
       <script src="https://connect.facebook.net/en_US/sdk.js"></script>
-      <script src="${request.contextPath}/js/identityProvider/Facebook.js?version=${version}"
-              data-app-id="${identityProviders["Facebook"][0].lookupAppId(clientId)}"></script>
+      <script src="${request.contextPath}/js/identityProvider/Facebook.js?version=${version}"></script>
     [/#if]
-    [#if identityProviders["Google"]?has_content && identityProviders["Google"][0].lookupLoginMethod(clientId) != "UseRedirect"]
-      <script src="https://accounts.google.com/gsi/client" async defer></script>
-      <script src="${request.contextPath}/js/identityProvider/Google.js?version=${version}"
-              data-client-id="${identityProviders["Google"][0].lookupClientId(clientId)}"></script>
+    [#if identityProviders["Google"]?has_content]
+      [#list identityProviders["Google"] as idp]
+        [#if idp.lookupLoginMethod(clientId) != "UseRedirect"]
+          [#-- Only one Google IdP can use the GSI APIs on a page. Assign the IdP for later use and load scripts. --]
+          [#assign gsiIdentityProvider = idp/]
+          <script src="https://accounts.google.com/gsi/client" async></script>
+          <script src="${request.contextPath}/js/identityProvider/Google.js?version=${version}"
+                  data-client-id="${gsiIdentityProvider.lookupClientId(clientId)}"
+                  data-identity-provider-id="${gsiIdentityProvider.id}"></script>
+          [#break]
+        [/#if]
+      [/#list]
     [/#if]
     [#if identityProviders["Twitter"]?has_content]
-    [#-- This is the FusionAuth clientId --]
-      <script src="${request.contextPath}/js/identityProvider/Twitter.js?version=${version}" data-client-id="${clientId}"></script>
+      <script src="${request.contextPath}/js/identityProvider/Twitter.js?version=${version}"></script>
     [/#if]
     [#if identityProviders["EpicGames"]?has_content || identityProviders["Facebook"]?has_content || identityProviders["Google"]?has_content ||
     identityProviders["LinkedIn"]?has_content || identityProviders["Nintendo"]?has_content || identityProviders["OpenIDConnect"]?has_content ||
@@ -374,8 +381,9 @@
 [#-- Below are the social login buttons and helpers --]
 [#macro appleButton identityProvider clientId]
 [#-- https://developer.apple.com/design/human-interface-guidelines/sign-in-with-apple/overview/buttons/ --]
-  <button id="apple-login-button" class="apple login-button" data-scope="${identityProvider.lookupScope(clientId)!''}"
-          data-services-id="${identityProvider.lookupServicesId(clientId)}">
+  <button class="apple login-button" data-scope="${identityProvider.lookupScope(clientId)!''}"
+          data-services-id="${identityProvider.lookupServicesId(clientId)}"
+          data-identity-provider-id="${identityProvider.id}">
     <div>
       <div class="icon">
         <svg version="1.1" viewBox="4 6 30 30" xmlns="http://www.w3.org/2000/svg">
@@ -392,7 +400,7 @@
 [/#macro]
 
 [#macro epicButton identityProvider clientId]
-  <button id="epicgames-login-button" class="epicgames login-button" data-login-method="UseRedirect"
+  <button class="epicgames login-button" data-login-method="UseRedirect"
           data-scope="${identityProvider.lookupScope(clientId)!''}" data-identity-provider-id="${identityProvider.id}">
     <div>
       <div class="icon">
@@ -414,8 +422,9 @@
 [/#macro]
 
 [#macro facebookButton identityProvider clientId]
-  <button id="facebook-login-button" class="facebook login-button" data-login-method="${identityProvider.lookupLoginMethod(clientId)!''}"
-          data-permissions="${identityProvider.lookupPermissions(clientId)!''}" data-identity-provider-id="${identityProvider.id}">
+  <button class="facebook login-button" data-login-method="${identityProvider.lookupLoginMethod(clientId)!''}"
+          data-permissions="${identityProvider.lookupPermissions(clientId)!''}" data-identity-provider-id="${identityProvider.id}"
+          data-app-id="${identityProvider.lookupAppId(clientId)}">
     <div>
       <div class="icon">
         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 216 216">
@@ -429,9 +438,9 @@
 [/#macro]
 
 [#macro googleButton identityProvider clientId idpRedirectState=""]
-[#-- When using this loginMethod - the Google JavaScript API is not used at all. --]
+    [#-- When using this loginMethod - the Google JavaScript API is not used at all. --]
     [#if identityProvider.lookupLoginMethod(clientId) == "UseRedirect"]
-      <button id="google-login-button" class="google login-button" data-login-method="UseRedirect"
+      <button class="google login-button" data-login-method="UseRedirect"
               data-scope="${identityProvider.lookupScope(clientId)!''}" data-identity-provider-id="${identityProvider.id}">
         <div>
           <div class="icon">
@@ -452,25 +461,28 @@
           <div class="text">${identityProvider.lookupButtonText(clientId)?trim}</div>
         </div>
       </button>
-    [#else] [#-- UsePopup or UseVendorJavaScript --]
-    [#--
-     Use the Google Identity Service (GIS) API.
-     https://developers.google.com/identity/gsi/web/reference/html-reference
-    --]
-      <div id="g_id_onload" [#list identityProvider.lookupAPIProperties(clientId)!{} as attribute, value] data-${attribute}="${value}" [/#list]
-           data-client_id="${identityProvider.lookupClientId(clientId)}"
-           data-callback="googleLoginCallback">
-      </div>
-    [#-- This the Google Signin button. If only using One tap, you can delete or commment out this element --]
-      <div class="g_id_signin" [#list identityProvider.lookupButtonProperties(clientId)!{} as attribute, value] data-${attribute}="${value}" [/#list]
-              [#-- Optional click handler, when using ux_mode=popup. --]
-           data-click_listener="googleButtonClickHandler">
-      </div>
     [/#if]
 [/#macro]
 
-[#macro linkedInBottom identityProvider clientId]
-  <button id="linkedin-login-button" class="linkedin login-button" data-login-method="UseRedirect" data-identity-provider-id="${identityProvider.id}">
+[#macro googleGsiButton identityProvider clientId idpRedirectState=""]
+  [#-- UsePopup or UseVendorJavaScript --]
+  [#--
+   Use the Google Identity Service (GIS) API.
+   https://developers.google.com/identity/gsi/web/reference/html-reference
+  --]
+  <div id="g_id_onload" [#list identityProvider.lookupAPIProperties(clientId)!{} as attribute, value] data-${attribute}="${value}" [/#list]
+       data-client_id="${identityProvider.lookupClientId(clientId)}"
+       data-callback="googleLoginCallback">
+  </div>
+  [#-- This the Google Signin button. If only using One tap, you can delete or comment out this element --]
+  <div class="g_id_signin" [#list identityProvider.lookupButtonProperties(clientId)!{} as attribute, value] data-${attribute}="${value}" [/#list]
+       [#-- Optional click handler, when using ux_mode=popup. --]
+       data-click_listener="googleButtonClickHandler">
+  </div>
+[/#macro]
+
+[#macro linkedInButton identityProvider clientId]
+  <button class="linkedin login-button" data-login-method="UseRedirect" data-identity-provider-id="${identityProvider.id}">
     <div>
       <div class="icon">
         <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -515,7 +527,7 @@
 [/#macro]
 
 [#macro twitterButton identityProvider clientId]
-  <button id="twitter-login-button" class="twitter login-button">
+  <button class="twitter login-button" data-client-id="${clientId}" data-identity-provider-id="${identityProvider.id}">
     <div>
       <div class="icon">
         <svg version="1.1" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
@@ -573,7 +585,7 @@
 [/#macro]
 
 [#macro sonypsnButton identityProvider clientId]
-  <button id="sonypsn-login-button" class="sonypsn login-button" data-login-method="UseRedirect"
+  <button class="sonypsn login-button" data-login-method="UseRedirect"
           data-scope="${identityProvider.lookupScope(clientId)!''}" data-identity-provider-id="${identityProvider.id}">
     <div>
       <div class="icon">
@@ -588,7 +600,7 @@
 [/#macro]
 
 [#macro steamButton identityProvider clientId]
-  <button id="steam-login-button" class="steam login-button" data-login-method="UseRedirect" data-scope="${identityProvider.lookupScope(clientId)!''}"
+  <button class="steam login-button" data-login-method="UseRedirect" data-scope="${identityProvider.lookupScope(clientId)!''}"
           data-identity-provider-id="${identityProvider.id}">
     <div>
       <div class="icon">
@@ -616,7 +628,7 @@
 [/#macro]
 
 [#macro twitchButton identityProvider clientId]
-  <button id="twitch-login-button" class="twitch login-button" data-login-method="UseRedirect"
+  <button class="twitch login-button" data-login-method="UseRedirect"
           data-scope="${identityProvider.lookupScope(clientId)!''}" data-identity-provider-id="${identityProvider.id}">
     <div>
       <div class="icon">
@@ -639,7 +651,7 @@
 [/#macro]
 
 [#macro xboxButton identityProvider clientId]
-  <button id="xbox-login-button" class="xbox login-button" data-login-method="UseRedirect" data-scope="${identityProvider.lookupScope(clientId)!''}"
+  <button class="xbox login-button" data-login-method="UseRedirect" data-scope="${identityProvider.lookupScope(clientId)!''}"
           data-identity-provider-id="${identityProvider.id}">
     <div>
       <div class="icon">
@@ -713,39 +725,59 @@
           [/#if]
 
           [#if identityProviders["Apple"]?has_content]
-            <div class="form-row push-less-top">
-                [@appleButton identityProvider=identityProviders["Apple"][0] clientId=clientId/]
-            </div>
+            [#list identityProviders["Apple"] as identityProvider]
+              <div class="form-row push-less-top">
+                  [@appleButton identityProvider=identityProvider clientId=clientId/]
+              </div>
+            [/#list]
           [/#if]
 
           [#if identityProviders["EpicGames"]?has_content]
-            <div class="form-row push-less-top">
-                [@epicButton identityProvider=identityProviders["EpicGames"][0] clientId=clientId/]
-            </div>
+            [#list identityProviders["EpicGames"] as identityProvider]
+              <div class="form-row push-less-top">
+                  [@epicButton identityProvider=identityProvider clientId=clientId/]
+              </div>
+            [/#list]
           [/#if]
 
           [#if identityProviders["Facebook"]?has_content]
+            [#list identityProviders["Facebook"] as identityProvider]
+              <div class="form-row push-less-top">
+                  [@facebookButton identityProvider=identityProvider clientId=clientId /]
+              </div>
+            [/#list]
+          [/#if]
+
+          [#-- Check whether a Google IdP was assigned to use GSI APIs and render the button --]
+          [#if gsiIdentityProvider?has_content]
             <div class="form-row push-less-top">
-                [@facebookButton identityProvider=identityProviders["Facebook"][0] clientId=clientId /]
+                [@googleGsiButton identityProvider=gsiIdentityProvider clientId=clientId idpRedirectState=idpRedirectState/]
             </div>
           [/#if]
 
           [#if identityProviders["Google"]?has_content]
-            <div class="form-row push-less-top">
-                [@googleButton identityProvider=identityProviders["Google"][0] clientId=clientId idpRedirectState=idpRedirectState/]
-            </div>
+            [#list identityProviders["Google"] as identityProvider]
+              <div class="form-row push-less-top">
+                  [#-- The googleButton macro only renders buttons for IdPs configured with the UseRedirect login methods --]
+                  [@googleButton identityProvider=identityProvider clientId=clientId idpRedirectState=idpRedirectState/]
+              </div>
+            [/#list]
           [/#if]
 
           [#if identityProviders["LinkedIn"]?has_content]
-            <div class="form-row push-less-top">
-                [@linkedInBottom identityProvider=identityProviders["LinkedIn"][0] clientId=clientId/]
-            </div>
+            [#list identityProviders["LinkedIn"] as identityProvider]
+              <div class="form-row push-less-top">
+                  [@linkedInButton identityProvider=identityProvider clientId=clientId /]
+              </div>
+            [/#list]
           [/#if]
 
           [#if identityProviders["Nintendo"]?has_content]
-            <div class="form-row push-less-top">
-                [@nintendoButton identityProvider=identityProviders["Nintendo"][0] clientId=clientId/]
-            </div>
+            [#list identityProviders["Nintendo"] as identityProvider]
+              <div class="form-row push-less-top">
+                  [@nintendoButton identityProvider=identityProvider clientId=clientId /]
+              </div>
+            [/#list]
           [/#if]
 
           [#if identityProviders["OpenIDConnect"]?has_content]
@@ -765,33 +797,43 @@
           [/#if]
 
           [#if identityProviders["SonyPSN"]?has_content]
-            <div class="form-row push-less-top">
-                [@sonypsnButton identityProvider=identityProviders["SonyPSN"][0] clientId=clientId/]
-            </div>
+            [#list identityProviders["SonyPSN"] as identityProvider]
+              <div class="form-row push-less-top">
+                  [@sonypsnButton identityProvider=identityProvider clientId=clientId/]
+              </div>
+            [/#list]
           [/#if]
 
           [#if identityProviders["Steam"]?has_content]
-            <div class="form-row push-less-top">
-                [@steamButton identityProvider=identityProviders["Steam"][0] clientId=clientId/]
-            </div>
+            [#list identityProviders["Steam"] as identityProvider]
+              <div class="form-row push-less-top">
+                  [@steamButton identityProvider=identityProvider clientId=clientId/]
+              </div>
+            [/#list]
           [/#if]
 
           [#if identityProviders["Twitch"]?has_content]
-            <div class="form-row push-less-top">
-                [@twitchButton identityProvider=identityProviders["Twitch"][0] clientId=clientId/]
-            </div>
+            [#list identityProviders["Twitch"] as identityProvider]
+              <div class="form-row push-less-top">
+                  [@twitchButton identityProvider=identityProvider clientId=clientId/]
+              </div>
+            [/#list]
           [/#if]
 
           [#if identityProviders["Twitter"]?has_content]
-            <div class="form-row push-less-top">
-                [@twitterButton identityProvider=identityProviders["Twitter"][0] clientId=clientId/]
-            </div>
+            [#list identityProviders["Twitter"] as identityProvider]
+              <div class="form-row push-less-top">
+                  [@twitterButton identityProvider=identityProvider clientId=clientId/]
+              </div>
+            [/#list]
           [/#if]
 
           [#if identityProviders["Xbox"]?has_content]
-            <div class="form-row push-less-top">
-                [@xboxButton identityProvider=identityProviders["Xbox"][0] clientId=clientId/]
-            </div>
+            [#list identityProviders["Xbox"] as identityProvider]
+              <div class="form-row push-less-top">
+                  [@xboxButton identityProvider=identityProvider clientId=clientId/]
+              </div>
+            [/#list]
           [/#if]
       </div>
     [/#if]
@@ -1063,6 +1105,7 @@
     [@hidden name="metaData.device.type"/]
     [@hidden name="nonce"/]
     [@hidden name="oauth_context"/]
+    [@hidden name="max_age"/]
     [@hidden name="pendingIdPLinkId"/]
     [@hidden name="prompt"/]
     [@hidden name="redirect_uri"/]
@@ -1087,14 +1130,14 @@
 [/#macro]
 
 [#macro link url extraParameters=""]
-  <a href="${url}?tenantId=${(tenantId)!''}&client_id=${(client_id)!''}&nonce=${(nonce?url)!''}&pendingIdPLinkId=${(pendingIdPLinkId)!''}&redirect_uri=${(redirect_uri?url)!''}&response_mode=${(response_mode?url)!''}&response_type=${(response_type?url)!''}&scope=${(scope?url)!''}&state=${(state?url)!''}&timezone=${(timezone?url)!''}&metaData.device.name=${(metaData.device.name?url)!''}&metaData.device.type=${(metaData.device.type?url)!''}${(extraParameters!'')?no_esc}&code_challenge=${(code_challenge?url)!''}&code_challenge_method=${(code_challenge_method?url)!''}&user_code=${(user_code?url)!''}&prompt=${(prompt?url)!''}">
+  <a href="${url}?tenantId=${(tenantId)!''}&client_id=${(client_id)!''}&nonce=${(nonce?url)!''}&pendingIdPLinkId=${(pendingIdPLinkId)!''}&redirect_uri=${(redirect_uri?url)!''}&response_mode=${(response_mode?url)!''}&response_type=${(response_type?url)!''}&scope=${(scope?url)!''}&state=${(state?url)!''}&timezone=${(timezone?url)!''}&metaData.device.name=${(metaData.device.name?url)!''}&metaData.device.type=${(metaData.device.type?url)!''}${(extraParameters!'')?no_esc}&code_challenge=${(code_challenge?url)!''}&code_challenge_method=${(code_challenge_method?url)!''}&user_code=${(user_code?url)!''}&prompt=${(prompt?url)!''}&max_age=${(max_age?url)!''}">
       [#nested/]
   </a>
 [/#macro]
 
 [#macro logoutLink redirectURI extraParameters=""]
 [#-- Note that in order for the post_logout_redirect_uri to be correctly URL escaped, you must use this syntax for assignment --]
-    [#local post_logout_redirect_uri]${redirectURI}?tenantId=${(tenantId)!''}&client_id=${(client_id)!''}&nonce=${(nonce?url)!''}&pendingIdPLinkId=${(pendingIdPLinkId)!''}&redirect_uri=${(redirect_uri?url)!''}&response_mode=${(response_mode?url)!''}&response_type=${(response_type?url)!''}&scope=${(scope?url)!''}&state=${(state?url)!''}&timezone=${(timezone?url)!''}&metaData.device.name=${(metaData.device.name?url)!''}&metaData.device.type=${(metaData.device.type?url)!''}${(extraParameters?no_esc)!''}&code_challenge=${(code_challenge?url)!''}&code_challenge_method=${(code_challenge_method?url)!''}&user_code=${(user_code?url)!''}&prompt=${(prompt?url)!''}[/#local]
+    [#local post_logout_redirect_uri]${redirectURI}?tenantId=${(tenantId)!''}&client_id=${(client_id)!''}&nonce=${(nonce?url)!''}&pendingIdPLinkId=${(pendingIdPLinkId)!''}&redirect_uri=${(redirect_uri?url)!''}&response_mode=${(response_mode?url)!''}&response_type=${(response_type?url)!''}&scope=${(scope?url)!''}&state=${(state?url)!''}&timezone=${(timezone?url)!''}&metaData.device.name=${(metaData.device.name?url)!''}&metaData.device.type=${(metaData.device.type?url)!''}${(extraParameters?no_esc)!''}&code_challenge=${(code_challenge?url)!''}&code_challenge_method=${(code_challenge_method?url)!''}&user_code=${(user_code?url)!''}&prompt=${(prompt?url)!''}&max_age=${(max_age?url)!''}[/#local]
   <a
   href="/oauth2/logout?tenantId=${(tenantId)!''}&client_id=${(client_id)!''}&post_logout_redirect_uri=${post_logout_redirect_uri?markup_string?url}">[#t]
     [#nested/][#t]
@@ -1209,13 +1252,13 @@
 [#macro captchaScripts showCaptcha captchaMethod siteKey=""]
     [#if showCaptcha]
         [#if captchaMethod == "GoogleRecaptchaV2"]
-          <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+          <script src="https://www.google.com/recaptcha/api.js" async></script>
         [/#if]
         [#if captchaMethod == "GoogleRecaptchaV3"]
           <script src="https://www.google.com/recaptcha/api.js?render=${siteKey}"></script>
         [/#if]
         [#if captchaMethod == "HCaptcha" || captchaMethod == "HCaptchaEnterprise"]
-          <script src="https://hcaptcha.com/1/api.js" async defer></script>
+          <script src="https://hcaptcha.com/1/api.js" async></script>
         [/#if]
       <script src="${request.contextPath}/js/oauth2/Captcha.js?version=${version}"></script>
       <script data-captcha-method="${captchaMethod!''}" data-site-key="${siteKey!''}">
