@@ -11,40 +11,42 @@
 [#import "../_helpers.ftl" as helpers/]
 
 [#macro methodOption id method]
- <div class="form-row" >
-   <label>
-     <input type="radio" name="methodId" value="${id}" [#if id = methodId!'']checked[/#if]>
+  <div class="flex items-center">
+    <input class="relative size-4 appearance-none rounded-full border border-input-placeholder bg-input-bg before:absolute before:inset-1 before:rounded-full before:bg-input-bg not-checked:before:hidden checked:border-primary checked:bg-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:border-slate-300 disabled:bg-slate-100 disabled:before:bg-slate-400 forced-colors:appearance-auto forced-colors:before:hidden"
+           type="radio" name="methodId" id="method-${id}" value="${id}" [#if id = methodId!'']checked[/#if]>
+   <label for="method-${id}" class="ml-3 block text-sm font-medium text-text">
      [#if method.method == "email"]
-       <span>${theme.message("two-factor-method-email")}</span>
-       <span>
+       <span class="block">${theme.message("two-factor-method-email")}</span>
+       <span class="block text-xs font-normal text-text">
         [#assign index = method.email?index_of("@")/]
         ${theme.message('two-factor-get-code-at-email', method.email?substring(0, index + 2))}
        </span>
      [#elseif method.method == "authenticator"]
-       &nbsp;<span>${theme.message("two-factor-method-authenticator")}</span>
-        <span>
+       <span class="block">${theme.message("two-factor-method-authenticator")}</span>
+       <span class="block text-xs font-normal text-text">
          ${theme.message('two-factor-get-code-at-authenticator')}
-        </span>
+       </span>
      [#elseif method.method == "sms"]
-        <span>${theme.message('two-factor-method-sms')}</span>
-        <span>
-          ${theme.message('two-factor-get-code-at-sms', method.mobilePhone?substring(method.mobilePhone?length - 2))}
-        </span>
+       <span class="block">${theme.message('two-factor-method-sms')}</span>
+       <span class="block text-xs font-normal text-text">
+         ${theme.message('two-factor-get-code-at-sms', method.mobilePhone?substring(method.mobilePhone?length - 2))}
+       </span>
      [#else]
-        ${theme.optionalMessage(method.method)}
+       ${theme.optionalMessage(method.method)}
      [/#if]
-     </label>
+   </label>
  </div>
 [/#macro]
 
 [#macro recoveryCodeOption]
-<div class="form-row">
-  <label>
-    <input type="radio" name="methodId" value="recoveryCode" [#if "recoveryCode" == methodId!'']checked[/#if]>
-       <span>${theme.message('two-factor-recovery-code')}</span>
-       <span>
-         ${theme.message('two-factor-use-one-of-n-recover-codes', recoverCodesAvailable)}
-       </span>
+<div class="flex items-center">
+  <input class="relative size-4 appearance-none rounded-full border border-input-placeholder bg-input-bg before:absolute before:inset-1 before:rounded-full before:bg-input-bg not-checked:before:hidden checked:border-primary checked:bg-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:border-slate-300 disabled:bg-slate-100 disabled:before:bg-slate-400 forced-colors:appearance-auto forced-colors:before:hidden"
+         type="radio" name="methodId" id="method-recoveryCode" value="recoveryCode" [#if "recoveryCode" == methodId!'']checked[/#if]>
+  <label for="method-recoveryCode" class="ml-3 block text-sm font-medium text-text">
+    <span class="block">${theme.message('two-factor-recovery-code')}</span>
+    <span class="block text-xs font-normal text-text">
+      ${theme.message('two-factor-use-one-of-n-recover-codes', recoverCodesAvailable)}
+    </span>
   </label>
 </div>
 [/#macro]
@@ -70,7 +72,7 @@
         ${theme.message('{description}two-factor-methods-selection')}
 
         [#-- Available methods --]
-        <fieldset class="mt-3 hover radio-items">
+        <fieldset class="mt-3 space-y-4 mb-6">
 
           [#list availableMethodsMap as id, method]
              [@methodOption id method/]

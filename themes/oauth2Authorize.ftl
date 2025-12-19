@@ -67,50 +67,57 @@
         [/#if]
         </p>
       [/#if]
-      <form action="${request.contextPath}/oauth2/authorize" method="POST" class="full">
-        [@helpers.oauthHiddenFields/]
-        [@helpers.hidden name="showPasswordField"/]
-        [@helpers.hidden name="userVerifyingPlatformAuthenticatorAvailable"/]
-        [#if showPasswordField && hasDomainBasedIdentityProviders]
-          [@helpers.hidden name="loginId"/]
-        [/#if]
 
-        <fieldset>
+      [#-- The structuredForm component recognizes two form areas and formats them a little differently. Note that there are no fieldset or form-row
+           elements, nor any margin, padding, or other spacing-related classes. There's one div left that's used to put the remember me and forgot
+           password items on the same line. --]
+      [@helpers.structuredForm action="${request.contextPath}/oauth2/authorize" method="POST"; section]
+        [#-- The formFields section contains input fields, which are spaced closely together --]
+        [#if section == "formFields"]
+          [@helpers.oauthHiddenFields/]
+          [@helpers.hidden name="showPasswordField"/]
+          [@helpers.hidden name="userVerifyingPlatformAuthenticatorAvailable"/]
+          [#if showPasswordField && hasDomainBasedIdentityProviders]
+            [@helpers.hidden name="loginId"/]
+          [/#if]
+
           [@helpers.input type="text" name="loginId" id="loginId" autocomplete="username" autocapitalize="none" autocomplete="on" autocorrect="off" spellcheck="false" autofocus=(!loginId?has_content) placeholder=theme.message("loginId") leftAddon="user" disabled=(showPasswordField && hasDomainBasedIdentityProviders)/]
           [#if showPasswordField]
             [@helpers.input type="password" name="password" id="password" autocomplete="current-password" autofocus=loginId?has_content placeholder=theme.message("password") leftAddon="lock"/]
+
             [@helpers.captchaBadge showCaptcha=showCaptcha captchaMethod=tenant.captchaConfiguration.captchaMethod siteKey=tenant.captchaConfiguration.siteKey/]
           [/#if]
-        </fieldset>
 
-          [@helpers.input id="rememberDevice" type="checkbox" name="rememberDevice" label=theme.message("remember-device") value="true" uncheckedValue="false"]
-            <i class="fa fa-info-circle" data-tooltip="${theme.message('{tooltip}remember-device')}"></i>[#t/]
-          [/@helpers.input]
+        [#-- The buttons section contains links, checkboxes, and form buttons, which are spaced a little farther apart --]
+        [#elseif section == "buttons"]
+          [@helpers.input id="rememberDevice" type="checkbox" name="rememberDevice" label=theme.message('remember-device') value="true" uncheckedValue="false" tooltip=theme.message("{tooltip}remember-device")/]
 
-          <div class="form-row">
-            [#if showPasswordField]
+          [#if showPasswordField]
+            <div class="flex flex-col space-y-4 items-center">
               [@helpers.button icon="key" text=theme.message("submit")/]
               [@helpers.link url="${request.contextPath}/password/forgot"]${theme.message("forgot-your-password")}[/@helpers.link]
-            [#else]
-              [@helpers.button icon="arrow-right" text=theme.message("next")/]
-            [/#if]
-          </div>
-      </form>
-      <div>
-        [#if showPasswordField && hasDomainBasedIdentityProviders]
-          [@helpers.link url="" extraParameters="&showPasswordField=false"]${theme.message("sign-in-as-different-user")}[/@helpers.link]
-        [/#if]
-      </div>
-      [#if application.registrationConfiguration.enabled]
-        <div class="form-row push-top">
-          ${theme.message("dont-have-an-account")}
-          [@helpers.link url="${request.contextPath}/oauth2/register"]${theme.message("create-an-account")}[/@helpers.link]
-        </div>
-      [/#if]
+            </div>
+          [#else]
+            [@helpers.button icon="arrow-right" text=theme.message("next")/]
+          [/#if]
 
-     [#if showWebAuthnReauthLink]
-       [@helpers.link url="${request.contextPath}/oauth2/webauthn-reauth"] ${theme.message("return-to-webauthn-reauth")} [/@helpers.link]
-     [/#if]
+          [#if showPasswordField && hasDomainBasedIdentityProviders]
+            [@helpers.link url="" extraParameters="&showPasswordField=false"]${theme.message("sign-in-as-different-user")}[/@helpers.link]
+          [/#if]
+
+          [#if application.registrationConfiguration.enabled]
+            <span class="text-sm/6">${theme.message("dont-have-an-account")}</span>
+            [@helpers.link url="${request.contextPath}/oauth2/register"]${theme.message("create-an-account")}[/@helpers.link]
+          [/#if]
+
+          [#if showWebAuthnReauthLink]
+            <div class="flex justify-center">
+              [@helpers.link url="${request.contextPath}/oauth2/webauthn-reauth"] ${theme.message("return-to-webauthn-reauth")} [/@helpers.link]
+            </div>
+          [/#if]
+
+        [/#if]
+      [/@helpers.structuredForm]
       [@helpers.alternativeLogins clientId=client_id identityProviders=identityProviders passwordlessEnabled=passwordlessEnabled bootstrapWebauthnEnabled=bootstrapWebauthnEnabled idpRedirectState=idpRedirectState federatedCSRFToken=federatedCSRFToken/]
     [/@helpers.main]
 

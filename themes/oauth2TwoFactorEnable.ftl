@@ -23,7 +23,9 @@
     [#-- QR Code for Authenticator app --]
     [#if method == "authenticator"]
       [#-- This is initialized using qrcode-*.js by the element Id --]
-      <div id="qrcode" class="d-flex" style="justify-content: center;"></div>
+      <div class="d-flex" style="justify-content: center;">
+        <div id="qrcode" class="bg-white p-4"></div>
+      </div>
     [/#if]
 
   [#elseif method == "email" || method == "sms"]
@@ -31,24 +33,26 @@
     [#-- Email or SMS Instructions --]
     <p class="mt-0 mb-3">${theme.message("oauth2-${method}-enable-step-1")}</p>
 
-    <form id="send-two-factor-form" action="${request.contextPath}/oauth2/two-factor-enable" method="POST" class="full">
-      [@helpers.oauthHiddenFields/]
-      [@helpers.hidden name="action" value="send" /]
-      [@helpers.hidden name="method" /]
-      [#-- 'secret' and 'twoFactorSecretBase32' are required for authenticator. --]
-      [@helpers.hidden name="secret" /]
-      [@helpers.hidden name="secretBase32Encoded" /]
-      [@helpers.hidden name="twoFactorId"/]
+    [@helpers.structuredForm id="send-two-factor-form" action="${request.contextPath}/oauth2/two-factor-enable" method="POST"; section]
+      [#if section == "formFields"]
+        [@helpers.oauthHiddenFields/]
+        [@helpers.hidden name="action" value="send" /]
+        [@helpers.hidden name="method" /]
+        [#-- 'secret' and 'twoFactorSecretBase32' are required for authenticator. --]
+        [@helpers.hidden name="secret" /]
+        [@helpers.hidden name="secretBase32Encoded" /]
+        [@helpers.hidden name="twoFactorId"/]
 
-      [#-- Send a code --]
-      [#if method == "email"]
-        [@helpers.input type="text" id="email" name="email" label="Email" required=true/]
-      [#elseif method == "sms"]
-        [@helpers.input type="text" id="mobilePhone" name="mobilePhone" label="Mobile phone" required=true/]
+        [#-- Send a code --]
+        [#if method == "email"]
+          [@helpers.input type="text" id="email" name="email" label="Email" required=true/]
+        [#elseif method == "sms"]
+          [@helpers.input type="text" id="mobilePhone" name="mobilePhone" label="Mobile phone" required=true/]
+        [/#if]
+      [#elseif section == "buttons"]
+        [@helpers.button icon="arrow-circle-right" text="${theme.message('send-one-time-code')}"/]
       [/#if]
-
-      [@helpers.button icon="arrow-circle-right" color="gray" text="${theme.message('send-one-time-code')}"/]
-    </form>
+    [/@helpers.structuredForm]
   [/#if]
 [/#macro]
 
@@ -98,22 +102,23 @@
         [/#list]
 
         [#-- Enable Two Factor Form --]
-        <form id="enable-two-factor-form" action="${request.contextPath}/oauth2/two-factor-enable" method="POST" class="full">
-          [@helpers.oauthHiddenFields/]
-           [@helpers.hidden name="email" /]
-           [@helpers.hidden name="method" /]
-           [@helpers.hidden name="mobilePhone" /]
-           [#-- 'secret' and 'twoFactorSecretBase32' are required for authenticator. --]
-           [@helpers.hidden name="secret" /]
-           [@helpers.hidden name="secretBase32Encoded" /]
-           [@helpers.hidden name="twoFactorId"/]
-           <fieldset>
-             [@helpers.input type="text" name="code" id="verification-code" label=theme.message("verification-code") placeholder="${theme.message('{placeholder}two-factor-code')}" autocapitalize="none"  autocomplete="one-time-code" autocorrect="off" required=true/]
-           </fieldset>
-           <div class="form-row">
+        [@helpers.structuredForm id="enable-two-factor-form" action="${request.contextPath}/oauth2/two-factor-enable" method="POST"; section]
+          [#if section == "formFields"]
+            [@helpers.oauthHiddenFields/]
+            [@helpers.hidden name="email" /]
+            [@helpers.hidden name="method" /]
+            [@helpers.hidden name="mobilePhone" /]
+            [#-- 'secret' and 'twoFactorSecretBase32' are required for authenticator. --]
+            [@helpers.hidden name="secret" /]
+            [@helpers.hidden name="secretBase32Encoded" /]
+            [@helpers.hidden name="twoFactorId"/]
+
+            [@helpers.input type="text" name="code" id="verification-code" label=theme.message("verification-code") placeholder="${theme.message('{placeholder}two-factor-code')}" autocapitalize="none"  autocomplete="one-time-code" autocorrect="off" required=true/]
+
+          [#elseif section == "buttons"]
              [@helpers.button icon="save" text=theme.message("enable")/]
-           </div>
-        </form>
+          [/#if]
+        [/@helpers.structuredForm]
     [/@helpers.main]
 
     [@helpers.footer]

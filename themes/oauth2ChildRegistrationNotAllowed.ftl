@@ -21,11 +21,11 @@
         <p>
           ${theme.message("child-registration-not-allowed")}
         </p>
-        <fieldset>
+        <fieldset class="mt-3">
           [@helpers.input type="text" name="parentEmail" id="parentEmail" placeholder=theme.message("parentEmail") leftAddon="user" required=true/]
         </fieldset>
 
-        <div class="form-row">
+        <div class="mt-6">
           [@helpers.button icon="left-arrow" text=theme.message("submit")/]
         </div>
       </form>

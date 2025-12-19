@@ -17,7 +17,7 @@
     [/@helpers.header]
 
     [@helpers.main title=theme.message("authorized-not-registered-title")]
-      <span>${theme.message("authorized-not-registered")}</span>
+      ${theme.message("authorized-not-registered")}
     [/@helpers.main]
 
     [@helpers.footer]

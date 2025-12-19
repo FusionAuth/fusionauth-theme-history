@@ -18,21 +18,23 @@
 
     [@helpers.main title=theme.message("phone-verification-form-title")]
       [#-- FusionAuth automatically handles errors that occur during phone verification and outputs them in the HTML --]
-      <form action="${request.contextPath}/phone/verify" method="POST" class="full">
-        [@helpers.hidden name="captcha_token"/]
-        [@helpers.hidden name="client_id"/]
-        [@helpers.hidden name="tenantId"/]
-        <p>
-          ${theme.message("phone-verification-form")}
-        </p>
-        <fieldset class="push-less-top">
+      [@helpers.structuredForm action="${request.contextPath}/phone/verify" method="POST"; section]
+
+        [#if section == "formFields"]
+          [@helpers.hidden name="captcha_token"/]
+          [@helpers.hidden name="client_id"/]
+          [@helpers.hidden name="tenantId"/]
+          <p>
+            ${theme.message("phone-verification-form")}
+          </p>
+
           [@helpers.input type="text" name="phoneNumber" id="phone" autocapitalize="none" autofocus=true autocomplete="on" autocorrect="off" placeholder="${theme.message('phone')}" leftAddon="user"/]
           [@helpers.captchaBadge showCaptcha=showCaptcha captchaMethod=tenant.captchaConfiguration.captchaMethod siteKey=tenant.captchaConfiguration.siteKey/]
-        </fieldset>
-        <div class="form-row">
+
+        [#elseif section == "buttons"]
           [@helpers.button text=theme.message("submit")/]
-        </div>
-      </form>
+        [/#if]
+      [/@helpers.structuredForm]
     [/@helpers.main]
 
     [@helpers.footer]

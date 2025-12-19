@@ -24,10 +24,7 @@
     [/@helpers.header]
 
     [@helpers.main title=theme.message("logging-out")]
-      <div class="progress-bar" >
-        <div style="animation-duration: ${logoutDurationInSeconds + 1}s; animation-timing-function: ease-out;">
-        </div>
-      </div>
+      [@helpers.progressBar durationSeconds=(logoutDurationInSeconds + 1)/]
     [/@helpers.main]
 
     [#-- Use allLogoutURLs to call the logout URL of all applications in the tenant, or use registeredLogoutURLs to log out of just the applications the user is currently registered.

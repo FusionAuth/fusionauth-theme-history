@@ -13,24 +13,30 @@
   [@helpers.body]
 
     [@helpers.main title=theme.message("access-denied") colClass="col-xs col-sm-10 col-md-8 col-lg-7 col-xl-5"]
-      [#assign incidentId = (request.getAttribute("incidentId")!'')/]
-      [#assign incidentCause = (request.getAttribute("incidentCause")!'')/]
+      <div class="flex flex-col gap-4">
 
-      [#if incidentCause?has_content && incidentCause == "BlockedIPAddressException"]
-      ${theme.message('unauthorized-message-blocked-ip', currentBaseURL)}
-      [#else]
-      ${theme.message("unauthorized-message")}
-      [/#if]
-      <p>
-      ${theme.message("ip-address")}${theme.message("propertySeparator")} ${currentIPAddress}
-      [#assign currentLocation = fusionAuth.currentLocation()!{}/]
-      [#if currentLocation?has_content]
-      <br>${theme.message("location")}${theme.message("propertySeparator")} ${currentLocation.displayString}
-      [/#if]
-      </p>
 
-      <hr>
-       [#if incidentId?has_api]${theme.message("incident-id")}${theme.message("propertySeparator")} <span style="font-weight: 600">${incidentId}</span> &middot; [/#if]${theme.message("security-by")} <a href="https://fusionauth.io">FusionAuth</a>
+        [#assign incidentId = (request.getAttribute("incidentId")!'')/]
+        [#assign incidentCause = (request.getAttribute("incidentCause")!'')/]
+
+        [#if incidentCause?has_content && incidentCause == "BlockedIPAddressException"]
+        ${theme.message('unauthorized-message-blocked-ip', currentBaseURL)}
+        [#else]
+        ${theme.message("unauthorized-message")}
+        [/#if]
+        <p>${theme.message("ip-address")}${theme.message("propertySeparator")} ${currentIPAddress}
+
+        [#assign currentLocation = fusionAuth.currentLocation()!{}/]
+        [#if currentLocation?has_content]
+        ${theme.message("location")}${theme.message("propertySeparator")} ${currentLocation.displayString}
+        [/#if]
+        </p>
+
+        <hr>
+         <p>[#if incidentId?has_api]${theme.message("incident-id")}${theme.message("propertySeparator")} <span class="font-semibold">${incidentId}</span> &middot; [/#if] </p>
+
+         <p class="text-xs">${theme.message("security-by")} [@helpers.link url="https://fusionauth.io"]FusionAuth[/@helpers.link]</p>
+       </div>
     [/@helpers.main]
 
     [@helpers.footer]

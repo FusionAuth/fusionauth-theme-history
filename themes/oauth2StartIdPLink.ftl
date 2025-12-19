@@ -28,7 +28,9 @@
 
     [@helpers.main title=theme.message("start-idp-link-title")]
       [#if pendingIdPLink??]
-        ${theme.message('pending-link-info', pendingIdPLink.identityProviderName)}
+        <div class="mb-5">
+          ${theme.message('pending-link-info', pendingIdPLink.identityProviderName)}
+        </div>
       [/#if]
 
       [#if logoutToContinue]
@@ -63,7 +65,7 @@
             [/@helpers.logoutLink]
           [#else]
             [@helpers.link url="/oauth2/authorize"]
-              <button class="blue button w-100" style="height: 35px;"><i class="fa fa-arrow-right"></i> ${theme.message("link-to-existing-user")} </button>
+              [@helpers.linkButton text="${theme.message('link-to-existing-user')}" /]
             [/@helpers.link]
           [/#if]
         </div>
@@ -74,22 +76,19 @@
        <div class="row mb-3">
          <div class="col-xs">
            [@helpers.link url="/oauth2/register"]
-             <button class="blue button w-100" style="height: 35px;"> <i class="fa fa-arrow-right"></i> ${theme.message("link-to-new-user")} </button>
+             [@helpers.linkButton text="${theme.message('link-to-new-user')}" /]
            [/@helpers.link]
          </div>
        </div>
       [/#if]
 
       [#if pendingIdPLink??]
-      <div class="hr-container">
-        <hr>
-        <div>${theme.message("or")}</div>
-      </div>
+        [@helpers.orSeparator /]
 
-      <div class="row mt-3 mb-3">
+      <div class="row mb-3">
         <div class="col-xs">
         [@helpers.link url="/oauth2/authorize" extraParameters="&cancelPendingIdpLink=true"]
-          <button class="blue button w-100" style="height: 35px;"><i class="fa fa-arrow-right"></i> ${theme.message("cancel-link")} </button>
+          [@helpers.linkButton text="${theme.message('cancel-link')}"/]
         [/@helpers.link]
         </div>
       </div>

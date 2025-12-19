@@ -19,31 +19,29 @@
     [/@helpers.header]
 
     [@helpers.main title=theme.message('password-change-title')]
-      <form action="${request.contextPath}/password/change" method="POST" class="full">
-        [@helpers.oauthHiddenFields/]
-        [@helpers.hidden name="changePasswordId"/]
+      [@helpers.structuredForm action="${request.contextPath}/password/change" method="POST"; section]
 
-        [#-- Show the Password Validation Rules if there is a field error for 'password' --]
-        [#if (fieldMessages?keys?seq_contains("password")!false) && passwordValidationRules??]
-          [@helpers.passwordRules passwordValidationRules/]
-        [/#if]
-        <fieldset>
-          [@helpers.input type="password" name="password" autocomplete="new-password" id="password" placeholder=theme.message('password') leftAddon="lock" autofocus=true required=true/]
-          [@helpers.input type="password" name="passwordConfirm" autocomplete="new-password" id="passwordConfirm" placeholder=theme.message('passwordConfirm') leftAddon="lock" required=true/]
-          [@helpers.captchaBadge showCaptcha=showCaptcha captchaMethod=tenant.captchaConfiguration.captchaMethod siteKey=tenant.captchaConfiguration.siteKey/]
-        </fieldset>
+        [#if section == "formFields"]
+          [@helpers.oauthHiddenFields/]
+          [@helpers.hidden name="changePasswordId"/]
 
-        [#-- Show checkbox for remember me - we are in an OAuth2 workflow --]
-        [#if client_id?has_content]
-          [@helpers.input id="rememberDevice" type="checkbox" name="rememberDevice" label=theme.message('remember-device') value="true" uncheckedValue="false"]
-            <i class="fa fa-info-circle" data-tooltip="${theme.message('{tooltip}remember-device')}"></i>[#t/]
-          [/@helpers.input]
-        [/#if]
+          [#-- Show the Password Validation Rules if there is a field error for 'password' --]
+          [#if (fieldMessages?keys?seq_contains("password")!false) && passwordValidationRules??]
+            [@helpers.passwordRules passwordValidationRules/]
+          [/#if]
+            [@helpers.input type="password" name="password" autocomplete="new-password" id="password" placeholder=theme.message('password') leftAddon="lock" autofocus=true required=true/]
+            [@helpers.input type="password" name="passwordConfirm" autocomplete="new-password" id="passwordConfirm" placeholder=theme.message('passwordConfirm') leftAddon="lock" required=true/]
+            [@helpers.captchaBadge showCaptcha=showCaptcha captchaMethod=tenant.captchaConfiguration.captchaMethod siteKey=tenant.captchaConfiguration.siteKey/]
+        [#elseif section == "buttons"]
 
-        <div class="form-row">
+          [#-- Show checkbox for remember me - we are in an OAuth2 workflow --]
+          [#if client_id?has_content]
+            [@helpers.input id="rememberDevice" type="checkbox" name="rememberDevice" label=theme.message('remember-device') value="true" uncheckedValue="false" tooltip=theme.message("{tooltip}remember-device") /]
+          [/#if]
+
           [@helpers.button text=theme.message('submit')/]
-        </div>
-      </form>
+        [/#if]
+      [/@helpers.structuredForm]
     [/@helpers.main]
 
     [@helpers.footer]

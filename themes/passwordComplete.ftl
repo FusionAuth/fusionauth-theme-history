@@ -16,9 +16,7 @@
     [/@helpers.header]
 
     [@helpers.main title=theme.message('password-changed-title')]
-      <p>
-        ${theme.message('password-changed')}
-      </p>
+      ${theme.message('password-changed')}
     [/@helpers.main]
 
     [@helpers.footer]

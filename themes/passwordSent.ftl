@@ -19,6 +19,7 @@
       <p>
         ${theme.message('forgot-password-message-sent', loginId)}
       </p>
+
       <p class="mt-2">[@helpers.link url="/oauth2/authorize"]${theme.message('return-to-login')}[/@helpers.link]</p>
     [/@helpers.main]
 

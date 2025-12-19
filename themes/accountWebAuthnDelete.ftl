@@ -22,12 +22,11 @@
     [/@helpers.header]
 
     [@helpers.accountMain rowClass="row center" colClass="col-xs-12 col-sm-12 col-md-10 col-lg-8" actionURL="/account/webauthn/" actionText=theme.message("go-back")]
-      [@helpers.accountPanelFull]
+      [@helpers.accountPanelFull title="${theme.message('delete-webauthn-passkey')}"]
         <fieldset>
-          <legend>${theme.message("delete-webauthn-passkey")}</legend>
-          <p><em>${theme.message("{description}delete-webauthn-passkey")}</em></p>
+          <p class="mb-3">${theme.message("{description}delete-webauthn-passkey")}</p>
 
-          <table class="properties">
+          <table class="properties text-xs">
             <tbody>
               [@row name=theme.message("name") value=helpers.display(credential, "displayName") /]
               [@row name=theme.message("identifier") value=helpers.display(credential, "name") /]
@@ -40,15 +39,15 @@
           </table>
         </fieldset>
 
-        <form id="webauthn-form" action="${request.contextPath}/account/webauthn/delete" method="POST">
-          [@helpers.hidden name="id"/]
-          [@helpers.hidden name="client_id"/]
-          [@helpers.hidden name="tenantId"/]
-
-          <div class="form-row">
-            [@helpers.button icon="trash" color="red" text=theme.message("delete")/]
-          </div>
-        </form>
+        [@helpers.structuredForm id="webauthn-form" action="${request.contextPath}/account/webauthn/delete" method="POST"; section]
+          [#if section == "formFields"]
+            [@helpers.hidden name="id"/]
+            [@helpers.hidden name="client_id"/]
+            [@helpers.hidden name="tenantId"/]
+          [#elseif section == "buttons"]
+            [@helpers.button style="delete" text=theme.message("delete")/]
+          [/#if]
+        [/@helpers.structuredForm]
       [/@helpers.accountPanelFull]
     [/@helpers.accountMain]
 

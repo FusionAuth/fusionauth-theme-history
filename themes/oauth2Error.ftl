@@ -15,13 +15,13 @@
     [/@helpers.header]
 
     [@helpers.main title="Error"]
-      <p>
-        We're sorry, your request was malformed or was unable to be completed for some reason. Try hitting the back button and restarting the process to see if it fixes the problem.
-      </p>
+      <p class="text-sm">We're sorry, your request was malformed or was unable to be completed for some reason. Try hitting the back button and restarting the process to see if it fixes the problem.</p>
 
       [#if oauthJSONError?has_content]
-      If you want the nerdy explanation, review the following JSON body.
-      <pre class="code scrollable horizontal">${oauthJSONError}</pre>
+      <p class="mt-4 mb-4">If you want the nerdy explanation, review the following JSON body.</p>
+      <div class="overflow-auto text-xs full">
+        <pre>${oauthJSONError}</pre>
+      </div>
       [/#if]
     [/@helpers.main]
 

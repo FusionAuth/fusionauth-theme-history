@@ -17,36 +17,39 @@
     [/@helpers.header]
 
     [@helpers.main title=theme.message('consent-required')]
-      <p>${theme.message('consent-required-intro', application.name?esc?markup_string)?no_esc}${theme.message("propertySeparator")}</p>
+      <p class="mb-4">${theme.message('consent-required-intro', application.name?esc?markup_string)?no_esc}${theme.message("propertySeparator")}</p>
 
-      <form action="${request.contextPath}/oauth2/consent" method="POST" class="full consent-prompt">
-        [@helpers.oauthHiddenFields/]
+      [@helpers.structuredForm action="${request.contextPath}/oauth2/consent" method="POST"; section]
 
-        [#list requiredScopes as scope]
-          [@helpers.scopeConsentField application=application scope=scope type="required" /]
-        [/#list]
+        [#if section == "formFields"]
+          [@helpers.oauthHiddenFields/]
 
-        [#list optionalScopes as scope]
-          [@helpers.scopeConsentField application=application scope=scope  type="optional" /]
-        [/#list]
+          [#list requiredScopes as scope]
+            [@helpers.scopeConsentField application=application scope=scope type="required" /]
+          [/#list]
 
-        [#list unknownScopes as scope]
-          [@helpers.scopeConsentField application=application scope=scope type="unknown" /]
-        [/#list]
+          [#list optionalScopes as scope]
+            [@helpers.scopeConsentField application=application scope=scope  type="optional" /]
+          [/#list]
 
-        <div class="form-row">
+          [#list unknownScopes as scope]
+            [@helpers.scopeConsentField application=application scope=scope type="unknown" /]
+          [/#list]
+
+        [#elseif section == "buttons"]
+
           <hr>
           [#if optionalScopes?has_content]
             <p>${theme.message('scope-consent-optional')}</p>
           [/#if]
-          <p>${theme.message('scope-consent-agreement', application.name)}</p>
-        </div>
+          <div>${theme.message('scope-consent-agreement', application.name)}</div>
 
-        <div class="form-row">
-          [@helpers.button icon="key" name="action" value="allow" text=theme.message('allow') /]
-          [@helpers.button icon="reply" color="gray" name="action" value="cancel" text=theme.message('cancel') /]
-        </div>
-      </form>
+          <div class="flex flex-col justify-between gap-3">
+            [@helpers.button name="action" value="allow" text=theme.message('allow') /]
+            [@helpers.button name="action" value="cancel" style="" text=theme.message('cancel') /]
+          </div>
+        [/#if]
+      [/@helpers.structuredForm]
     [/@helpers.main]
 
     [@helpers.footer]

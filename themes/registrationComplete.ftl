@@ -15,9 +15,7 @@
     [/@helpers.header]
 
     [@helpers.main title=theme.message('registration-verification-complete-title')]
-      <p>
-        ${theme.message('registration-verification-complete')}
-      </p>
+      ${theme.message('registration-verification-complete')}
     [/@helpers.main]
 
     [@helpers.footer]

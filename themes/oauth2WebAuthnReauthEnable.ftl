@@ -26,72 +26,67 @@
     [@helpers.header]
       [#-- Custom header code goes here --]
     [/@helpers.header]
+
     [@helpers.main title=theme.message("no-password")]
       [#setting url_escaping_charset='UTF-8']
-      <fieldset>
-        <p>${theme.message("{description}webauthn-reauth")}</p>
-        <form id="webauthn-login-form" action="${request.contextPath}/oauth2/webauthn-reauth-enable" method="POST" class="full">
-          [@helpers.oauthHiddenFields/]
-          [@helpers.hidden name="webAuthnLoginRequest"/]
-          [@helpers.hidden name="workflow" value="reauthentication"/]
 
-          [#if webAuthnCredentials?has_content]
-          <p><em>${theme.message("{description}webauthn-reauth-existing-credential")}</em></p>
-          <fieldset class="mt-3 hover push-bottom">
-            [#list webAuthnCredentials![] as credential]
-             <button class="chunky-wide-submit" name="credentialId" value="${credential.id}">
-                <span>
-                  <span>${helpers.display(credential, "displayName")}</span>
-                  <span class="sub-text">
-                    ${theme.message("last-used")}
-                    ${theme.formatZoneDateTime(credential.lastUseInstant, theme.message("date-format"), zoneId)}</span>
-                </span>
-                <i class="fa fa-chevron-right"></i>
-              </button>
-            [/#list]
-          </fieldset>
-          [/#if]
+        [@helpers.structuredForm id="webauthn-login-form" action="${request.contextPath}/oauth2/webauthn-reauth-enable" method="POST"; section]
+          [#if section == "formFields"]
+            [@helpers.oauthHiddenFields/]
+            [@helpers.hidden name="webAuthnLoginRequest"/]
+            [@helpers.hidden name="workflow" value="reauthentication"/]
 
-          <fieldset>
+            <p class="text-md">${theme.message("{description}webauthn-reauth")}</p>
+          [#elseif section == "buttons"]
+
+            [#-- List existing credentials for re-authentication if any exist. --]
+            [#if webAuthnCredentials?has_content]
+              <p>${theme.message("{description}webauthn-reauth-existing-credential")}</p>
+              <fieldset class="mt-3 hover push-bottom">
+                [#list webAuthnCredentials![] as credential]
+                 <button class="chunky-wide-submit" name="credentialId" value="${credential.id}">
+                    <span>
+                      <span>${helpers.display(credential, "displayName")}</span>
+                      <span class="sub-text">
+                        ${theme.message("last-used")}
+                        ${theme.formatZoneDateTime(credential.lastUseInstant, theme.message("date-format"), zoneId)}</span>
+                    </span>
+                    <i class="fa fa-chevron-right"></i>
+                  </button>
+                [/#list]
+              </fieldset>
+            [/#if]
+
             [@helpers.input id="doNotAskAgain" type="checkbox" name="doNotAskAgain" label=theme.message('dont-ask-again') value="true" uncheckedValue="false"/]
-            <div class="form-row">
-              [@helpers.button icon="check" name="action" value="skip" text=theme.message("not-now") /]
-            </div>
-          </fieldset>
-
-        </form>
+            [@helpers.button icon="check" name="action" value="skip" text=theme.message("not-now") /]
+          [/#if]
+        [/@helpers.structuredForm]
 
         [#-- Description for adding a new credential during login. --]
-        <p>
-          <em>
+        <div class="mt-8 ">
           [#if webAuthnCredentials?has_content]
             ${theme.message("or")} ${theme.message("{description}webauthn-reauth-add-credential")?uncap_first}
           [#else]
             ${theme.message("{description}webauthn-reauth-add-credential")}
           [/#if]
-          </em>
-        </p>
+        </div>
 
-        <form id="webauthn-register-form" action="${request.contextPath}/oauth2/webauthn-reauth-enable" method="POST" class="full" data-start-registration-action="/oauth2/ajax/webauthn/start-registration">
-          [@helpers.oauthHiddenFields/]
-          [@helpers.hidden name="webAuthnRegisterRequest"/]
-          [@helpers.hidden name="workflow" value="reauthentication"/]
+        [@helpers.structuredForm id="webauthn-register-form" action="${request.contextPath}/oauth2/webauthn-reauth-enable" method="POST" dataAttributes={"start-registration-action": "/oauth2/ajax/webauthn/start-registration"}; section]
+          [#if section == "buttons"]
+            [@helpers.oauthHiddenFields/]
+            [@helpers.hidden name="webAuthnRegisterRequest"/]
+            [@helpers.hidden name="workflow" value="reauthentication"/]
 
-          <fieldset>
             [#-- Default the displayName on initial render if not alread set. --]
             [#if !(displayName??) && request.method == "GET"]
               [#global displayName = theme.message('unnamed')/]
             [/#if]
 
             [@helpers.input type="text" name="displayName" id="displayName" label="${theme.message('display-name')}" autocomplete="off" autofocus=true required=true/]
-          </fieldset>
-
-          <div class="form-row">
             [@helpers.button icon="key" name="action" value="register" text=theme.message("register") /]
-          </div>
+          [/#if]
 
-        </form>
-      </fieldset>
+        [/@helpers.structuredForm]
     [/@helpers.main]
 
     [@helpers.footer]

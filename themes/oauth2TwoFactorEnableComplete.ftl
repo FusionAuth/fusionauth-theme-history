@@ -20,19 +20,22 @@
 
     [@helpers.main title=theme.message("two-factor-recovery-codes")]
       [#setting url_escaping_charset='UTF-8']
-      <form action="${request.contextPath}/oauth2/two-factor-enable-complete" method="POST" class="full">
-        [@helpers.oauthHiddenFields/]
-        <p class="mt-0"> ${theme.message("{description}oauth2-recovery-codes-1")} </p>
-        <fieldset>
-          <div class="code d-flex" style="justify-content: center; flex-wrap: wrap; gap: 5px 15px;">
-            [#list recoveryCodes as code]<div>${code}</div>[/#list]
-          </div>
-          <p> ${theme.message("{description}oauth2-recovery-codes-2")}  </p>
-        </fieldset>
-        <div class="form-row">
+      [@helpers.structuredForm action="${request.contextPath}/oauth2/two-factor-enable-complete" method="POST"; section]
+        [#if section == "formFields"]
+          [@helpers.oauthHiddenFields/]
+          ${theme.message("{description}oauth2-recovery-codes-1")}
+
+          [@helpers.codeBox]
+            [#list recoveryCodes as code]
+${code}
+            [/#list]
+          [/@helpers.codeBox]
+
+          ${theme.message("{description}oauth2-recovery-codes-2")}
+        [#elseif section == "buttons"]
           [@helpers.button text=theme.message("done")/]
-        </div>
-      </form>
+        [/#if]
+      [/@helpers.structuredForm]
     [/@helpers.main]
 
     [@helpers.footer]

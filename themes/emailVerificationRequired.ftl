@@ -31,58 +31,56 @@
 
        [#-- If configured, collect the verification code on this form, this means the user sits here until they verify their email. --]
        [#if collectVerificationCode]
-          <form id="verification-required-enter-code" action="${request.contextPath}/email/verification-required" method="POST" class="full">
-            [@helpers.oauthHiddenFields/]
-            [@helpers.hidden name="action" value="verify"/]
-            [@helpers.hidden name="allowEmailChange"/]
-            [@helpers.hidden name="collectVerificationCode"/]
-            [@helpers.hidden name="email"/]
-            [@helpers.hidden name="verificationId"/]
-            <fieldset>
-              [@helpers.input type="text" name="oneTimeCode" id="otp" autocapitalize="none" autofocus=true autocomplete="one-time-code" autocorrect="off" placeholder="${theme.message('code')}" leftAddon="lock"/]
-              [@helpers.captchaBadge showCaptcha=showCaptcha captchaMethod=tenant.captchaConfiguration.captchaMethod siteKey=tenant.captchaConfiguration.siteKey/]
-            </fieldset>
-            <div class="form-row">
-              [@helpers.button text=theme.message("submit")/]
-            </div>
-         </form>
+         [@helpers.structuredForm id="verification-required-enter-code" action="${request.contextPath}/email/verification-required" method="POST"; section]
+           [#if section == "formFields"]
+             [@helpers.oauthHiddenFields/]
+             [@helpers.hidden name="action" value="verify"/]
+             [@helpers.hidden name="allowEmailChange"/]
+             [@helpers.hidden name="collectVerificationCode"/]
+             [@helpers.hidden name="email"/]
+             [@helpers.hidden name="verificationId"/]
+
+             [@helpers.input type="text" name="oneTimeCode" id="otp" autocapitalize="none" autofocus=true autocomplete="one-time-code" autocorrect="off" placeholder="${theme.message('verificationCode')}" leftAddon="lock"/]
+             [@helpers.captchaBadge showCaptcha=showCaptcha captchaMethod=tenant.captchaConfiguration.captchaMethod siteKey=tenant.captchaConfiguration.siteKey/]
+           [#elseif section == "buttons"]
+             [@helpers.button text=theme.message("submit")/]
+           [/#if]
+         [/@helpers.structuredForm]
        [#else]
          <p class="mb-3"> ${theme.message("{description}email-verification-required-non-interactive")} </p>
        [/#if]
 
        [#-- Resend a verification email --]
-       <form id="verification-required-resend-code" action="${request.contextPath}/email/verification-required" method="POST" class="full">
-         [@helpers.oauthHiddenFields/]
-         [@helpers.hidden name="action" value="resend"/]
-         [@helpers.hidden name="allowEmailChange"/]
-         [@helpers.hidden name="collectVerificationCode"/]
-         [@helpers.hidden name="email"/]
-         <div class="form-row">
-           <button class="link blue-text"><i class="fa fa-arrow-right"></i> ${theme.message("email-verification-required-send-another")} </button>
-         </div>
-       </form>
+       [@helpers.structuredForm id="verification-required-resend-code" action="${request.contextPath}/email/verification-required" method="POST"; section]
+
+         [#if section == "formFields"]
+           [@helpers.oauthHiddenFields/]
+           [@helpers.hidden name="action" value="resend"/]
+           [@helpers.hidden name="allowEmailChange"/]
+           [@helpers.hidden name="collectVerificationCode"/]
+           [@helpers.hidden name="email"/]
+         [#elseif section == "buttons"]
+           [@helpers.linkButton text="${theme.message('email-verification-required-send-another')}" /]
+          [/#if]
+       [/@helpers.structuredForm]
 
        [#-- If configured to allow an email change, present the user with a form. This is intended to assist the user if they mis-typed their email address previously. --]
        [#if allowEmailChange]
-         <div class="hr-container">
-           <hr>
-           <div>${theme.message("or")}</div>
-         </div>
-         <form id="verification-required-change-email" action="${request.contextPath}/email/verification-required" method="POST" class="full">
-           [@helpers.oauthHiddenFields/]
-           [@helpers.hidden name="action" value="changeEmail"/]
-           [@helpers.hidden name="allowEmailChange"/]
-           [@helpers.hidden name="collectVerificationCode"/]
-           <p class="mb-3">
-             ${theme.message("{description}email-verification-required-change-email")}
-           </p>
-           <fieldset>
+         [@helpers.orSeparator /]
+         [@helpers.structuredForm id="verification-required-change-email" action="${request.contextPath}/email/verification-required" method="POST"; section]
+           [#if section == "formFields"]
+             [@helpers.oauthHiddenFields/]
+             [@helpers.hidden name="action" value="changeEmail"/]
+             [@helpers.hidden name="allowEmailChange"/]
+             [@helpers.hidden name="collectVerificationCode"/]
+             <p class="mb-3">
+               ${theme.message("{description}email-verification-required-change-email")}
+             </p>
              [@helpers.input type="text" name="email" id="email" autocapitalize="none" autocomplete="on" autocorrect="off" placeholder="${theme.message('email')}" leftAddon="user"/]
-           </fieldset>
-           <div class="form-row">
-              [@helpers.button text=theme.message("submit")/]
-           </div>
-         </form>
+           [#elseif section == "buttons"]
+             [@helpers.button text=theme.message("submit")/]
+           [/#if]
+         [/@helpers.structuredForm]
        [/#if]
 
     [/@helpers.main]

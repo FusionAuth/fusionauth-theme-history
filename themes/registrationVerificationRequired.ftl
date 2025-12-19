@@ -29,32 +29,32 @@
 
        [#-- If configured, collect the verification code on this form, this means the user sits here until they verify their registration. --]
        [#if collectVerificationCode]
-          <form id="verification-required-enter-code" action="${request.contextPath}/registration/verification-required" method="POST" class="full">
-            [@helpers.oauthHiddenFields/]
-            [@helpers.hidden name="action" value="verify"/]
-            [@helpers.hidden name="collectVerificationCode"/]
-            [@helpers.hidden name="verificationId"/]
-            <fieldset>
+          [@helpers.structuredForm id="verification-required-enter-code" action="${request.contextPath}/registration/verification-required" method="POST"; section]
+            [#if section == "formFields"]
+              [@helpers.oauthHiddenFields/]
+              [@helpers.hidden name="action" value="verify"/]
+              [@helpers.hidden name="collectVerificationCode"/]
+              [@helpers.hidden name="verificationId"/]
+
               [@helpers.input type="text" name="oneTimeCode" id="otp" autocapitalize="none" autofocus=true autocomplete="one-time-code" autocorrect="off" placeholder="${theme.message('code')}" leftAddon="lock"/]
               [@helpers.captchaBadge showCaptcha=showCaptcha captchaMethod=tenant.captchaConfiguration.captchaMethod siteKey=tenant.captchaConfiguration.siteKey/]
-            </fieldset>
-            <div class="form-row">
+            [#elseif section == "buttons"]
               [@helpers.button text=theme.message('submit')/]
-            </div>
-         </form>
+            [/#if]
+          [/@helpers.structuredForm]
        [#else]
          <p> ${theme.message("{description}registration-verification-required-non-interactive")} </p>
        [/#if]
 
        [#-- Resend a verification email --]
-       <form id="verification-required-resend-code" action="${request.contextPath}/registration/verification-required" method="POST" class="full">
-         [@helpers.oauthHiddenFields/]
-         [@helpers.hidden name="action" value="resend"/]
-         [@helpers.hidden name="collectVerificationCode"/]
-         <div class="form-row">
-           <button class="link blue-text send-another-button"><i class="fa fa-arrow-right"></i> ${theme.message('registration-verification-required-send-another')} </button>
-         </div>
-       </form>
+       [@helpers.structuredForm id="verification-required-resend-code" action="${request.contextPath}/registration/verification-required" method="POST"; section]
+         [#if section == "buttons"]
+           [@helpers.oauthHiddenFields/]
+           [@helpers.hidden name="action" value="resend"/]
+           [@helpers.hidden name="collectVerificationCode"/]
+           [@helpers.linkButton text="${theme.message('registration-verification-required-send-another')}"][/@helpers.linkButton]
+          [/#if]
+       [/@helpers.structuredForm]
 
     [/@helpers.main]
 

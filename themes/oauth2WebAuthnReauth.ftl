@@ -34,35 +34,36 @@
     [/@helpers.header]
     [@helpers.main title=theme.message("login-with-passkey")]
       [#setting url_escaping_charset='UTF-8']
-        <form id="webauthn-login-form" action="${request.contextPath}/oauth2/webauthn-reauth" method="POST" class="full">
-          [@helpers.oauthHiddenFields/]
-          [@helpers.hidden name="webAuthnRequest" /]
-          [@helpers.hidden name="workflow" value="reauthentication"/]
-          [@helpers.hidden name="userVerifyingPlatformAuthenticatorAvailable" /]
+        [@helpers.structuredForm id="webauthn-login-form" action="${request.contextPath}/oauth2/webauthn-reauth" method="POST"; section]
 
-          <p><em>${theme.message("webauthn-reauth-select-passkey")}</em></p>
-          <fieldset class="mt-3 hover push-bottom">
-          [#list webAuthnCredentials![] as credential]
-            <button class="chunky-wide-submit" name="credentialId" value="${credential.id}">
-              <span>
-                <span>[@passKey users(credential.userId)/]</span>
-                <span class="sub-text">${helpers.display(credential, "displayName")}</span>
-              </span>
-              <i class="fa fa-chevron-right"></i>
-            </button>
-          [/#list]
-          </fieldset>
+          [#if section == "formFields"]
+            [@helpers.oauthHiddenFields/]
+            [@helpers.hidden name="webAuthnRequest" /]
+            [@helpers.hidden name="workflow" value="reauthentication"/]
+            [@helpers.hidden name="userVerifyingPlatformAuthenticatorAvailable" /]
 
-          <p><em>${theme.message("webauthn-reauth-return-to-login")}</em></p>
+            ${theme.message("webauthn-reauth-select-passkey")}
 
-          [@helpers.input id="rememberDevice" type="checkbox" name="rememberDevice" label=theme.message("remember-device") value="true" uncheckedValue="false"]
-            <i class="fa fa-info-circle" data-tooltip="${theme.message('{tooltip}remember-device')}"></i>[#t/]
-          [/@helpers.input]
+            [#list webAuthnCredentials![] as credential]
+              <button class="chunky-wide-submit py-3 flex items-center w-full hover:bg-input-text/30 focus:bg-input-text/30" name="credentialId" value="${credential.id}">
+                <span class="flex flex-col items-start flex-grow">
+                  <span class="font-medium">[@passKey users(credential.userId)/]</span>
+                  <span>${helpers.display(credential, "displayName")}</span>
+                </span>
+                <i class="fa fa-chevron-right"></i>
+              </button>
+            [#sep]<div class="border-1 border-input-text/50"></div>
+            [/#list]
 
-          <div class="form-row">
+          [#elseif section == "buttons"]
+
+            <p>${theme.message("webauthn-reauth-return-to-login")}</p>
+
+            [@helpers.input id="rememberDevice" type="checkbox" name="rememberDevice" label=theme.message('remember-device') value="true" uncheckedValue="false" tooltip=theme.message("{tooltip}remember-device")/]
+
             <p class="mt-2">[@helpers.link url="/oauth2/authorize" extraParameters="&skipWebAuthnReauth=true"]${theme.message("return-to-normal-login")}[/@helpers.link]</p>
-          </div>
-        </form>
+          [/#if]
+        [/@helpers.structuredForm]
     [/@helpers.main]
 
     [@helpers.footer]

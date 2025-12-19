@@ -20,30 +20,6 @@
       new FusionAuth.OAuth2.Device(form, ${userCodeLength});
     });
   </script>
-  <style>
-    #user_code_container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    #user_code_container > div {
-      margin-left: 2px;
-      margin-right: 2px;
-    }
-
-    #user_code_container input[type="text"] {
-      font-size: 30px;
-      padding: 5px 0;
-      margin-bottom: 5px;
-      text-align: center;
-      width: 32px;
-    }
-
-    #user_code_container input[type="text"] + span {
-      font-size: 32px;
-    }
-  </style>
   [/@helpers.head]
   [@helpers.body]
 
@@ -74,8 +50,8 @@
           [#if logoutToContinue]
             [#-- The user must logout before continuing because the currently logged in user has exceeded the number of allowed links to this IdP. --]
             <p>${theme.message('device-link-count-exceeded-pending-logout', currentLoginId, devicePendingIdPLink.identityProviderName)}</p>
-            <p class="pb-3">${theme.message("device-link-count-exceeded-next-step")}</p>
-            <div class="row">
+            <p>${theme.message("device-link-count-exceeded-next-step")}</p>
+            <div class="mt-4 mb-4">
               <div class="col-xs">
                 [@helpers.logoutLink redirectURI="/oauth2/device"]
                   <button class="blue button w-100" style="height: 35px;"><i class="fa fa-arrow-right"></i> ${theme.message("logout-and-continue")}</button>
@@ -84,7 +60,7 @@
             </div>
           [#else]
             <p>${theme.message('device-logged-in-as-not-you', currentLoginId)}</p>
-            <div class="row">
+            <div class="mt-4 mb-4">
               <div class="col-xs">
                 [@helpers.logoutLink redirectURI="/oauth2/device"]
                   <button class="blue button"><i class="fa fa-arrow-right"></i> ${theme.message("logout-and-continue")}</button>
@@ -97,30 +73,29 @@
 
       [#-- Not showing the form if the user must logout first. --]
       [#if !logoutToContinue]
-      <form action="${request.contextPath}/oauth2/device" method="POST" id="device-form">
-        [@helpers.oauthHiddenFields/]
-        <p>${theme.message("userCode")}</p>
-        <fieldset>
-          <div id="user_code_container">
-            [#list 0..<userCodeLength as i]
-            <div>
-              <label for="user_code_${i}"></label>
-              <input type="text" id="user_code_${i}" maxlength="1" [#if i?index == 0]autofocus[/#if] autocomplete="off"/>
-              [#if i == (userCodeLength/2)?floor - 1]<span>-</span>[/#if]
+      [@helpers.structuredForm action="${request.contextPath}/oauth2/device" method="POST" id="device-form"; section]
+
+        [#if section == "formFields"]
+          [@helpers.oauthHiddenFields/]
+          <p>${theme.message("userCode")}</p>
+          <fieldset>
+            <div id="user_code_container" class="flex flex-wrap justify-center space-x-2">
+              [#list 0..<userCodeLength as i]
+              <div class=" flex">
+                <label for="user_code_${i}"></label>
+                <input class="border-1 text-3xl p-1 w-8" type="text" id="user_code_${i}" maxlength="1" [#if i?index == 0]autofocus[/#if] autocomplete="off"/>
+                [#if i == (userCodeLength/2)?floor - 1]<span class="text-3xl pl-1 ml-1">-</span>[/#if]
+              </div>
+              [/#list]
+              <input type="hidden" name="interactive_user_code" id="interactive_user_code" />
             </div>
-            [/#list]
-            <input type="hidden" name="interactive_user_code" id="interactive_user_code" />
-          </div>
-        </fieldset>
+          </fieldset>
 
-        <div class="form-row">
           [@helpers.errors field="user_code" /]
-        </div>
-
-        <div class="form-row push-top">
+        [#elseif section == "buttons"]
           [@helpers.button text=theme.message('submit')/]
-        </div>
-      </form>
+        [/#if]
+      [/@helpers.structuredForm]
       [/#if]
     [/@helpers.main]
 

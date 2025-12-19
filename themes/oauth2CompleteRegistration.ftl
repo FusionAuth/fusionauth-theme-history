@@ -36,7 +36,6 @@
     [@helpers.main title=theme.message("complete-registration")]
       <form action="${request.contextPath}/oauth2/complete-registration" method="POST" class="full">
         [@helpers.oauthHiddenFields/]
-        [@helpers.hidden name="step"/]
         [@helpers.hidden name="registrationState"/]
         [@helpers.hidden name="userVerifyingPlatformAuthenticatorAvailable"/]
 

@@ -28,17 +28,17 @@
       [#-- Generic detail about what to do next --]
       <p class="mb-4">${theme.message("{description}confirmation-required-ignore")}</p>
 
-      <form action="${request.contextPath}/confirmation-required" method="POST" class="full">
-        <input type="hidden" name="csrfToken" value="${csrfToken!""}"/>
-        [#list request.parameters as key,value]
-          [#list value as v]
-          <input type="hidden" name="${key!""}" value="${v!""}"/>
+      [@helpers.structuredForm action="${request.contextPath}/confirmation-required" method="POST"; section]
+        [#if section == "buttons"]
+          <input type="hidden" name="csrfToken" value="${csrfToken!""}"/>
+          [#list request.parameters as key,value]
+            [#list value as v]
+            <input type="hidden" name="${key!""}" value="${v!""}"/>
+            [/#list]
           [/#list]
-        [/#list]
-        <div class="form-row">
           [@helpers.button text=theme.message('continue') /]
-        </div>
-      </form>
+        [/#if]
+      [/@helpers.structuredForm]
     [/@helpers.main]
 
     [@helpers.footer]

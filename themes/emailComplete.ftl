@@ -15,9 +15,7 @@
     [/@helpers.header]
 
     [@helpers.main title=theme.message("email-verification-complete-title")]
-      <p>
         ${theme.message("email-verification-complete")}
-      </p>
     [/@helpers.main]
 
     [@helpers.footer]

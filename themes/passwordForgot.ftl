@@ -17,21 +17,21 @@
     [/@helpers.header]
 
     [@helpers.main title=theme.message('forgot-password-title')]
-      <form action="${request.contextPath}/password/forgot" method="POST" class="full">
-        [@helpers.oauthHiddenFields/]
+      <p class="mt-0 mb-3">
+        ${theme.message('forgot-password')}
+      </p>
 
-        <p>
-          ${theme.message('forgot-password')}
-        </p>
-        <fieldset class="push-less-top">
+      [@helpers.structuredForm action="${request.contextPath}/password/forgot" method="POST"; section]
+        [#if section == "formFields"]
+          [@helpers.oauthHiddenFields/]
+
           [@helpers.input type="text" name="loginId" id="loginId" autocapitalize="none" autofocus=true autocomplete="on" autocorrect="off" placeholder=theme.message('loginId') leftAddon="user" required=true/]
           [@helpers.captchaBadge showCaptcha=showCaptcha captchaMethod=tenant.captchaConfiguration.captchaMethod siteKey=tenant.captchaConfiguration.siteKey/]
-        </fieldset>
-        <div class="form-row">
+        [#elseif section == "buttons"]
           [@helpers.button text=theme.message('submit')/]
           <p class="mt-2">[@helpers.link url="/oauth2/authorize"]${theme.message('return-to-login')}[/@helpers.link]</p>
-        </div>
-      </form>
+        [/#if]
+      [/@helpers.structuredForm]
     [/@helpers.main]
 
     [@helpers.footer]

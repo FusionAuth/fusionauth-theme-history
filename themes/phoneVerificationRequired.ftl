@@ -31,56 +31,55 @@
 
        [#-- If configured, collect the verification code on this form, this means the user sits here until they verify their phone number. --]
        [#if collectVerificationCode]
-          <form id="verification-required-enter-code" action="${request.contextPath}/phone/verification-required" method="POST" class="full">
+         [@helpers.structuredForm id="verification-required-enter-code" action="${request.contextPath}/phone/verification-required" method="POST"; section]
+          [#if section == "formFields"]
             [@helpers.oauthHiddenFields/]
             [@helpers.hidden name="action" value="verify"/]
             [@helpers.hidden name="collectVerificationCode"/]
             [@helpers.hidden name="phoneNumber"/]
             [@helpers.hidden name="verificationId"/]
-            <fieldset>
-              [@helpers.input type="text" name="oneTimeCode" id="otp" autocapitalize="none" autofocus=true autocomplete="one-time-code" autocorrect="off" placeholder="${theme.message('code')}" leftAddon="lock"/]
+              [@helpers.input type="text" name="oneTimeCode" id="otp" autocapitalize="none" autofocus=true autocomplete="one-time-code" autocorrect="off" placeholder="${theme.message('verificationCode')}" leftAddon="lock"/]
               [@helpers.captchaBadge showCaptcha=showCaptcha captchaMethod=tenant.captchaConfiguration.captchaMethod siteKey=tenant.captchaConfiguration.siteKey/]
-            </fieldset>
-            <div class="form-row">
+            [#elseif section == "buttons"]
               [@helpers.button text=theme.message("submit")/]
-            </div>
-         </form>
+            [/#if]
+          [/@helpers.structuredForm]
        [#else]
          <p class="mb-3"> ${theme.message("{description}phone-verification-required-non-interactive")} </p>
        [/#if]
 
        [#-- Resend a verification SMS --]
-       <form id="verification-required-resend-code" action="${request.contextPath}/phone/verification-required" method="POST" class="full">
-         [@helpers.oauthHiddenFields/]
-         [@helpers.hidden name="action" value="resend"/]
-         [@helpers.hidden name="collectVerificationCode"/]
-         [@helpers.hidden name="phoneNumber"/]
-         <div class="form-row">
-           <button class="link blue-text"><i class="fa fa-arrow-right"></i> ${theme.message("phone-verification-required-send-another")} </button>
-         </div>
-       </form>
+       [@helpers.structuredForm id="verification-required-resend-code" action="${request.contextPath}/phone/verification-required" method="POST"; section]
+
+         [#if section == "formFields"]
+           [@helpers.oauthHiddenFields/]
+           [@helpers.hidden name="action" value="resend"/]
+           [@helpers.hidden name="collectVerificationCode"/]
+           [@helpers.hidden name="phoneNumber"/]
+         [#elseif section == "buttons"]
+           [@helpers.linkButton text="${theme.message('phone-verification-required-send-another')}" /]
+         [/#if]
+       [/@helpers.structuredForm]
 
        [#-- If configured to allow a phone number change, present the user with a form. This is intended to assist the user if they mis-typed their phone number previously. --]
        [#if allowPhoneNumberChange]
-         <div class="hr-container">
-           <hr>
-           <div>${theme.message("or")}</div>
-         </div>
-         <form id="verification-required-change-phone" action="${request.contextPath}/phone/verification-required" method="POST" class="full">
-           [@helpers.oauthHiddenFields/]
-           [@helpers.hidden name="action" value="changePhoneNumber"/]
-           [@helpers.hidden name="allowPhoneNumberChange"/]
-           [@helpers.hidden name="collectVerificationCode"/]
-           <p class="mb-3">
-             ${theme.message("{description}phone-verification-required-change-phone")}
-           </p>
-           <fieldset>
+         [@helpers.orSeparator /]
+
+         [@helpers.structuredForm id="verification-required-change-phone" action="${request.contextPath}/phone/verification-required" method="POST"; section]
+
+           [#if section == "formFields"]
+             [@helpers.oauthHiddenFields/]
+             [@helpers.hidden name="action" value="changePhoneNumber"/]
+             [@helpers.hidden name="allowPhoneNumberChange"/]
+             [@helpers.hidden name="collectVerificationCode"/]
+             <p class="mb-3">
+               ${theme.message("{description}phone-verification-required-change-phone")}
+             </p>
              [@helpers.input type="text" name="phoneNumber" id="phone" autocapitalize="none" autofocus=true autocomplete="on" autocorrect="off" placeholder="${theme.message('phone')}" leftAddon="user"/]
-           </fieldset>
-           <div class="form-row">
-              [@helpers.button text=theme.message("submit")/]
-           </div>
-         </form>
+           [#elseif section == "buttons"]
+             [@helpers.button text=theme.message("submit")/]
+            [/#if]
+         [/@helpers.structuredForm]
        [/#if]
     [/@helpers.main]
 
