@@ -103,8 +103,8 @@
       [/#if]
 
       [#-- Locale selector at bottom with mt-3 spacing --]
-      <div class="w-full max-w-[352px] mt-3">
-        [@helpers.localeSelector/]
+      <div class="w-full flex justify-center max-w-[352px] mt-3">
+        <div class="w-min-content">[@helpers.localeSelector/]</div>
       </div>
     </main>
 

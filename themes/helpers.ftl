@@ -138,20 +138,24 @@
 [/#macro]
 
 [#macro header]
-    [#if theme.type != 'simple' || request.requestURI == "/" || request.requestURI?starts_with("/account")]
-      <header class="w-full [#if request.requestURI != "/"]hidden[/#if] bg-panel-bg border-panel-border border-b-2 shadow-sm border-solid">
-        <div class="[#if request.requestURI == "/"]flex[#else]hidden[/#if] justify-end px-4 py-3">
+    [#if request.requestURI == "/" || request.requestURI?starts_with("/account")]
+      <header class="w-full bg-panel-bg border-panel-border border-b-2 shadow-sm border-solid">
+        <div class="flex justify-end h-12">
           <nav>
-            <ul class="flex items-center gap-4 text-font">
+            <ul class="flex items-center gap-4 text-font h-full">
                 [#if request.requestURI == "/"]
                   <li><a href="${request.contextPath}/admin/" title="Administrative login"
-                         class="hover:text-font/70 text-font"><i class="fa fa-lock text-lg"></i></a>
+                         class="hover:text-font/70 text-font mr-4 p-2 hover:bg-page-bg rounded-theme"><i class="fa fa-lock text-lg"></i></a>
                   </li>
                 [#elseif request.requestURI?starts_with("/account")]
-                  <li><a href="${request.contextPath}/account/logout?client_id=${client_id!''}&tenantId=${tenantId!''}" title="Logout"
-                       class="hover:text-font/70 text-font"><i class="fa fa-sign-out"></i></a></li>
-                [#else]
-                  <li><a target="_blank" href="https://fusionauth.io/docs/" class="hover:text-font/70 text-font">${theme.message("help")}</a></li>
+                  <li class=" mr-2 flex items-center justify-center h-full">
+                    <a href="${request.contextPath}/account/logout?client_id=${client_id!''}&tenantId=${tenantId!''}" title="Logout"
+                       class="text-font/50 items-center rounded-theme focus:z-10 p-2 hover:bg-page-bg">
+                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 shrink-0">
+                         <path fill="none" stroke-width="1.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"/>
+                       </svg>
+                    </a>
+                  </li>
                 [/#if]
             </ul>
           </nav>
