@@ -94,7 +94,7 @@
 
           [#if showPasswordField]
             <div class="flex flex-col space-y-4 items-center">
-              [@helpers.button icon="key" text=theme.message("submit")/]
+              [@helpers.button id="submit-button" icon="key" text=theme.message("submit")/]
               [@helpers.link url="${request.contextPath}/password/forgot"]${theme.message("forgot-your-password")}[/@helpers.link]
             </div>
           [#else]

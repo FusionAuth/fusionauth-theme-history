@@ -7,6 +7,7 @@
 [#-- @ftlvariable name="code_challenge" type="java.lang.String" --]
 [#-- @ftlvariable name="code_challenge_method" type="java.lang.String" --]
 [#-- @ftlvariable name="consents" type="java.util.Map<java.util.UUID, java.util.List<java.lang.String>>" --]
+[#-- @ftlvariable name="dpop_jkt" type="java.lang.String" --]
 [#-- @ftlvariable name="editPasswordOption" type="java.lang.String" --]
 [#-- @ftlvariable name="locale" type="java.util.Locale" --]
 [#-- @ftlvariable name="loginTheme" type="io.fusionauth.domain.Theme.Templates" --]
@@ -121,6 +122,10 @@
         if (localeSelect !== null) {
           new FusionAuth.OAuth2.LocaleSelect(localeSelect);
         }
+        document.querySelectorAll('button.show-password-button').forEach(button => {
+          button.classList.remove('hidden');
+          button.addEventListener('click', () => FusionAuth.Util.togglePasswordMasking(button));
+        });
       });
       FusionAuth.Version = "${version}";
     </script>
@@ -621,12 +626,12 @@
           [#if passwordlessEnabled]
             <div>
                 [@link url = "/oauth2/passwordless"]
-                  <button class="login-button w-full h-12 rounded-theme bg-white px-3 py-2 text-sm font-normal text-slate-900 shadow-xs ring-1 ring-slate-300 hover:bg-slate-50 cursor-pointer gap-3">
-                    <div class="flex items-center justify-between w-full">
-                      <div class="icon size-5 shrink-0">
+                  <button class="login-button w-full h-9 rounded-theme bg-input-bg px-3 -py-1 text-sm font-normal text-input-text shadow-xs ring-1 ring-input-text/30 hover:bg-input-text/30 cursor-pointer">
+                    <div class="flex items-center justify-center w-full">
+                      <div class="icon size-5 shrink-0 mr-2">
                         <i class="fa fa-link"></i>
                       </div>
-                      <div class="text-normal grow">${theme.message('passwordless-button-text')}</div>
+                      <div class="text-normal">${theme.message('passwordless-button-text')}</div>
                     </div>
                   </button>
                 [/@link]
@@ -636,12 +641,12 @@
           [#if bootstrapWebauthnEnabled]
             <div>
                 [@link url = "/oauth2/webauthn"]
-                  <button class="login-button w-full h-12 rounded-theme bg-white px-3 py-2 text-sm font-normal text-slate-900 shadow-xs ring-1 ring-slate-300 hover:bg-slate-50 cursor-pointer gap-3">
-                    <div class="flex items-center justify-between w-full">
-                      <div class="icon size-5 shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000"
+                  <button class="login-button w-full h-9 rounded-theme bg-input-bg px-3 -py-1 text-sm font-normal text-input-text shadow-xs ring-1 ring-input-text/30 hover:bg-input-text/30 cursor-pointer">
+                    <div class="flex items-center justify-center w-full">
+                      <div class="icon size-5 shrink-0 mr-2">
+                        <svg class="size-5 fill-input-text" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
                              preserveAspectRatio="xMidYMid meet">
-                          <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="#FFF" stroke="none">
+                          <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" stroke="none">
                             <path
                                 d="M923 4595 c-187 -51 -349 -214 -398 -402 -12 -44 -15 -122 -15 -348 0 -261 2 -294 19 -331 51 -112 193 -135 276 -43 19 21 37 49 40 61 2 13 6 160 7 328 3 338 5 345 72 386 28 17 58 19 336 22 168 1 315 5 328 7 12 3 40 21 61 40 92 83 69 225 -43 276 -37 17 -70 19 -336 18 -221 0 -308 -4 -347 -14z"/>
                             <path
@@ -661,7 +666,7 @@
                           </g>
                         </svg>
                       </div>
-                      <div class="text-normal grow">${theme.message('webauthn-button-text')}</div>
+                      <div class="text-normal">${theme.message('webauthn-button-text')}</div>
                     </div>
                   </button>
                 [/@link]
@@ -874,14 +879,14 @@
 [/#macro]
 
 [#-- Input field of type. --]
-[#macro input type name id autocapitalize="none" autocomplete="on" autocorrect="off" autofocus=false spellcheck="false" label="" placeholder="" leftAddon="" required=false tooltip="" disabled=false class="" dateTimeFormat="" value="" uncheckedValue="" checked=false]
+[#macro input type name id autocapitalize="none" autocomplete="on" autocorrect="off" autofocus=false spellcheck="false" label="" placeholder="" leftAddon="" required=false tooltip="" disabled=false class="" dateTimeFormat="" value="" uncheckedValue="" checked=false canShowPassword=true]
     <div>
      [#if type == "checkbox"]
           [@_input_checkbox name=name value=value uncheckedValue=uncheckedValue label=label tooltip=tooltip]
               [#nested]
           [/@_input_checkbox]
       [#else]
-          [@_input_text type=type name=name id=id autocapitalize=autocapitalize autocomplete=autocomplete autocorrect=autocorrect autofocus=autofocus spellcheck=spellcheck label=label placeholder=placeholder leftAddon=leftAddon required=required tooltip=tooltip disabled=disabled class=class dateTimeFormat=dateTimeFormat/]
+          [@_input_text type=type name=name id=id autocapitalize=autocapitalize autocomplete=autocomplete autocorrect=autocorrect autofocus=autofocus spellcheck=spellcheck label=label placeholder=placeholder leftAddon=leftAddon required=required tooltip=tooltip disabled=disabled class=class dateTimeFormat=dateTimeFormat canShowPassword=canShowPassword/]
       [/#if]
       [@errors field=name/]
     </div>
@@ -934,7 +939,7 @@
   </span>
 [/#macro]
 
-[#macro _input_text type name id autocapitalize autocomplete autocorrect autofocus spellcheck label placeholder leftAddon required tooltip disabled class dateTimeFormat ]
+[#macro _input_text type name id autocapitalize autocomplete autocorrect autofocus spellcheck label placeholder leftAddon required tooltip disabled class dateTimeFormat canShowPassword=true]
     [#local labelText = label?has_content?then(label, theme.message(name))/]
     [#compress]
       <label for="${id}" class="block text-xs font-medium text-input-text mb-1[#if (fieldMessages[name]![])?size > 0] error[/#if]">
@@ -951,20 +956,37 @@
         [#assign the_type="text" /]
         [#assign the_class=class + " date-picker" /]
     [#-- it is possible that this element is the first in the form list. We want it to focus on something else so that the placeholder shows. --]
-      <input type="text" style="display:none" autofocus="autofocus" >
+      <input type="text" class="hidden" autofocus="autofocus" >
     [#else ]
         [#assign the_type=type /]
         [#assign the_class=class /]
     [/#if]
-  <input id="${id}" type="${the_type}" name="${name}" [#if type != "password"]value="${value}"[/#if]
+
+  <div class="relative w-full flex items-center">
+    <input id="${id}" type="${the_type}" name="${name}" [#if type != "password"]value="${value}"[/#if]
          class="block w-full rounded-theme bg-input-bg px-3 py-1.5 text-base text-input-text outline-1 -outline-offset-1 [#if (fieldMessages[name]![])?size > 0] outline-error/50 focus:outline-2 focus:-outline-offset-2 focus:outline-error [#else] outline-input-text/50 focus:outline-2 focus:-outline-offset-2 focus:outline-primary [/#if] placeholder:text-input-text/50 disabled:bg-input-bg disabled:text-input-text/70 disabled:outline-input-text/30 sm:text-sm/6 ${the_class}"
          autocapitalize="${autocapitalize}" autocomplete="${autocomplete}" autocorrect="${autocorrect}"
          spellcheck="${spellcheck}" [#if autofocus]autofocus="autofocus"[/#if] [#if disabled]disabled="disabled"[/#if] [#if placeholder?has_content]placeholder="${placeholder}"[/#if]/>
+
     [#if dateTimeFormat != ""]
       <input type="hidden" name="${name}@dateTimeFormat" value="${dateTimeFormat}"/>
     [#elseif type == "date"]
       <input type="hidden" name="${name}@dateTimeFormat" value="yyyy-MM-dd"/>
     [/#if]
+
+    [#if type == "password" && canShowPassword]
+      <button type="button" data-visibility-target="${id}" tabindex="-1"
+              class="show-password-button hidden absolute inset-y-0 right-0 flex items-center px-3 text-input-text/50 hover:text-primary cursor-pointer border-none bg-transparent">
+        <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+        </svg>
+        <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 hidden">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
+        </svg>
+      </button>
+    [/#if]
+  </div>
 [/#macro]
 
 [#macro _input_checkbox name value uncheckedValue label tooltip]
@@ -1213,6 +1235,7 @@
     [@hidden name="captcha_token"/]
     [@hidden name="client_id"/]
     [@hidden name="code_challenge"/]
+    [@hidden name="dpop_jkt"/]
     [@hidden name="code_challenge_method"/]
     [@hidden name="metaData.device.name"/]
     [@hidden name="metaData.device.type"/]
@@ -1288,7 +1311,7 @@
 [/#macro]
 
 [#macro link url extraParameters=""]
-  <a class="text-sm text-link hover:text-link-hover hover:underline cursor-pointer" href="${url}?tenantId=${(tenantId)!''}&client_id=${(client_id)!''}&nonce=${(nonce?url)!''}&pendingIdPLinkId=${(pendingIdPLinkId)!''}&redirect_uri=${(redirect_uri?url)!''}&response_mode=${(response_mode?url)!''}&response_type=${(response_type?url)!''}&scope=${(scope?url)!''}&state=${(state?url)!''}&timezone=${(timezone?url)!''}&metaData.device.name=${(metaData.device.name?url)!''}&metaData.device.type=${(metaData.device.type?url)!''}${(extraParameters!'')?no_esc}&code_challenge=${(code_challenge?url)!''}&code_challenge_method=${(code_challenge_method?url)!''}&user_code=${(user_code?url)!''}&prompt=${(prompt?url)!''}&max_age=${(max_age?url)!''}">
+  <a class="text-sm text-link hover:text-link-hover hover:underline cursor-pointer" href="${url}?tenantId=${(tenantId)!''}&client_id=${(client_id)!''}&nonce=${(nonce?url)!''}&pendingIdPLinkId=${(pendingIdPLinkId)!''}&redirect_uri=${(redirect_uri?url)!''}&response_mode=${(response_mode?url)!''}&response_type=${(response_type?url)!''}&scope=${(scope?url)!''}&state=${(state?url)!''}&timezone=${(timezone?url)!''}&metaData.device.name=${(metaData.device.name?url)!''}&metaData.device.type=${(metaData.device.type?url)!''}${(extraParameters!'')?no_esc}&code_challenge=${(code_challenge?url)!''}&code_challenge_method=${(code_challenge_method?url)!''}&user_code=${(user_code?url)!''}&prompt=${(prompt?url)!''}&max_age=${(max_age?url)!''}&dpop_jkt=${(dpop_jkt?url)!''}">
       [#nested/]
   </a>
 [/#macro]
@@ -1325,12 +1348,15 @@
         [#if passwordValidationRules.rememberPreviousPasswords.enabled]
           <li>${theme.message('password-previous-constraint', passwordValidationRules.rememberPreviousPasswords.count)}</li>
         [/#if]
+        [#if passwordValidationRules.disallowUserLoginId]
+          <li>${theme.message('password-containsLogin-constraint')}</li>
+        [/#if]
     </ul>
   </div>
 [/#macro]
 
 [#macro customField field key autofocus=false placeholder="" label="" leftAddon="true"]
-    [#assign fieldId = field.key?replace(".", "_") /]
+    [#assign fieldId = key?replace(".", "_") /]
     [#local leftAddon = (leftAddon == "true")?then(field.data.leftAddon!'info', "") /]
 
     [#if field.key == "user.preferredLanguages" || field.key == "registration.preferredLanguages"]
