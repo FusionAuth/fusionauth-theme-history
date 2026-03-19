@@ -12,7 +12,7 @@
 [#import "../_helpers.ftl" as helpers/]
 
 [@helpers.html]
-  [@helpers.head title=theme.message("device-title")]
+  [@helpers.head title=theme.message("oauth2-device-page-title")]
   <script src="${request.contextPath}/js/oauth2/Device.js?version=${version}"></script>
   <script>
     Prime.Document.onReady(function() {

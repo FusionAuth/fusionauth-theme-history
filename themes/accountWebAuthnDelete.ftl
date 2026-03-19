@@ -12,7 +12,7 @@
 [/#macro]
 
 [@helpers.html]
-  [@helpers.head title=theme.message("delete-webauthn-passkey")]
+  [@helpers.head title=theme.message("account-webauthn-delete-page-title")]
     [#-- Custom head/script code goes here --]
   [/@helpers.head]
   [@helpers.body]

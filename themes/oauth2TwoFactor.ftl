@@ -12,7 +12,7 @@
 [#import "../_helpers.ftl" as helpers/]
 
 [@helpers.html]
-  [@helpers.head]
+  [@helpers.head title=theme.message("oauth2-two-factor-page-title")]
     [#-- Custom <head> code goes here --]
     <script src="${request.contextPath}/js/oauth2/TwoFactor.js?version=${version}"></script>
     <script>

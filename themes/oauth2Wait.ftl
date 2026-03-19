@@ -9,7 +9,7 @@
 [#import "../_helpers.ftl" as helpers/]
 
 [@helpers.html]
-  [@helpers.head title=theme.message("wait-title")]
+  [@helpers.head title=theme.message("oauth2-wait-page-title")]
   <meta http-equiv="Refresh" content="2; url=${waitURL}">
   [/@helpers.head ]
 

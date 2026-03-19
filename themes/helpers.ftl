@@ -35,7 +35,7 @@
 </html>
 [/#macro]
 
-[#macro head title="Login | FusionAuth" author="FusionAuth" description="User Management Redefined. A Single Sign-On solution for your entire enterprise."]
+[#macro head title="" author="FusionAuth" description="User Management Redefined. A Single Sign-On solution for your entire enterprise."]
   <head>
     <title>${title}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">

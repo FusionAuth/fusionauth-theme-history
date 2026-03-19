@@ -8,7 +8,7 @@
 [#import "../_helpers.ftl" as helpers/]
 
 [@helpers.html]
-  [@helpers.head title=theme.message("device-title")/]
+  [@helpers.head title=theme.message("oauth2-device-complete-page-title")/]
   [@helpers.body]
 
     [@helpers.header]

@@ -9,7 +9,7 @@
 [#assign logoutDurationInSeconds = 2 /]
 
 [@helpers.html]
-  [@helpers.head title=theme.message("logout-title")/]
+  [@helpers.head title=theme.message("samlv2-logout-page-title")/]
   [@helpers.body]
     [@helpers.header]
       [#-- Custom header code goes here --]

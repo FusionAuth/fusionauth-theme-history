@@ -15,7 +15,7 @@
 [/#macro]
 
 [@helpers.html]
-  [@helpers.head]
+  [@helpers.head title=theme.message("oauth2-webauthn-reauth-page-title")]
     <script src="${request.contextPath}/js/FormHelper.js?version=${version}"></script>
     <script src="${request.contextPath}/js/oauth2/OAuth2WebAuthnLogin.js?version=${version}"></script>
     <script>

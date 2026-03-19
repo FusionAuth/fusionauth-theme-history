@@ -31,7 +31,7 @@
 [#import "../_helpers.ftl" as helpers/]
 
 [@helpers.html]
-  [@helpers.head]
+  [@helpers.head title=theme.message("oauth2-authorize-page-title")]
     <script src="${request.contextPath}/js/jstz-min-1.0.6.js"></script>
     [@helpers.captchaScripts showCaptcha=showCaptcha captchaMethod=tenant.captchaConfiguration.captchaMethod siteKey=tenant.captchaConfiguration.siteKey/]
     <script src="${request.contextPath}/js/oauth2/Authorize.js?version=${version}"></script>

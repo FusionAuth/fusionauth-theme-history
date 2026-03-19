@@ -10,7 +10,7 @@
 [#import "../_helpers.ftl" as helpers/]
 
 [@helpers.html]
-  [@helpers.head]
+  [@helpers.head title=theme.message("oauth2-passwordless-page-title")]
     [@helpers.captchaScripts showCaptcha=showCaptcha captchaMethod=tenant.captchaConfiguration.captchaMethod siteKey=tenant.captchaConfiguration.siteKey/]
   [/@helpers.head]
   [@helpers.body]

@@ -9,7 +9,7 @@
 [#import "../../_helpers.ftl" as helpers/]
 
 [@helpers.html]
-  [@helpers.head title=theme.message("add-webauthn-passkey")]
+  [@helpers.head title=theme.message("account-webauthn-add-page-title")]
     <script src="${request.contextPath}/js/account/AccountWebAuthnRegistration.js?version=${version}"></script>
     <script src="${request.contextPath}/js/WebAuthnHelper.js?version=${version}"></script>
     <script>

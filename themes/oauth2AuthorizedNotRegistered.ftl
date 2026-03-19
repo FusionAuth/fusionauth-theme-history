@@ -7,7 +7,7 @@
 [#import "../_helpers.ftl" as helpers/]
 
 [@helpers.html]
-  [@helpers.head]
+  [@helpers.head title=theme.message("oauth2-authorized-not-registered-page-title")]
     [#-- Custom <head> code goes here --]
   [/@helpers.head]
 

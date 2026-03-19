@@ -10,7 +10,7 @@
 [#import "../_helpers.ftl" as helpers/]
 
 [@helpers.html]
-  [@helpers.head]
+  [@helpers.head title=theme.message("oauth2-complete-registration-page-title")]
     [#-- Custom <head> code goes here --]
     <script>
     document.addEventListener('DOMContentLoaded', () => {

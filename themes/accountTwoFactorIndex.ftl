@@ -9,7 +9,7 @@
 [#import "../../_helpers.ftl" as helpers/]
 
 [@helpers.html]
-  [@helpers.head title=theme.message("multi-factor-configuration")/]
+  [@helpers.head title=theme.message("account-two-factor-index-page-title")/]
   [@helpers.body]
 
     [@helpers.header]

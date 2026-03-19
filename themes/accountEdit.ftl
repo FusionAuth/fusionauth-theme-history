@@ -26,7 +26,7 @@
 [/#function]
 
 [@helpers.html]
-  [@helpers.head title=theme.message("account")/]
+  [@helpers.head title=theme.message("account-edit-page-title")/]
   [@helpers.body]
     [@helpers.header]
       [#-- Custom header code goes here --]

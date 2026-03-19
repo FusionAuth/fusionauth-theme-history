@@ -13,7 +13,7 @@
 [#assign logoutDurationInSeconds = 2 /]
 
 [@helpers.html]
-  [@helpers.head title=theme.message("logout-title")]
+  [@helpers.head title=theme.message("oauth2-logout-page-title")]
   [#if redirectURL?has_content]
     <meta http-equiv="Refresh" content="${logoutDurationInSeconds}; url=${redirectURL}">
   [/#if]

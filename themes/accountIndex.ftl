@@ -11,7 +11,7 @@
 [#import "../_helpers.ftl" as helpers/]
 
 [@helpers.html]
-  [@helpers.head title=theme.message("account")]
+  [@helpers.head title=theme.message("account-index-page-title")]
     [#-- Custom header code goes here --]
     <script src="${request.contextPath}/js/ui/Main.js?version=${version}"></script>
   [/@helpers.head]

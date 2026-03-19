@@ -10,7 +10,7 @@
 [#import "../../_helpers.ftl" as helpers/]
 
 [@helpers.html]
-  [@helpers.head title=theme.message("passkeys")]
+  [@helpers.head title=theme.message("account-webauthn-index-page-title")]
     <script src="${request.contextPath}/js/WebAuthnHelper.js?version=${version}"></script>
     <script>
     document.addEventListener('DOMContentLoaded', () => {

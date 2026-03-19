@@ -8,7 +8,7 @@
 [#import "_helpers.ftl" as helpers/]
 
 [@helpers.html]
-  [@helpers.head title=theme.message("confirmation-required")]
+  [@helpers.head title=theme.message("confirmation-required-page-title")]
     [#-- Custom <head> code goes here --]
   [/@helpers.head ]
   [@helpers.body]

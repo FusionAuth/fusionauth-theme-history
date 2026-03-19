@@ -9,7 +9,7 @@
 [#import "../_helpers.ftl" as helpers/]
 
 [@helpers.html]
-  [@helpers.head]
+  [@helpers.head title=theme.message("oauth2-two-factor-enable-complete-page-title")]
     [#-- Custom <head> code goes here --]
   [/@helpers.head]
   [@helpers.body]

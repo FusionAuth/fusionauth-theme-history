@@ -9,7 +9,7 @@
 [#import "_helpers.ftl" as helpers/]
 
 [@helpers.html]
-  [@helpers.head title=theme.message("unauthorized")/]
+  [@helpers.head title=theme.message("unauthorized-page-title")/]
   [@helpers.body]
 
     [@helpers.main title=theme.message("access-denied") colClass="col-xs col-sm-10 col-md-8 col-lg-7 col-xl-5"]

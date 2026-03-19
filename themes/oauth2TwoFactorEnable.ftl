@@ -57,7 +57,7 @@
 [/#macro]
 
 [@helpers.html]
-  [@helpers.head]
+  [@helpers.head title=theme.message("oauth2-two-factor-enable-page-title")]
     [#-- JavaScript is used for rendering authenticator QR code --]
     <script src="${request.contextPath}/js/qrcode-min-1.0.js"></script>
     <script src="${request.contextPath}/js/oauth2/OAuth2TwoFactorEnable.js?version=${version}"></script>

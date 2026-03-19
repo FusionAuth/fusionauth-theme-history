@@ -52,7 +52,7 @@
 [/#macro]
 
 [@helpers.html]
-  [@helpers.head]
+  [@helpers.head title=theme.message("oauth2-two-factor-methods-page-title")]
     [#-- Custom <head> code goes here --]
   [/@helpers.head]
   [@helpers.body]

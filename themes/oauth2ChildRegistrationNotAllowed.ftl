@@ -6,7 +6,7 @@
 [#import "../_helpers.ftl" as helpers/]
 
 [@helpers.html]
-  [@helpers.head]
+  [@helpers.head title=theme.message("oauth2-child-registration-not-allowed-page-title")]
     [#-- Custom <head> code goes here --]
   [/@helpers.head]
   [@helpers.body]

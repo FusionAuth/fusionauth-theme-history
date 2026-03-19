@@ -14,7 +14,7 @@
      be available.
 --]
 [@helpers.html]
-  [@helpers.head]
+  [@helpers.head title=theme.message("oauth2-start-idp-link-page-title")]
     [#-- Custom <head> code goes here --]
   [/@helpers.head]
 

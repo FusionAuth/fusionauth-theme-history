@@ -8,7 +8,7 @@
 [#import "../_helpers.ftl" as helpers/]
 
 [@helpers.html]
-  [@helpers.head]
+  [@helpers.head title=theme.message("registration-sent-page-title")]
     [#-- Custom <head> code goes here --]
   [/@helpers.head]
   [@helpers.body]

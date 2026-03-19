@@ -23,7 +23,7 @@
 [#import "../_helpers.ftl" as helpers/]
 
 [@helpers.html]
-  [@helpers.head title=theme.message("register")]
+  [@helpers.head title=theme.message("oauth2-register-page-title")]
     <script src="${request.contextPath}/js/identityProvider/InProgress.js?version=${version}"></script>
     [@helpers.alternativeLoginsScript clientId=client_id identityProviders=identityProviders/]
     [#if readyToRegister]

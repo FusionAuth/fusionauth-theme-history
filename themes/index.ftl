@@ -5,7 +5,7 @@
 [#import "_helpers.ftl" as helpers/]
 
 [@helpers.html]
-  [@helpers.head title="FusionAuth"/]
+  [@helpers.head title=theme.message("index-page-title")/]
   [@helpers.body]
      [#if theme.type != "simple"]
        [#--
