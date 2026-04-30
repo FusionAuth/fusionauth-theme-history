@@ -41,7 +41,7 @@
 
         [#-- Begin Self Service Custom Registration Form Steps --]
         [#if fields?has_content]
-          <fieldset>
+          <fieldset class="flex flex-col gap-3">
             [#list fields as field]
               [@helpers.customField field field.key field?is_first?then(true, false) field.key /]
               [#if field.confirm]
@@ -50,7 +50,7 @@
             [/#list]
           </fieldset>
 
-          <div class="form-row">
+          <div class="mt-3">
           [#if step == totalSteps]
             [@helpers.button icon="key" text=theme.message("register")/]
           [#else]
@@ -84,7 +84,7 @@
           [/#if]
         </fieldset>
 
-        <div class="form-row">
+        <div class="mt-3">
           [@helpers.button icon="key" text=theme.message("submit")/]
         </div>
         [/#if]
@@ -92,8 +92,8 @@
 
         [#-- Begin Self Service Custom Registration Form Step Counter --]
         [#if step > 0]
-          <div class="w-100 mt-3" style="display: inline-flex; flex-direction: row; justify-content: space-evenly;">
-            <div class="text-right" style="flex-grow: 1;"> ${theme.message('register-step', step, totalSteps)} </div>
+          <div class="w-100 mt-3">
+            <div class="text-right"> ${theme.message('register-step', step, totalSteps)} </div>
           </div>
         [/#if]
         [#-- End Self Service Custom Registration Form Step Counter --]

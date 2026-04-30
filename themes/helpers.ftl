@@ -55,6 +55,16 @@
            You can check if this is working using this site https://realfavicongenerator.net/
            Questions about icon names and sizes? https://realfavicongenerator.net/faq#.XrBnPJNKg3g --]
 
+      [#-- Simple theme icons --]
+    [#if theme.type == "simple" && theme.variables.favicons?has_content]
+      [#list theme.variables.favicons as favicon]
+        <link rel="${favicon.rel!'icon'}"
+              [#if favicon.type?has_content]type="${favicon.type}"[/#if]
+              [#if favicon.sizes?has_content]sizes="${favicon.sizes}"[/#if]
+              href="${favicon.href}">
+      [/#list]
+    [#else]
+
       [#-- Apple & iOS --]
     <link rel="apple-touch-icon" sizes="57x57" href="/images/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="/images/apple-icon-60x60.png">
@@ -82,6 +92,7 @@
     <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="128" href="/images/favicon-128.png">
 
+    [/#if]
       [#-- End Favicon Madness --]
 
     <link rel="stylesheet" href="/css/font-awesome-4.7.0.min.css"/>

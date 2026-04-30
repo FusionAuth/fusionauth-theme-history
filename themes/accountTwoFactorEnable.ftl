@@ -5,6 +5,7 @@
 [#-- @ftlvariable name="email" type="java.lang.String" --]
 [#-- @ftlvariable name="method" type="java.lang.String" --]
 [#-- @ftlvariable name="mobilePhone" type="java.lang.String" --]
+[#-- @ftlvariable name="phoneMessageTypes" type="java.util.List<java.lang.String>" --]
 [#-- @ftlvariable name="recoveryCodes" type="java.util.List<java.lang.String>" --]
 [#-- @ftlvariable name="secret" type="java.lang.String" --]
 [#-- @ftlvariable name="secretBase32Encoded" type="java.lang.String" --]
@@ -25,8 +26,18 @@
 
     [#elseif method == "email" || method == "sms"]
 
-      [#-- Email or SMS Instructions --]
-      <p class="mt-0 mb-3">${theme.message("${method}-enable-step-1", helpers.display(user, (method == "email")?then("email", "mobilePhone")))}</p>
+      [#-- Email or Phone Instructions --]
+      [#assign messageKey = "${method}-enable-step-1"/]
+      [#if method == "sms"]
+        [#assign smsEnabled = phoneMessageTypes?seq_contains("SMS")/]
+        [#assign voiceEnabled = phoneMessageTypes?seq_contains("Voice")/]
+        [#if phoneMessageTypes?size == 1 && smsEnabled]
+          [#assign messageKey = "sms-enable-smsMessage-step-1"/]
+        [#elseif phoneMessageTypes?size == 1 && voiceEnabled]
+          [#assign messageKey = "sms-enable-voiceMessage-step-1"/]
+        [/#if]
+      [/#if]
+      <p class="mt-0 mb-3">${theme.message(messageKey)}</p>
 
       [@helpers.structuredForm id="two-factor-send-form" action="${request.contextPath}/account/two-factor/enable" method="POST"; section]
         [#if section == "formFields"]
@@ -42,7 +53,10 @@
           [#if method == "email"]
             [@helpers.input type="text" id="email" name="email" label="Email" required=true/]
           [#elseif method == "sms"]
-            [@helpers.input type="text" id="mobilePhone" name="mobilePhone" label="Mobile phone" required=true/]
+              [#if phoneMessageTypes?size > 1]
+                  [@helpers.select name="messageType" id="select-message-type" options=phoneMessageTypes label="${theme.message('select-two-factor-message-type')}"/]
+              [/#if]
+              [@helpers.input type="text" id="mobilePhone" name="mobilePhone" label="Mobile phone" required=true/]
           [/#if]
         [#elseif section == "buttons"]
           [@helpers.button icon="arrow-circle-right" text="${theme.message('send-one-time-code')}"/]

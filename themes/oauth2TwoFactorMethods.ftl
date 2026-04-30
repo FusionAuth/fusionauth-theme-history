@@ -3,6 +3,7 @@
 [#-- @ftlvariable name="availableMethodsMap" type="java.util.Map<java.lang.String, io.fusionauth.domain.TwoFactorMethod>" --]
 [#-- @ftlvariable name="client_id" type="java.lang.String" --]
 [#-- @ftlvariable name="methodId" type="java.lang.String" --]
+[#-- @ftlvariable name="phoneMessageTypes" type="java.util.List<java.lang.String>" --]
 [#-- @ftlvariable name="recoverCodesAvailable" type="int" --]
 [#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]
 [#-- @ftlvariable name="tenantId" type="java.util.UUID" --]
@@ -10,11 +11,12 @@
 [#-- @ftlvariable name="version" type="java.lang.String" --]
 [#import "../_helpers.ftl" as helpers/]
 
-[#macro methodOption id method]
+[#macro methodOption id method messageType='']
+   [#assign optionId = id + messageType?has_content?then('-' + messageType, '')/]
   <div class="flex items-center">
     <input class="relative size-4 appearance-none rounded-full border border-input-placeholder bg-input-bg before:absolute before:inset-1 before:rounded-full before:bg-input-bg not-checked:before:hidden checked:border-primary checked:bg-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:border-slate-300 disabled:bg-slate-100 disabled:before:bg-slate-400 forced-colors:appearance-auto forced-colors:before:hidden"
-           type="radio" name="methodId" id="method-${id}" value="${id}" [#if id = methodId!'']checked[/#if]>
-   <label for="method-${id}" class="ml-3 block text-sm font-medium text-text">
+           type="radio" name="methodId" id="method-${optionId}" value="${optionId}" [#if optionId = methodId!'']checked[/#if]>
+   <label for="method-${optionId}" class="ml-3 block text-sm font-medium text-text">
      [#if method.method == "email"]
        <span class="block">${theme.message("two-factor-method-email")}</span>
        <span class="block text-xs font-normal text-text">
@@ -25,6 +27,11 @@
        <span class="block">${theme.message("two-factor-method-authenticator")}</span>
        <span class="block text-xs font-normal text-text">
          ${theme.message('two-factor-get-code-at-authenticator')}
+       </span>
+     [#elseif method.method == "sms" && messageType == "Voice"]
+       <span class="block">${theme.message('two-factor-method-voice')}</span>
+       <span class="block text-xs font-normal text-text">
+         ${theme.message('two-factor-get-code-at-voice', method.mobilePhone?substring(method.mobilePhone?length - 2))}
        </span>
      [#elseif method.method == "sms"]
        <span class="block">${theme.message('two-factor-method-sms')}</span>
@@ -75,7 +82,13 @@
         <fieldset class="mt-3 space-y-4 mb-6">
 
           [#list availableMethodsMap as id, method]
-             [@methodOption id method/]
+            [#if method.method == "sms"]
+              [#list phoneMessageTypes as messageType]
+                [@methodOption id=id method=method messageType=messageType/]
+              [/#list]
+            [#else]
+              [@methodOption id=id method=method/]
+            [/#if]
           [/#list]
 
           [#-- Optionally show an option for recovery codes. A recovery code can always be used to login, so selecting this is not

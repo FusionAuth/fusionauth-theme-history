@@ -5,6 +5,7 @@
 [#-- @ftlvariable name="currentUser" type="io.fusionauth.domain.User" --]
 [#-- @ftlvariable name="method" type="io.fusionauth.domain.TwoFactorMethod" --]
 [#-- @ftlvariable name="methodId" type="java.lang.String" --]
+[#-- @ftlvariable name="phoneMessageTypes" type="java.util.List<java.lang.String>" --]
 [#-- @ftlvariable name="showResendOrSelectMethod" type="boolean" --]
 [#-- @ftlvariable name="secret" type="java.lang.String" --]
 [#-- @ftlvariable name="secretBase32Encoded" type="java.lang.String" --]
@@ -30,8 +31,18 @@
 
   [#elseif method == "email" || method == "sms"]
 
-    [#-- Email or SMS Instructions --]
-    <p class="mt-0 mb-3">${theme.message("oauth2-${method}-enable-step-1")}</p>
+    [#-- Email or Phone Instructions --]
+    [#assign messageKey = "oauth2-${method}-enable-step-1"/]
+    [#if method == "sms"]
+      [#assign smsEnabled = phoneMessageTypes?seq_contains("SMS")/]
+      [#assign voiceEnabled = phoneMessageTypes?seq_contains("Voice")/]
+      [#if phoneMessageTypes?size == 1 && smsEnabled]
+        [#assign messageKey = "oauth2-sms-enable-smsMessage-step-1"/]
+      [#elseif (phoneMessageTypes![])?size == 1 && voiceEnabled]
+        [#assign messageKey = "oauth2-sms-enable-voiceMessage-step-1"/]
+      [/#if]
+    [/#if]
+    <p class="mt-0 mb-3">${theme.message(messageKey)}</p>
 
     [@helpers.structuredForm id="send-two-factor-form" action="${request.contextPath}/oauth2/two-factor-enable" method="POST"; section]
       [#if section == "formFields"]
@@ -47,6 +58,9 @@
         [#if method == "email"]
           [@helpers.input type="text" id="email" name="email" label="Email" required=true/]
         [#elseif method == "sms"]
+          [#if phoneMessageTypes?size > 1]
+            [@helpers.select name="messageType" id="select-message-type" options=phoneMessageTypes label="${theme.message('select-two-factor-message-type')}"/]
+          [/#if]
           [@helpers.input type="text" id="mobilePhone" name="mobilePhone" label="Mobile phone" required=true/]
         [/#if]
       [#elseif section == "buttons"]
