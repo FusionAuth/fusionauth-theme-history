@@ -18,6 +18,7 @@
 [#-- @ftlvariable name="pendingIdPLinkId" type="java.lang.String" --]
 [#-- @ftlvariable name="prompt" type="java.lang.String" --]
 [#-- @ftlvariable name="redirect_uri" type="java.lang.String" --]
+[#-- @ftlvariable name="resource" type="java.util.List<java.net.URI>" --]
 [#-- @ftlvariable name="response_mode" type="java.lang.String" --]
 [#-- @ftlvariable name="response_type" type="java.lang.String" --]
 [#-- @ftlvariable name="scope" type="java.lang.String" --]
@@ -1256,6 +1257,9 @@
     [@hidden name="pendingIdPLinkId"/]
     [@hidden name="prompt"/]
     [@hidden name="redirect_uri"/]
+    [#list (resource![]) as r]
+    [@hidden name="resource" value="${r}"/]
+    [/#list]
     [@hidden name="response_mode"/]
     [@hidden name="response_type"/]
     [@hidden name="scope"/]
@@ -1322,14 +1326,17 @@
 [/#macro]
 
 [#macro link url extraParameters=""]
-  <a class="text-sm text-link hover:text-link-hover hover:underline cursor-pointer" href="${url}?tenantId=${(tenantId)!''}&client_id=${(client_id)!''}&nonce=${(nonce?url)!''}&pendingIdPLinkId=${(pendingIdPLinkId)!''}&redirect_uri=${(redirect_uri?url)!''}&response_mode=${(response_mode?url)!''}&response_type=${(response_type?url)!''}&scope=${(scope?url)!''}&state=${(state?url)!''}&timezone=${(timezone?url)!''}&metaData.device.name=${(metaData.device.name?url)!''}&metaData.device.type=${(metaData.device.type?url)!''}${(extraParameters!'')?no_esc}&code_challenge=${(code_challenge?url)!''}&code_challenge_method=${(code_challenge_method?url)!''}&user_code=${(user_code?url)!''}&prompt=${(prompt?url)!''}&max_age=${(max_age?url)!''}&dpop_jkt=${(dpop_jkt?url)!''}">
+    [#local resourceParams = (resource![])?map(r -> "&resource=" + r?url)?join("")]
+  <a class="text-sm text-link hover:text-link-hover hover:underline cursor-pointer"
+     href="${url}?tenantId=${(tenantId)!''}&client_id=${(client_id)!''}&nonce=${(nonce?url)!''}&pendingIdPLinkId=${(pendingIdPLinkId)!''}&redirect_uri=${(redirect_uri?url)!''}&response_mode=${(response_mode?url)!''}&response_type=${(response_type?url)!''}&scope=${(scope?url)!''}&state=${(state?url)!''}&timezone=${(timezone?url)!''}&metaData.device.name=${(metaData.device.name?url)!''}&metaData.device.type=${(metaData.device.type?url)!''}${(extraParameters!'')?no_esc}${resourceParams?no_esc}&code_challenge=${(code_challenge?url)!''}&code_challenge_method=${(code_challenge_method?url)!''}&user_code=${(user_code?url)!''}&prompt=${(prompt?url)!''}&max_age=${(max_age?url)!''}&dpop_jkt=${(dpop_jkt?url)!''}">
       [#nested/]
   </a>
 [/#macro]
 
 [#macro logoutLink redirectURI extraParameters=""]
 [#-- Note that in order for the post_logout_redirect_uri to be correctly URL escaped, you must use this syntax for assignment --]
-    [#local post_logout_redirect_uri]${redirectURI}?tenantId=${(tenantId)!''}&client_id=${(client_id)!''}&nonce=${(nonce?url)!''}&pendingIdPLinkId=${(pendingIdPLinkId)!''}&redirect_uri=${(redirect_uri?url)!''}&response_mode=${(response_mode?url)!''}&response_type=${(response_type?url)!''}&scope=${(scope?url)!''}&state=${(state?url)!''}&timezone=${(timezone?url)!''}&metaData.device.name=${(metaData.device.name?url)!''}&metaData.device.type=${(metaData.device.type?url)!''}${(extraParameters?no_esc)!''}&code_challenge=${(code_challenge?url)!''}&code_challenge_method=${(code_challenge_method?url)!''}&user_code=${(user_code?url)!''}&prompt=${(prompt?url)!''}&max_age=${(max_age?url)!''}[/#local]
+    [#local resourceParams = (resource![])?map(r -> "&resource=" + r?url)?join("")]
+    [#local post_logout_redirect_uri]${redirectURI}?tenantId=${(tenantId)!''}&client_id=${(client_id)!''}&nonce=${(nonce?url)!''}&pendingIdPLinkId=${(pendingIdPLinkId)!''}&redirect_uri=${(redirect_uri?url)!''}&response_mode=${(response_mode?url)!''}&response_type=${(response_type?url)!''}&scope=${(scope?url)!''}&state=${(state?url)!''}&timezone=${(timezone?url)!''}&metaData.device.name=${(metaData.device.name?url)!''}&metaData.device.type=${(metaData.device.type?url)!''}${(extraParameters?no_esc)!''}${resourceParams?no_esc}&code_challenge=${(code_challenge?url)!''}&code_challenge_method=${(code_challenge_method?url)!''}&user_code=${(user_code?url)!''}&prompt=${(prompt?url)!''}&max_age=${(max_age?url)!''}[/#local]
   <a class="link text-link hover:text-link-hover hover:underline cursor-pointer"
   href="/oauth2/logout?tenantId=${(tenantId)!''}&client_id=${(client_id)!''}&post_logout_redirect_uri=${post_logout_redirect_uri?markup_string?url}">[#t]
     [#nested/][#t]

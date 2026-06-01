@@ -31,7 +31,7 @@
                         You can theme this in your <a href="/admin/theme" class="text-indigo-800 underline">customization options</a>. If you don't want to theme it, be sure to redirect it to the proper route.
                       </p>     
                       <a class="flex justify-center items-center mb-9 mt-5 rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 cursor-pointer" href="/admin/">
-                        <span>Go to FusionAuth Admin</span> 
+                        <span>Go to FusionAuth Admin</span>
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18" height="16" class="ml-2">
                           <path fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" transform="translate(0.75 0.823242)" d="M8.75 0L15 6.25M15 6.25L8.75 12.5M15 6.25L0 6.25" fill-rule="evenodd"></path>
                         </svg>
