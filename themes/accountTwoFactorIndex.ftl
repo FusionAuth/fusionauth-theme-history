@@ -16,7 +16,7 @@
       [#-- Custom header code goes here --]
     [/@helpers.header]
 
-    [@helpers.accountMain rowClass="row center" colClass="col-xs-12 col-sm-12 col-md-10 col-lg-8" actionURL="/account/" actionText=theme.message("go-back")]
+    [@helpers.accountMain rowClass="row center" colClass="col-xs-12 col-sm-12 col-md-10 col-lg-8" actionURL="/account/" actionText=theme.message("go-back") wide=true]
         [@helpers.accountPanelFull title="${theme.message('two-factor-authentication')}"]
           <div class="mb-4">${theme.message("{description}two-factor-authentication")}</div>
 
@@ -26,6 +26,7 @@
                <thead>
                 <tr class="border-b border-slate-400">
                 <th>${theme.message("method")}</th>
+                <th>${theme.message("two-factor-name")}</th>
                 <th>${theme.message("value")}</th>
                 <th class="action">${theme.message("action")}</th>
                 </tr>
@@ -34,6 +35,7 @@
                  [#list user.twoFactor.methods as method]
                    <tr>
                      <td class="py-2"> ${theme.message(method.method)} </td>
+                     <td class="py-2"> ${helpers.display(method, "name")} </td>
                      <td class="py-2">
                        [#if method.method == "email"]${helpers.display(method, "email")}
                        [#elseif method.method == "sms"]${helpers.display(method, "mobilePhone")}
@@ -41,8 +43,17 @@
                        [/#if]
                      </td>
                      <td class="action py-2">
-                       [@helpers.buttonLink type="delete" size="sm" text=theme.message('disable') href="${request.contextPath}/account/two-factor/disable?client_id=${client_id}&methodId=${method.id?url}&tenantId=${tenantId!''}"?no_esc][/@helpers.buttonLink]
-[#--                       <a class="small-square gray button ml-2 pr-0" href="${request.contextPath}/account/two-factor/disable?client_id=${client_id}&methodId=${method.id?url}&tenantId=${tenantId!''}" data-tooltip="${theme.message('disable')}"> <i class="fa fa-minus"></i> </a>--]
+                       <div class="inline-flex items-center gap-3">
+                          <a href="${request.contextPath}/account/two-factor/edit?client_id=${client_id}&methodId=${method.id?url}&tenantId=${tenantId!''}"
+                             class="text-sm text-link hover:text-link-hover hover:underline">
+                              ${theme.message("edit")}
+                         </a>
+                         <span class="text-slate-300" aria-hidden="true">|</span>
+                         <a href="${request.contextPath}/account/two-factor/disable?client_id=${client_id}&methodId=${method.id?url}&tenantId=${tenantId!''}"
+                            class="text-sm text-link hover:text-link-hover hover:underline">
+                             ${theme.message("disable")}
+                         </a>
+                       </div>
                      </td>
                    </tr>
                  [#else]

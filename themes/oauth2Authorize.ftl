@@ -37,6 +37,7 @@
     <script src="${request.contextPath}/js/oauth2/Authorize.js?version=${version}"></script>
     <script src="${request.contextPath}/js/identityProvider/InProgress.js?version=${version}"></script>
     [@helpers.alternativeLoginsScript clientId=client_id identityProviders=identityProviders/]
+    <script type="module" src="${request.contextPath}/js/entrypoints/oauth2/authorize.js?version=${version}"></script>
     <script>
       Prime.Document.onReady(function() {
         [#-- This object handles guessing the timezone, filling in the device id of the user, and check for WebAuthn re-authentication support --]

@@ -13,6 +13,7 @@
 [#-- @ftlvariable name="tenantId" type="java.util.UUID" --]
 [#-- @ftlvariable name="trustComputer" type="boolean" --]
 [#-- @ftlvariable name="twoFactorId" type="java.lang.String" --]
+[#-- @ftlvariable name="twoFactorName" type="java.lang.String" --]
 [#-- @ftlvariable name="version" type="java.lang.String" --]
 [#import "../_helpers.ftl" as helpers/]
 
@@ -53,6 +54,7 @@
         [@helpers.hidden name="secret" /]
         [@helpers.hidden name="secretBase32Encoded" /]
         [@helpers.hidden name="twoFactorId"/]
+        [@helpers.hidden name="twoFactorName"/]
 
         [#-- Send a code --]
         [#if method == "email"]
@@ -127,6 +129,7 @@
             [@helpers.hidden name="secretBase32Encoded" /]
             [@helpers.hidden name="twoFactorId"/]
 
+            [@helpers.input type="text" name="twoFactorName" id="two-factor-name" label=theme.message("two-factor-name") placeholder="${theme.message('{placeholder}two-factor-name')}" autocapitalize="none" autocorrect="off" /]
             [@helpers.input type="text" name="code" id="verification-code" label=theme.message("verification-code") placeholder="${theme.message('{placeholder}two-factor-code')}" autocapitalize="none"  autocomplete="one-time-code" autocorrect="off" required=true/]
 
           [#elseif section == "buttons"]

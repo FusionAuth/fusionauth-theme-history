@@ -48,6 +48,7 @@
           [#-- 'secret' and 'twoFactorSecretBase32' are required for authenticator. --]
           [@helpers.hidden name="secret" /]
           [@helpers.hidden name="secretBase32Encoded" /]
+          [@helpers.hidden name="twoFactorName" /]
 
           [#-- Send a code --]
           [#if method == "email"]
@@ -153,6 +154,7 @@ ${code}
               [@helpers.hidden name="secret" /]
               [@helpers.hidden name="secretBase32Encoded" /]
 
+              [@helpers.input type="text" name="twoFactorName" id="two-factor-name" label=theme.message("two-factor-name") placeholder="${theme.message('{placeholder}two-factor-name')}" autocapitalize="none" autocorrect="off"/]
               [@helpers.input type="text" name="code" id="verification-code" label=theme.message("verification-code") placeholder="${theme.message('{placeholder}two-factor-code')}" autocapitalize="none"  autocomplete="one-time-code" autocorrect="off" required=true/]
             [#elseif section == "buttons"]
               [@helpers.button icon="save" text=theme.message("enable")/]

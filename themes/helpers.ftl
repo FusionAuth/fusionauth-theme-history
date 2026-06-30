@@ -251,9 +251,9 @@
   </main>
 [/#macro]
 
-[#macro accountMain rowClass="row center-xs" colClass="col-xs col-sm-8 col-md-6 col-lg-5 col-xl-4" actionURL="" actionText="Go back" actionDirection="back"]
+[#macro accountMain rowClass="row center-xs" colClass="col-xs col-sm-8 col-md-6 col-lg-5 col-xl-4" actionURL="" actionText="Go back" actionDirection="back" wide=false]
   <main class="min-h-screen bg-page-bg flex flex-col items-center px-5 py-15">
-    <div class="w-full max-w-[352px]">
+    <div class="w-full [#if wide]max-w-2xl[#else]max-w-[352px][/#if]">
       [@printErrorAlerts rowClass="" colClass=""/]
       [@printInfoAlerts rowClass="" colClass=""/]
       <div class="w-full">
@@ -835,7 +835,7 @@
 [#-- text-indigo-500 text-indigo-400 border-indigo-200 border-l-indigo-500 bg-indigo-50 bg-indigo-100 ring-indigo-600 ring-offset-indigo-50 --]
 [#-- text-rose-800 text-rose-500 text-rose-400 border-rose-200 border-l-rose-500 bg-rose-50 bg-rose-100 ring-rose-600 ring-offset-rose-50 --]
 [#-- text-amber-800 text-amber-500 text-amber-400 border-amber-200 border-l-amber-500 bg-amber-50 bg-amber-100 ring-amber-600 ring-offset-amber-50 --]
-  <div class="alert [#if type == 'error'] border-error-icon/50 [#else] border-info-icon/60 [/#if] border-1 bg-alert-background rounded-theme p-3 mb-4 w-full max-w-[352px]">
+  <div class="alert [#if type == 'error'] border-error-icon/50 [#else] border-info-icon/60 [/#if] border-1 bg-alert-background rounded-theme p-3 mb-4 w-full">
     <div class="flex items-center">
       <div class="flex items-center shrink-0">
         [#noautoesc]${svg}[/#noautoesc]

@@ -14,27 +14,27 @@
 [#macro methodOption id method messageType='']
    [#assign optionId = id + messageType?has_content?then('-' + messageType, '')/]
   <div class="flex items-center">
-    <input class="relative size-4 appearance-none rounded-full border border-input-placeholder bg-input-bg before:absolute before:inset-1 before:rounded-full before:bg-input-bg not-checked:before:hidden checked:border-primary checked:bg-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:border-slate-300 disabled:bg-slate-100 disabled:before:bg-slate-400 forced-colors:appearance-auto forced-colors:before:hidden"
+    <input class="relative size-4 shrink-0 appearance-none rounded-full border border-input-placeholder bg-input-bg before:absolute before:inset-1 before:rounded-full before:bg-input-bg not-checked:before:hidden checked:border-primary checked:bg-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:border-slate-300 disabled:bg-slate-100 disabled:before:bg-slate-400 forced-colors:appearance-auto forced-colors:before:hidden"
            type="radio" name="methodId" id="method-${optionId}" value="${optionId}" [#if optionId = methodId!'']checked[/#if]>
-   <label for="method-${optionId}" class="ml-3 block text-sm font-medium text-text">
+   <label for="method-${optionId}" class="ml-3 block text-sm font-medium text-text wrap-anywhere">
      [#if method.method == "email"]
-       <span class="block">${theme.message("two-factor-method-email")}</span>
+       <span class="block">[#if method.name?has_content]${method.name} (${theme.message("two-factor-method-email")})[#else]${theme.message("two-factor-method-email")}[/#if]</span>
        <span class="block text-xs font-normal text-text">
         [#assign index = method.email?index_of("@")/]
         ${theme.message('two-factor-get-code-at-email', method.email?substring(0, index + 2))}
        </span>
      [#elseif method.method == "authenticator"]
-       <span class="block">${theme.message("two-factor-method-authenticator")}</span>
+       <span class="block">[#if method.name?has_content]${method.name} (${theme.message("two-factor-method-authenticator")})[#else]${theme.message("two-factor-method-authenticator")}[/#if]</span>
        <span class="block text-xs font-normal text-text">
          ${theme.message('two-factor-get-code-at-authenticator')}
        </span>
      [#elseif method.method == "sms" && messageType == "Voice"]
-       <span class="block">${theme.message('two-factor-method-voice')}</span>
+       <span class="block">[#if method.name?has_content]${method.name} (${theme.message('two-factor-method-voice')})[#else]${theme.message('two-factor-method-voice')}[/#if]</span>
        <span class="block text-xs font-normal text-text">
          ${theme.message('two-factor-get-code-at-voice', method.mobilePhone?substring(method.mobilePhone?length - 2))}
        </span>
      [#elseif method.method == "sms"]
-       <span class="block">${theme.message('two-factor-method-sms')}</span>
+       <span class="block">[#if method.name?has_content]${method.name} (${theme.message('two-factor-method-sms')})[#else]${theme.message('two-factor-method-sms')}[/#if]</span>
        <span class="block text-xs font-normal text-text">
          ${theme.message('two-factor-get-code-at-sms', method.mobilePhone?substring(method.mobilePhone?length - 2))}
        </span>

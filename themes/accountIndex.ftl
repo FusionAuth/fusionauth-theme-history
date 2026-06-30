@@ -27,8 +27,10 @@
     [#assign actionTexts = actionTexts + webauthnAvailable?then([theme.message("manage-webauthn-passkeys")], [])/]
 
     <main class="min-h-screen bg-page-bg flex flex-col items-center px-5 py-15">
-      [@helpers.printErrorAlerts rowClass="flex justify-center" colClass="w-full max-w-[352px]"/]
-      [@helpers.printInfoAlerts rowClass="flex justify-center" colClass="w-full max-w-[352px]"/]
+      <div class="w-full max-w-[352px]">
+        [@helpers.printErrorAlerts rowClass="" colClass=""/]
+        [@helpers.printInfoAlerts rowClass="" colClass=""/]
+      </div>
       
       [#-- Main Card --]
       <div class="w-full max-w-[352px] bg-panel-bg border-2 border-panel-border rounded-theme shadow-sm">
