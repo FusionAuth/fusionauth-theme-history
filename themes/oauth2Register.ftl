@@ -84,9 +84,9 @@
           [#if advancedRegistration]
             [#list fields as field]
               [#assign key = field.key]
-              [@helpers.customField field key field?is_first field.key /]
+              [@helpers.customField field=field key=key autofocus=field?is_first placeholder=field.key label=theme.optionalMessage(key)/]
               [#if field.confirm]
-                [@helpers.customField field "confirm.${key}" false "[confirm]${field.key}" /]
+                [@helpers.customField field=field key="confirm.${key}" autofocus=false placeholder="[confirm]${field.key}" label=theme.optionalMessage("confirm.${key}")/]
               [/#if]
             [/#list]
 

@@ -3,6 +3,7 @@
 [#-- @ftlvariable name="client_id" type="java.lang.String" --]
 [#-- @ftlvariable name="formConfigured" type="boolean" --]
 [#-- @ftlvariable name="multiFactorAvailable" type="boolean" --]
+[#-- @ftlvariable name="redirectURI" type="java.lang.String" --]
 [#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]
 [#-- @ftlvariable name="tenantId" type="java.util.UUID" --]
 [#-- @ftlvariable name="user" type="io.fusionauth.domain.User" --]
@@ -77,7 +78,7 @@
 
           [#-- Edit button if form configured --]
           [#if formConfigured]
-            <a id="edit-profile" class="block w-full rounded-md bg-primary px-3 py-2 text-center text-sm font-semibold text-primary-text shadow-sm hover:bg-primary-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" href="${request.contextPath}/account/edit?client_id=${client_id}&tenantId=${tenantId!''}">
+            <a id="edit-profile" class="block w-full rounded-md bg-primary px-3 py-2 text-center text-sm font-semibold text-primary-text shadow-sm hover:bg-primary-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" href="${request.contextPath}/account/edit?client_id=${client_id}&tenantId=${tenantId!''}[#if redirectURI??]&redirect_uri=${redirectURI?url('UTF-8')}[/#if]">
               ${theme.message('edit-profile')}
             </a>
           [/#if]
@@ -89,14 +90,14 @@
         <div class="w-full max-w-[352px] mt-3 text-center space-y-2">
           [#if multiFactorAvailable]
             <div>
-              <a href="${request.contextPath}/account/two-factor/?client_id=${client_id}&tenantId=${tenantId!''}" class="text-link hover:text-link-hover text-sm">
+              <a href="${request.contextPath}/account/two-factor/?client_id=${client_id}&tenantId=${tenantId!''}[#if redirectURI??]&redirect_uri=${redirectURI?url('UTF-8')}[/#if]" class="text-link hover:text-link-hover text-sm">
                 ${theme.message("manage-two-factor")}
               </a>
             </div>
           [/#if]
           [#if webauthnAvailable]
             <div>
-              <a href="${request.contextPath}/account/webauthn/?client_id=${client_id}&tenantId=${tenantId!''}" class="text-link hover:text-link-hover text-sm">
+              <a href="${request.contextPath}/account/webauthn/?client_id=${client_id}&tenantId=${tenantId!''}[#if redirectURI??]&redirect_uri=${redirectURI?url('UTF-8')}[/#if]" class="text-link hover:text-link-hover text-sm">
                 ${theme.message("manage-webauthn-passkeys")}
               </a>
             </div>
@@ -104,9 +105,14 @@
         </div>
       [/#if]
 
-      [#-- Locale selector at bottom with mt-3 spacing --]
-      <div class="w-full flex justify-center max-w-[352px] mt-3">
-        <div class="w-min-content">[@helpers.localeSelector/]</div>
+      [#-- redirectURI is the resolved URL back to the application (an authorized redirect_uri, or the application/tenant base URL). --]
+      <div class="w-full max-w-[352px] mt-3 flex items-center justify-between gap-4">
+        <div class="flex-shrink-0">[@helpers.localeSelector/]</div>
+        [#if redirectURI??]
+          <div class="flex-shrink-0 text-right">
+            <a href="${redirectURI}" class="text-sm text-link hover:text-link-hover hover:underline inline-flex items-center gap-2"><i class="fa fa-arrow-left"></i> ${theme.message("return-to-application")}</a>
+          </div>
+        [/#if]
       </div>
     </main>
 

@@ -43,9 +43,9 @@
         [#if fields?has_content]
           <fieldset class="flex flex-col gap-3">
             [#list fields as field]
-              [@helpers.customField field field.key field?is_first?then(true, false) field.key /]
+              [@helpers.customField field=field key=field.key autofocus=field?is_first?then(true, false) placeholder=field.key label=theme.optionalMessage(field.key)/]
               [#if field.confirm]
-                [@helpers.customField field "confirm.${field.key}" false "[confirm]${field.key}" /]
+                [@helpers.customField field=field key="confirm.${field.key}" autofocus=false placeholder="[confirm]${field.key}" label=theme.optionalMessage("confirm.${field.key}")/]
               [/#if]
             [/#list]
           </fieldset>

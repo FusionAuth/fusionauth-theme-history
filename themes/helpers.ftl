@@ -318,6 +318,13 @@
                         [#local actionURL = actionURL + "?tenantId=${tenantId}"/]
                     [/#if]
                 [/#if]
+                [#if redirectURI?? && !actionURL?contains("redirect_uri")]
+                    [#if actionURL?contains("?")]
+                        [#local actionURL = actionURL + "&redirect_uri=${redirectURI?url('UTF-8')}"/]
+                    [#else]
+                        [#local actionURL = actionURL + "?redirect_uri=${redirectURI?url('UTF-8')}"/]
+                    [/#if]
+                [/#if]
                 [#if actionDirection == "back"]
                   <a class="text-sm text-link hover:text-link-hover hover:underline inline-flex items-center gap-2" href="${actionURL}"><i class="fa fa-arrow-left"></i> ${actionTexts[url_index]}</a>
                 [#else]
@@ -1040,7 +1047,7 @@
   <div class="form-row mb-4">
       [#if label?has_content]
           [#compress]
-            <label for="${id}" class="block text-sm/6 font-medium text-input-text mb-2[#if (fieldMessages[name]![])?size > 0] error[/#if]">
+            <label for="${id}" class="block text-xs font-medium text-input-text mb-1[#if (fieldMessages[name]![])?size > 0] error[/#if]">
               ${label}[#if required] <span class="required text-error">*</span>[/#if]
                 [#if tooltip?has_content]
                   <i class="fa fa-info-circle" data-tooltip="${tooltip}"></i>
@@ -1446,7 +1453,7 @@
 
       [#-- Render confirm if set to true on the field     --]
       [#if field.confirm]
-          [@customField field "confirm.${field.key}" false "[confirm]${field.key}" /]
+          [@customField field=field key="confirm.${field.key}" autofocus=false placeholder="[confirm]${field.key}" label=theme.optionalMessage("confirm.${field.key}")/]
       [/#if]
   </div>
 [/#macro]
