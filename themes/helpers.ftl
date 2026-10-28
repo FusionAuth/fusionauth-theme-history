@@ -214,7 +214,7 @@
       [/#list]
     [/#if]
     [#if identityProviders["Twitter"]?has_content]
-      <script src="${request.contextPath}/js/identityProvider/Twitter.js?version=${version}"></script>
+      <script src="${request.contextPath}/js/identityProvider/Twitter.js?version=${version}" [#if clientId?has_content]data-application-id="${clientId}"[/#if]></script>
     [/#if]
     [#if identityProviders["EpicGames"]?has_content || identityProviders["Facebook"]?has_content || identityProviders["Google"]?has_content ||
     identityProviders["LinkedIn"]?has_content || identityProviders["Nintendo"]?has_content || identityProviders["OpenIDConnect"]?has_content ||
@@ -1500,6 +1500,59 @@
         [/#if]
         [@errors field="captcha_token"/]
     [/#if]
+[/#macro]
+
+[#macro cimdClientDetails clientName="" clientUri="" clientHost="" redirectHost="" redirectIsLoopback=false resourceHost=""]
+  [#-- Gate on the authoritative host, not the client-supplied name, so an empty client_name cannot hide the redirect and resource context --]
+  [#if clientHost?has_content]
+    <div id="cimd-client-details" class="mb-4">
+      <div class="mb-1 text-sm text-text/70">${theme.message('consent-details')}</div>
+      <dl class="rounded-theme border border-slate-200 bg-slate-50 divide-y divide-slate-200 text-xs">
+        [#if clientName?has_content]
+          <div id="cimd-client-name" class="px-3 py-1.5">
+            <dt class="font-medium text-input-text">${theme.message('consent-client-name')}</dt>
+            <dd class="text-text break-all">${clientName}</dd>
+          </div>
+        [/#if]
+        <div id="cimd-hosted-at" class="px-3 py-1.5">
+          <dt class="flex items-center gap-1 font-medium text-input-text">
+            <span class="whitespace-nowrap">${theme.message('consent-hosted-at')}</span>
+            [@cssTooltip text=theme.message('{tooltip}consent-hosted-at') id="cimd-hosted-at-tooltip" /]
+          </dt>
+          <dd class="text-text break-all">${clientHost}</dd>
+        </div>
+        [#if clientUri?has_content]
+          <div id="cimd-client-website" class="px-3 py-1.5">
+            <dt class="font-medium text-input-text">${theme.message('consent-client-website')}</dt>
+            <dd class="text-text/60 break-all">${clientUri}</dd>
+          </div>
+        [/#if]
+        [#if resourceHost?has_content]
+          <div id="cimd-resource" class="px-3 py-1.5">
+            <dt class="flex items-center gap-1 font-medium text-input-text">
+              <span class="whitespace-nowrap">${theme.message('consent-resource')}</span>
+              [@cssTooltip text=theme.message('{tooltip}consent-resource') id="cimd-resource-tooltip" /]
+            </dt>
+            <dd class="text-text break-all">${resourceHost}</dd>
+          </div>
+        [/#if]
+        [#if redirectHost?has_content]
+          <div id="cimd-redirect" class="px-3 py-1.5">
+            <dt class="flex items-center gap-1 font-medium text-input-text">
+              <span class="whitespace-nowrap">${theme.message('consent-redirect')}</span>
+              [@cssTooltip text=theme.message('{tooltip}consent-redirect') id="cimd-redirect-tooltip" /]
+            </dt>
+            <dd class="text-text break-all">${redirectHost}</dd>
+          </div>
+        [/#if]
+      </dl>
+      [#if redirectIsLoopback]
+        <div id="cimd-redirect-loopback-warning" class="mt-3">
+          [@alert message=theme.message('consent-redirect-loopback-warning') type="error" icon="exclamation-circle" includeDismissButton=false/]
+        </div>
+      [/#if]
+    </div>
+  [/#if]
 [/#macro]
 
 [#macro scopeConsentField application scope type]

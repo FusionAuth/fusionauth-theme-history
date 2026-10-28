@@ -36,7 +36,7 @@
     [@helpers.captchaScripts showCaptcha=showCaptcha captchaMethod=tenant.captchaConfiguration.captchaMethod siteKey=tenant.captchaConfiguration.siteKey/]
     <script src="${request.contextPath}/js/oauth2/Authorize.js?version=${version}"></script>
     <script src="${request.contextPath}/js/identityProvider/InProgress.js?version=${version}"></script>
-    [@helpers.alternativeLoginsScript clientId=client_id identityProviders=identityProviders/]
+    [@helpers.alternativeLoginsScript clientId=application.id identityProviders=identityProviders/]
     <script type="module" src="${request.contextPath}/js/entrypoints/oauth2/authorize.js?version=${version}"></script>
     <script>
       Prime.Document.onReady(function() {
@@ -119,7 +119,7 @@
 
         [/#if]
       [/@helpers.structuredForm]
-      [@helpers.alternativeLogins clientId=client_id identityProviders=identityProviders passwordlessEnabled=passwordlessEnabled bootstrapWebauthnEnabled=bootstrapWebauthnEnabled idpRedirectState=idpRedirectState federatedCSRFToken=federatedCSRFToken/]
+      [@helpers.alternativeLogins clientId=application.id identityProviders=identityProviders passwordlessEnabled=passwordlessEnabled bootstrapWebauthnEnabled=bootstrapWebauthnEnabled idpRedirectState=idpRedirectState federatedCSRFToken=federatedCSRFToken/]
     [/@helpers.main]
 
     [@helpers.footer]

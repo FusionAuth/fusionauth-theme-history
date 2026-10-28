@@ -1,9 +1,15 @@
 [#ftl/]
 [#-- @ftlvariable name="application" type="io.fusionauth.domain.Application" --]
+[#-- @ftlvariable name="cimdClientHost" type="java.lang.String" --]
+[#-- @ftlvariable name="cimdClientName" type="java.lang.String" --]
+[#-- @ftlvariable name="cimdClientUri" type="java.lang.String" --]
+[#-- @ftlvariable name="cimdRedirectHost" type="java.lang.String" --]
+[#-- @ftlvariable name="cimdRedirectIsLoopback" type="boolean" --]
+[#-- @ftlvariable name="cimdResourceHost" type="java.lang.String" --]
 [#-- @ftlvariable name="requiredScopes" type="java.util.List<io.fusionauth.domain.ApplicationOAuthScope>" --]
 [#-- @ftlvariable name="optionalScopes" type="java.util.List<io.fusionauth.domain.ApplicationOAuthScope>" --]
 [#-- @ftlvariable name="theme" type="io.fusionauth.domain.Theme" --]
-[#-- @ftlvariable name="unknownScopes" type="java.util.List<java.lang.String>" --]
+[#-- @ftlvariable name="unknownScopes" type="java.util.Set<java.lang.String>" --]
 
 [#import "../_helpers.ftl" as helpers/]
 
@@ -17,6 +23,9 @@
     [/@helpers.header]
 
     [@helpers.main title=theme.message('consent-required')]
+      [@helpers.cimdClientDetails clientName=cimdClientName clientUri=cimdClientUri clientHost=cimdClientHost
+                                  redirectHost=cimdRedirectHost redirectIsLoopback=cimdRedirectIsLoopback resourceHost=cimdResourceHost /]
+
       <p class="mb-4">${theme.message('consent-required-intro', application.name?esc?markup_string)?no_esc}${theme.message("propertySeparator")}</p>
 
       [@helpers.structuredForm action="${request.contextPath}/oauth2/consent" method="POST"; section]

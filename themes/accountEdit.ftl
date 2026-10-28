@@ -44,29 +44,29 @@
             [@helpers.hidden name="redirect_uri" value=redirectURI!'' /]
 
             [#if fields?has_content]
-              [#list fields as fieldKey, fieldValues]
+                [#list fields as fieldKey, fieldValues]
 
                 [#-- Section labels  --]
-                [#assign sectionNumber = fieldKey + 1/]
-                [#assign sectionLabel = generateSectionLabel(sectionNumber, tenantId) /]
-                [#if sectionLabel?has_content]
-                  <legend> ${sectionLabel} </legend>
-                [/#if]
-
-                [#list fieldValues as field]
-                  [#if field.key == "user.password"]
-                    [@helpers.passwordField field=field
-                                            showCurrentPasswordField=(passwordSet && application.formConfiguration.selfServiceFormConfiguration.requireCurrentPasswordOnPasswordChange)/]
-                  [#else]
-                    [#assign key = field.key]
-                    [@helpers.customField field=field key=key autofocus=field?is_first placeholder=field.key label=theme.optionalMessage(key)/]
-
-                    [#if field.confirm]
-                      [@helpers.customField field=field key="confirm.${key}" autofocus=false placeholder="[confirm]${field.key}" label=theme.optionalMessage("confirm.${key}")/]
+                    [#assign sectionNumber = fieldKey + 1/]
+                    [#assign sectionLabel = generateSectionLabel(sectionNumber, tenantId) /]
+                    [#if sectionLabel?has_content]
+                      <legend> ${sectionLabel} </legend>
                     [/#if]
-                  [/#if]
+
+                    [#list fieldValues as field]
+                        [#if field.key == "user.password"]
+                            [@helpers.passwordField field=field
+                            showCurrentPasswordField=(passwordSet && application.formConfiguration.selfServiceFormConfiguration.requireCurrentPasswordOnPasswordChange)/]
+                        [#else]
+                            [#assign key = field.key]
+                            [@helpers.customField field key field?is_first field.key /]
+
+                            [#if field.confirm]
+                                [@helpers.customField field "confirm.${key}" false "[confirm]${field.key}" /]
+                            [/#if]
+                        [/#if]
+                    [/#list]
                 [/#list]
-              [/#list]
             [/#if]
           [#elseif section == "buttons"]
             [@helpers.button icon="save" text=theme.message("submit")/]

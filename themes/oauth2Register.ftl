@@ -25,7 +25,7 @@
 [@helpers.html]
   [@helpers.head title=theme.message("oauth2-register-page-title")]
     <script src="${request.contextPath}/js/identityProvider/InProgress.js?version=${version}"></script>
-    [@helpers.alternativeLoginsScript clientId=client_id identityProviders=identityProviders/]
+    [@helpers.alternativeLoginsScript clientId=application.id identityProviders=identityProviders/]
     [#if readyToRegister]
       [@helpers.captchaScripts showCaptcha=showCaptcha captchaMethod=tenant.captchaConfiguration.captchaMethod siteKey=tenant.captchaConfiguration.siteKey/]
     [/#if]
@@ -183,7 +183,7 @@
 
           [#-- Identity Provider Buttons (if you want to include these, remove the if-statement) --]
           [#if true]
-            [@helpers.alternativeLogins clientId=client_id identityProviders=identityProviders![] passwordlessEnabled=false bootstrapWebauthnEnabled=false idpRedirectState=idpRedirectState federatedCSRFToken=federatedCSRFToken/]
+            [@helpers.alternativeLogins clientId=application.id identityProviders=identityProviders![] passwordlessEnabled=false bootstrapWebauthnEnabled=false idpRedirectState=idpRedirectState federatedCSRFToken=federatedCSRFToken/]
           [/#if]
           [#-- End Identity Provider Buttons --]
         [/#if]
